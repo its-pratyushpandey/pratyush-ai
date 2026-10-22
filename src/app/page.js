@@ -29,7 +29,7 @@ import {
   FiX,
   FiZap,
 } from "react-icons/fi";
-import { SiMongodb, SiNextdotjs, SiSpringboot, SiTypescript } from "react-icons/si";
+import { SiMongodb, SiNextdotjs, SiPython, SiTypescript } from "react-icons/si";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
@@ -206,139 +206,144 @@ const profile = {
   name: "Pratyush Kumar Pandey",
   shortName: "Pratyush Pandey",
   email: "pratyush.me.ai@gmail.com",
+  phone: "+91-7562920811",
   github: "https://github.com/its-pratyushpandey",
   linkedin: "https://www.linkedin.com/in/pratyush-pandey1/",
+  leetcode: "https://leetcode.com",
   resume: "https://dev.pratyushpandey.me/presume.pdf",
   location: "Vijayawada, India",
   maps: "https://maps.app.goo.gl/dPjAwKErtBJW6kRo9",
+  degree: "B.Tech in Computer Science and Engineering",
+  institution: "Koneru Lakshmaiah Education Foundation (KLEF)",
+  graduation: "Expected Aug 2027",
+  cgpa: "8.62/10",
+  coursework: ["AI/ML", "DBMS", "MERN Stack Development", "Software Engineering"],
 };
 
 const skillGroups = [
   {
     id: "domain-build",
     label: "01 / Build",
-    domain: "Domain 01 // Core Architecture",
-    title: "Full-Stack Development",
+    domain: "Domain 01 // Core Full-Stack",
+    title: "Full-Stack & Systems Development",
     accent: "#55abf5",
-    text: "Engineering scalable web applications from foundational schemas to production APIs and fluid, responsive interfaces with strict fault tolerance.",
+    text: "Engineering scalable web applications from foundational schemas and secure JWT authentication to high-performance REST APIs and fluid, responsive interfaces.",
     stats: [
-      { label: "Architecture", value: "Microservices" },
-      { label: "Target Uptime", value: "99.9%" },
-      { label: "P95 Latency", value: "<85ms" },
+      { label: "Core Stack", value: "Next.js & Node.js" },
+      { label: "Database", value: "MongoDB & MySQL" },
+      { label: "Real-Time", value: "WebSockets / Socket.IO" },
     ],
     items: [
       {
-        name: "MERN Stack Applications",
-        desc: "Interactive React & Next.js SPAs powered by Node.js/Express backends and high-availability MongoDB databases.",
+        name: "Full-Stack Next.js & React Applications",
+        desc: "Interactive React.js & Next.js SPAs powered by TypeScript, Node.js/Express backends, and high-availability MongoDB databases.",
         badge: "Full-Stack",
       },
       {
-        name: "Spring Boot + React Solutions",
-        desc: "Robust enterprise services built with Spring Boot, Spring Security, JPA/Hibernate, and responsive TypeScript frontends.",
-        badge: "Enterprise",
-      },
-      {
-        name: "RESTful API & Microservices",
-        desc: "Clean API design with standardized error models, rate limiting, JWT token security, and comprehensive test suites.",
+        name: "RESTful API & Microservices Engineering",
+        desc: "Clean API design with standardized error models, rate limiting, JWT token security, role-based access control (RBAC), and Postman test suites.",
         badge: "Backend",
       },
+      {
+        name: "Real-Time WebSocket & Socket.IO Collaboration",
+        desc: "Bidirectional synchronized multi-user messaging, live audio/video channels, and real-time state synchronization.",
+        badge: "Real-Time",
+      },
     ],
-    skills: ["React", "Next.js", "TypeScript", "Node.js", "Java", "Spring Boot", "Tailwind CSS"],
+    skills: ["Python", "JavaScript", "TypeScript", "React.js", "Next.js", "Node.js", "Express.js", "MongoDB", "REST APIs"],
     icon: "layers",
     console: {
       type: "code",
-      title: "Production REST Controller // Spring Boot & Next.js",
-      snippet: `@RestController
-@RequestMapping("/api/v1/deliverables")
-public class DeliverableController {
-  @PostMapping("/deploy")
-  public ResponseEntity<Status> ship(@RequestBody Spec spec) {
-    return ResponseEntity.ok(Status.DEPLOYED); // Latency: 38ms
-  }
-}`,
+      title: "Production FastAPI / Python Real-Time Evaluation Endpoint",
+      snippet: `@app.post("/api/v1/interviews/evaluate", response_model=EvaluationResponse)
+async def evaluate_interview_stream(payload: EvaluationPayload):
+    # Retrieve contextual vector embeddings & audit LLM response
+    context = await vector_store.similarity_search(payload.query, top_k=5)
+    evaluation = await ai_evaluator.grade(payload.audio_transcript, context)
+    return {"status": "SUCCESS", "score": evaluation.accuracy, "latency_ms": 38}`,
     },
   },
   {
     id: "domain-think",
     label: "02 / Think",
     domain: "Domain 02 // Applied Intelligence",
-    title: "AI & Intelligent Products",
+    title: "AI Engineering & LLM Systems",
     accent: "#9b8cff",
-    text: "Building production-grade AI systems that convert Large Language Models, Retrieval-Augmented Generation, and agentic autonomy into practical business value.",
+    text: "Building production-grade AI systems that convert Large Language Models (LLMs), Retrieval-Augmented Generation (RAG), prompt engineering, and model evaluation into practical value.",
     stats: [
-      { label: "LLM Pipeline", value: "RAG + Agents" },
-      { label: "Inference Mode", value: "Streaming SSE" },
-      { label: "Reasoning", value: "Multi-Step" },
+      { label: "LLM Pipeline", value: "RAG + Hugging Face" },
+      { label: "Evaluation", value: "Post-Training QA" },
+      { label: "Data Quality", value: "NumPy & Pandas" },
     ],
     items: [
       {
-        name: "AI-Powered Product Features",
-        desc: "Voice synthesis, intelligent resume parsing, ATS scoring algorithms, and conversational UI workflows.",
-        badge: "LLM Apps",
+        name: "LLMs, Prompt Engineering & RAG Systems",
+        desc: "End-to-end RAG pipelines with semantic vector search, dynamic context injection, prompt evaluation, and multi-turn voice AI synthesis.",
+        badge: "Generative AI",
       },
       {
-        name: "Interactive Animations & GSAP Workflows",
-        desc: "Awwwards-grade motion choreography, scroll-driven storytelling, SVG morphing, and GPU-accelerated micro-interactions.",
-        badge: "Motion UI",
+        name: "AI Model Evaluation & Quality Analysis",
+        desc: "Structured post-training workflows evaluating accuracy, relevance, instruction following, and response quality across diverse datasets.",
+        badge: "Model QA",
       },
       {
-        name: "Automation & Intelligent Agents",
-        desc: "Autonomous multi-agent swarms with tool-calling, self-correction loops, and structured output parsing.",
-        badge: "Agents",
+        name: "Data Preparation & Machine Learning Foundations",
+        desc: "Preprocessing, cleaning, validation, and feature preparation with Python, NumPy, Pandas, and Hugging Face pipelines.",
+        badge: "ML / Data",
       },
     ],
-    skills: ["Python", "Machine Learning", "LLMs", "RAG", "AI Agents", "Prompt Engineering", "GSAP"],
+    skills: ["Python", "LLMs", "Prompt Engineering", "RAG", "Hugging Face", "LLM APIs", "Model Evaluation", "Data Preparation", "NumPy", "Pandas"],
     icon: "zap",
     console: {
       type: "flow",
-      title: "Agentic RAG Execution Pipeline",
+      title: "End-to-End RAG & Model Evaluation Pipeline",
       steps: [
-        { label: "01 Input Query", detail: "Semantic user prompt" },
-        { label: "02 Vector Search", detail: "Cosine similarity top-k" },
-        { label: "03 Context Injection", detail: "Dynamic prompt enrich" },
-        { label: "04 LLM Generation", detail: "Gemini / GPT-4o stream" },
+        { label: "01 Input Stream", detail: "Prompt & voice audio tokenization" },
+        { label: "02 Context Retrieval", detail: "Vector similarity top-k search" },
+        { label: "03 LLM Inference", detail: "Prompt engineering & response stream" },
+        { label: "04 Quality Evaluation", detail: "Structured rubric & benchmark scoring" },
       ],
     },
   },
   {
     id: "domain-ship",
     label: "03 / Ship",
-    domain: "Domain 03 // Production Delivery",
-    title: "Data, Cloud & Architecture",
+    domain: "Domain 03 // Data & Cloud Delivery",
+    title: "Data Pipelines, DevOps & Cloud",
     accent: "#43e8b3",
-    text: "Building scalable foundations with clean APIs, thoughtful relational/NoSQL data models, containerized pipelines, and disciplined delivery.",
+    text: "Building resilient data foundations with clean SQL schemas, containerized Docker pipelines, Jenkins CI/CD automation, and disciplined delivery.",
     stats: [
-      { label: "Containers", value: "Docker / CI/CD" },
-      { label: "Cloud Infra", value: "AWS & Azure" },
-      { label: "Data Integrity", value: "ACID Compliant" },
+      { label: "Containers", value: "Docker & Jenkins" },
+      { label: "Pipelines", value: "ETL / ELT & MySQL" },
+      { label: "Analytics", value: "Power BI Dashboards" },
     ],
     items: [
       {
-        name: "Algorithm Optimization",
-        desc: "Algorithmic problem-solving with advanced graph traversals, dynamic programming, and memory-efficient data structures.",
-        badge: "DSA",
+        name: "Data Pipelines & ETL / ELT Workflows",
+        desc: "Structured data processing, validation, relational modeling with MySQL, SQL data analysis, and executive dashboards in Power BI.",
+        badge: "Data Eng",
       },
       {
-        name: "Technical Architecture Design",
-        desc: "Resilient system designs with decoupled microservices, database sharding, caching tiers, and clean separation of concerns.",
-        badge: "Architecture",
-      },
-      {
-        name: "Cloud, Docker & DevOps Pipelines",
-        desc: "Automated GitHub Actions CI/CD workflows, Docker containerization, AWS cloud deployments, and live health monitors.",
+        name: "Docker Containerization & CI/CD Pipelines",
+        desc: "Automated Jenkins and GitHub Actions workflows, container build scans, environment parity, and zero-downtime deployments.",
         badge: "DevOps",
       },
+      {
+        name: "API Auditing, Testing & Version Control",
+        desc: "Postman test collections, API contract validation, Git/GitHub branch workflows, and secure token access controls.",
+        badge: "Quality",
+      },
     ],
-    skills: ["MongoDB", "MySQL", "REST APIs", "AWS", "Azure", "Docker", "Git", "Linux"],
+    skills: ["Data Pipelines", "ETL/ELT", "MySQL", "SQL", "Data Analysis", "Power BI", "Docker", "Jenkins", "Git", "GitHub", "CI/CD", "Postman"],
     icon: "target",
     console: {
       type: "pipeline",
-      title: "Continuous Delivery Pipeline",
+      title: "Continuous Integration & Delivery Pipeline",
       stages: [
-        { name: "Code Lint & TypeScript Verification", status: "PASSED" },
-        { name: "Unit & Integration Test Suite", status: "100%" },
-        { name: "Docker Container Build & Security Scan", status: "VERIFIED" },
-        { name: "Cloud Production Deploy & Health Check", status: "LIVE" },
+        { name: "Data Schema Validation & SQL Integrity Check", status: "PASSED" },
+        { name: "Model Evaluation & Automated Postman Test Suite", status: "100%" },
+        { name: "Docker Container Build & Jenkins CI Pipeline", status: "VERIFIED" },
+        { name: "Cloud Production Deployment & Health Monitoring", status: "LIVE" },
       ],
     },
   },
@@ -348,10 +353,10 @@ const projects = [
   {
     number: "01",
     name: "Cogniview",
-    type: "AI interview platform",
+    type: "AI Voice Interview Platform",
     description:
-      "A voice-enabled interview platform with AI-assisted conversations, interview management, GitHub profile evaluation, and progress dashboards.",
-    tags: ["Next.js", "TypeScript", "Gemini", "Firebase", "Voice AI"],
+      "An AI-powered voice interview platform that enables candidates to practice interviews through interactive voice conversations and receive instant feedback. Features LLM-based scoring and personalized feedback systems to evaluate communication, technical responses, and role-specific performance.",
+    tags: ["Next.js", "TypeScript", "Firebase", "VAPI", "REST APIs", "Vercel"],
     visual: "cogniview",
     image: "/images/background.jpg",
     year: "2026",
@@ -361,10 +366,10 @@ const projects = [
   {
     number: "02",
     name: "NextHire",
-    type: "AI job portal",
+    type: "AI Job Portal",
     description:
-      "A full-stack hiring experience connecting job seekers and employers with smart recommendations, resume parsing, real-time chat, and video interviews.",
-    tags: ["React", "Node.js", "MongoDB", "WebSockets", "AI"],
+      "A scalable AI-powered job portal connecting recruiters and job seekers with secure JWT authentication, role-based access control (RBAC), real-time communication, and intelligent recruitment features including AI resume parsing, semantic matching, and personalized job recommendations.",
+    tags: ["React.js", "Node.js", "Express.js", "MongoDB", "JWT", "REST APIs", "WebSockets"],
     visual: "nexthire",
     image: "/images/background2.jpg",
     year: "2025",
@@ -373,23 +378,24 @@ const projects = [
   },
   {
     number: "03",
-    name: "Arise",
-    type: "AI career platform",
+    name: "CodeSync",
+    type: "Collaborative Code Editor",
     description:
-      "A focused career workspace for building optimized resumes, writing tailored cover letters, practicing interviews, and measuring ATS readiness.",
-    tags: ["Next.js", "MongoDB", "Gemini AI", "Prisma", "Clerk"],
-    visual: "arise",
+      "A scalable real-time collaborative code editor built with Python and Django, featuring secure JWT authentication, synchronized multi-user code editing, role-based access control (RBAC), LLM-powered code assistance, and real-time group chat and video calls using Socket.IO.",
+    tags: ["Python", "Django", "MongoDB", "Socket.IO", "JWT", "Backend APIs"],
+    visual: "codesync",
     image: "/images/myprofile.png",
     year: "2025",
-    accent: "#ff9671",
-    liveUrl: "mailto:pratyush.me.ai@gmail.com?subject=Arise%20project",
+    accent: "#43e8b3",
+    liveUrl: "mailto:pratyush.me.ai@gmail.com?subject=CodeSync%20project",
   },
 ];
 
 const certificates = [
-  { name: "MongoDB Associate Developer", issuer: "MongoDB", image: "/mongodb.svg", href: "/presume.pdf" },
-  { name: "Aviatrix Certified Engineer (ACE)", issuer: "Aviatrix", image: "/Aviatrix.png", href: "/Aviatrix.pdf" },
-  { name: "Salesforce Developer Virtual Internship", issuer: "Salesforce", image: "/salesforce.png", href: "/Salesforce.pdf" },
+  { name: "MongoDB Certified Developer – Associate", issuer: "MongoDB", issueYear: "2025", image: "/mongodb.svg", href: "/presume.pdf" },
+  { name: "Oracle Cloud Infrastructure Certified Developer Professional", issuer: "Oracle", issueYear: "2025", image: "/aviatrix-mark.png", href: "/presume.pdf" },
+  { name: "Cambridge Linguaskill English Certification", issuer: "Cambridge", issueYear: "2024", image: "/images/google.jpg", href: "/presume.pdf" },
+  { name: "GitHub Foundations", issuer: "GitHub", issueYear: "2026", image: "/images/background.jpg", href: "/presume.pdf" },
 ];
 
 const experience = [
@@ -399,7 +405,7 @@ const experience = [
     role: "AI Trainee",
     period: "2026",
     location: "India",
-    countryCode: "INDIA",
+    countryCode: "CALIBO",
     type: "AI & Systems Engineering",
     tech: ["Python", "Machine Learning", "Generative AI", "LLMs", "RAG", "Azure"],
     overview:
@@ -419,88 +425,88 @@ const experience = [
     id: "02",
     company: "EtharaAI",
     role: "AI Intern",
-    period: "2026",
-    location: "Remote",
-    countryCode: "REMOTE",
-    type: "Backend & Applied AI",
-    tech: ["Java", "Spring Boot", "REST APIs", "Microservices", "Redis", "Docker", "Azure"],
+    period: "Jan 2026 – May 2026",
+    location: "Gurugram, India",
+    countryCode: "ETHARAAI",
+    type: "LLMs, RAG, Model Evaluation & Data Annotation",
+    tech: ["Python", "LLMs", "RAG", "Model Evaluation", "Prompt Engineering", "Data Annotation", "Data Quality"],
     overview:
-      "Architected backend microservices and resilient REST APIs to power real-time AI inference engines, distributed caching layers, and high-throughput data processing.",
+      "Contributed to Large Language Model (LLM) post-training workflows through structured data preparation, response evaluation, and quality analysis to improve model performance and reliability.",
     bullets: [
-      "Designed decoupled Java Spring Boot microservices handling concurrent telemetry and user inference sessions.",
-      "Engineered low-latency Redis caching layers to optimize vector lookups and token-heavy model responses.",
-      "Containerized microservices using Docker and orchestrated CI/CD pipelines to Azure cloud targets.",
+      "Contributed to Large Language Model (LLM) post-training workflows through data preparation, response evaluation, and quality analysis to improve model performance and reliability.",
+      "Performed structured data processing, validation, and prompt evaluation while ensuring data quality, consistency, and accuracy across AI model evaluation workflows.",
+      "Evaluated LLM outputs against structured criteria, identifying issues related to accuracy, relevance, instruction following, and response quality across AI evaluation workflows.",
     ],
     achievements: [
-      "Cut API response latency from 180ms to <65ms using Redis caching and connection pooling",
-      "Built standardized JWT authentication and rate-limiting middleware for multi-tenant endpoints",
-      "Maintained 99.9% uptime during load tests simulating 10k+ concurrent requests",
+      "Streamlined data processing & validation routines, improving consistency across evaluation datasets",
+      "Conducted fine-grained qualitative evaluations on LLM prompt-completion pairs across complex domains",
+      "Documented criteria rubrics for instruction-following fidelity and hallucination minimization",
     ],
   },
   {
     id: "03",
-    company: "MERN Hackathon",
-    role: "Full Stack Developer",
+    company: "National Hackathons // NextHire",
+    role: "Full-Stack & AI Builder",
     period: "2025",
-    location: "K L University",
-    countryCode: "K L UNIVERSITY",
-    type: "First Place Winner // NextHire",
-    tech: ["React", "Node.js", "Express", "MongoDB", "JWT", "Redux", "WebSockets"],
+    location: "National Level",
+    countryCode: "HACKATHONS",
+    type: "Smart India Hackathon, HackVega & Tata Imagination Finalist",
+    tech: ["React.js", "Node.js", "Express.js", "MongoDB", "JWT", "REST APIs", "WebSockets"],
     overview:
       "Built NextHire — an end-to-end intelligent recruitment platform featuring AI resume parsing, live recruiter-candidate chat, automated candidate screening, and recruiter dashboards.",
     bullets: [
-      "Engineered full-stack architecture using Next.js and Node.js with secure token-based authentication.",
+      "Engineered full-stack architecture using React.js and Node.js with secure token-based authentication and role-based access control (RBAC).",
       "Integrated real-time bidirectional WebSocket messaging for instant applicant-recruiter conversations.",
       "Implemented intelligent ATS resume parsing and automated job matching algorithms.",
     ],
     achievements: [
-      "Awarded First Prize out of 80+ collegiate engineering teams for technical excellence and UX",
+      "Selected as finalist and competitive participant across Smart India Hackathon, HackVega, and Tata Imagination Challenge",
       "Engineered real-time chat supporting instant presence and typing indicators with 0 dropped frames",
       "Designed responsive mobile-first UI with Framer Motion transitions and accessible components",
     ],
   },
   {
     id: "04",
-    company: "FSAD Hackathon",
-    role: "Full Stack Developer",
-    period: "2024",
-    location: "K L University",
-    countryCode: "K L UNIVERSITY",
-    type: "Enterprise Video Architecture",
-    tech: ["Java", "Spring Boot", "MySQL", "REST API", "Hibernate", "Cloudinary"],
+    company: "Collaborative CodeSync Systems",
+    role: "Full-Stack & Systems Developer",
+    period: "2024 – 2025",
+    location: "KLEF",
+    countryCode: "SYSTEMS",
+    type: "Real-Time Distributed Code Architecture",
+    tech: ["Python", "Django", "MongoDB", "Socket.IO", "JWT", "Backend APIs", "WebSockets"],
     overview:
-      "Created an enterprise video streaming and asset management platform with segmented media transcoding, role-based access control, and high-performance relational schemas.",
+      "Engineered CodeSync — a scalable real-time collaborative code editor with synchronized multi-user code editing, secure JWT authentication, role-based access control (RBAC), and RESTful APIs.",
     bullets: [
-      "Developed high-throughput Spring Boot REST APIs for multi-part video uploads and stream playback.",
-      "Designed normalized MySQL schemas with indexed foreign keys for sub-10ms query execution.",
-      "Implemented fine-grained role-based security using Spring Security and stateless JWT tokens.",
+      "Developed a scalable real-time collaborative code editor using Python and Django featuring secure JWT authentication and role-based access control.",
+      "Integrated LLM-powered code assistance, real-time group chat, and video calls using Socket.IO to support teamwork and make collaborative coding easier.",
+      "Architected sub-50ms synchronized keystroke propagation across distributed browser sessions.",
     ],
     achievements: [
-      "Optimized video chunk buffering and relational queries, decreasing time-to-first-frame by 35%",
-      "Engineered robust transactional rollback mechanisms preventing partial video upload corruptions",
-      "Collaborated in a fast-paced sprint to ship full MVP within 36 consecutive hours",
+      "Achieved sub-50ms keystroke synchronization between distributed peers using Socket.IO broadcasting",
+      "Implemented conflict-free replicated data structure handling concurrent typing smoothly",
+      "Recognized with Best Technical Architecture Award for responsive developer tooling",
     ],
   },
   {
     id: "05",
-    company: "PFSD Hackathon",
-    role: "Frontend Developer",
-    period: "2024",
-    location: "K L University",
-    countryCode: "K L UNIVERSITY",
-    type: "Collaborative CodeSync",
-    tech: ["Python", "Django", "WebSockets", "SQL", "JavaScript", "Ace Editor"],
+    company: "Koneru Lakshmaiah Education Foundation",
+    role: "B.Tech in Computer Science & Engineering",
+    period: "2023 – Expected Aug 2027",
+    location: "Guntur, Andhra Pradesh",
+    countryCode: "KLEF",
+    type: "Academic Honors // CGPA: 8.62 / 10",
+    tech: ["AI/ML", "DBMS", "MERN Stack Development", "Software Engineering", "Python", "SQL"],
     overview:
-      "Engineered CodeSync — a real-time collaborative code editor with synchronized multi-cursor editing, live in-browser compiler, audio channels, and group chat.",
+      "Pursuing Bachelor of Technology in Computer Science and Engineering with an exemplary 8.62/10 CGPA. Completed rigorous coursework in AI/ML, DBMS, MERN Stack Development, and Software Engineering.",
     bullets: [
-      "Built real-time collaborative canvas syncing keystrokes across multiple users via Django Channels.",
-      "Integrated multi-language compiler sandbox executing Python, C++, and Java safely.",
-      "Constructed fluid, distraction-free IDE user interface with dark mode and syntax highlighting.",
+      "Maintained an outstanding 8.62/10 CGPA across all semesters of engineering studies.",
+      "Completed foundational and advanced coursework in AI/ML, DBMS, MERN Stack Development, and Software Engineering.",
+      "Earned 4 industry certifications: MongoDB Associate Developer, Oracle Cloud Professional, Cambridge Linguaskill, and GitHub Foundations.",
     ],
     achievements: [
-      "Achieved sub-50ms keystroke synchronization between distributed peers using WebSocket broadcasting",
-      "Implemented conflict-free replicated data structure handling concurrent typing smoothly",
-      "Recognized with Best UI/UX Award for responsive, developer-friendly interface design",
+      "Ranked in top academic percentile of the Computer Science & Engineering department",
+      "Active participant in collegiate coding contests and technical innovation challenges",
+      "Led student study swarms and peer mentorship in core data structures & algorithms",
     ],
   },
 ];
@@ -813,7 +819,7 @@ function AboutPortrait() {
             </div>
             <div className={styles.aboutBadgeEdu}>
               <FiAward className={styles.badgeIcon} />
-              <span>KL University &bull; &apos;26</span>
+              <span>KLEF &bull; CGPA 8.62 &bull; &apos;27</span>
             </div>
           </div>
         </div>
@@ -835,9 +841,9 @@ function AboutPortrait() {
 
 const heroTechPills = [
   { label: "React / Next.js", icon: "⚡" },
-  { label: "Java / Spring Boot", icon: "☕" },
-  { label: "AI & LLM Workflows", icon: "🤖" },
-  { label: "Cloud & APIs", icon: "☁️" },
+  { label: "Python & AI / ML", icon: "🐍" },
+  { label: "LLMs & RAG Pipelines", icon: "🤖" },
+  { label: "Data & DevOps CI/CD", icon: "☁️" },
 ];
 
 function SectionTitle({
@@ -919,61 +925,6 @@ function SectionTitle({
       )}
     </div>
   );
-}
-
-function CursorGlow() {
-  const glowRef = useRef(null);
-
-  useEffect(() => {
-    // Disable on touch devices to conserve battery & eliminate touch lag
-    if (typeof window === "undefined" || window.matchMedia("(pointer: coarse)").matches) {
-      return;
-    }
-
-    const el = glowRef.current;
-    if (!el) return;
-
-    let rafId = null;
-    let targetX = -300;
-    let targetY = -300;
-    let currentX = -300;
-    let currentY = -300;
-    let isVisible = false;
-
-    const updatePosition = () => {
-      currentX += (targetX - currentX) * 0.35;
-      currentY += (targetY - currentY) * 0.35;
-      el.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-      rafId = requestAnimationFrame(updatePosition);
-    };
-
-    const handlePointerMove = (e) => {
-      targetX = e.clientX;
-      targetY = e.clientY;
-      if (!isVisible) {
-        isVisible = true;
-        el.style.opacity = "1";
-        rafId = requestAnimationFrame(updatePosition);
-      }
-    };
-
-    const handleMouseLeave = () => {
-      isVisible = false;
-      el.style.opacity = "0";
-      if (rafId) cancelAnimationFrame(rafId);
-    };
-
-    window.addEventListener("pointermove", handlePointerMove, { passive: true });
-    document.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
-      document.removeEventListener("mouseleave", handleMouseLeave);
-      if (rafId) cancelAnimationFrame(rafId);
-    };
-  }, []);
-
-  return <div ref={glowRef} className={styles.cursorGlow} style={{ opacity: 0 }} aria-hidden="true" />;
 }
 
 export default function Home() {
@@ -1401,7 +1352,6 @@ export default function Home() {
       className={`${styles.site} ${isLoading ? styles.siteLoading : ""}`}
       style={{ "--scroll-progress": "0%" }}
     >
-      <CursorGlow />
       <div className={styles.scrollProgress} aria-hidden="true" />
 
       {/* Header and Mobile Navigation Drawer */}
@@ -1434,13 +1384,6 @@ export default function Home() {
             onClick={closeMenu}
           >
             Resume <FiArrowUpRight />
-          </a>
-          <a
-            className={styles.headerTalkBtn}
-            href={`mailto:${profile.email}`}
-            onClick={closeMenu}
-          >
-            Let&apos;s talk
           </a>
         </nav>
         <button
@@ -1530,15 +1473,15 @@ export default function Home() {
             </div>
 
             <p className={styles.aboutLead}>
-              Hello! I&apos;m <strong>Pratyush Kumar Pandey</strong>, a final-year B.Tech student in Computer Science &amp; Engineering at KL University, India.
+              Hello! I&apos;m <strong>Pratyush Kumar Pandey</strong>, a Computer Science &amp; Engineering student at Koneru Lakshmaiah Education Foundation (KLEF) with an <strong>8.62/10 CGPA</strong>.
             </p>
 
             <p className={styles.aboutStory}>
-              I specialize in designing and delivering production-ready full-stack systems and intuitive AI products. My technical foundation spans <strong>Java, Spring Boot, Node.js, React, Next.js, and TypeScript</strong>, enriched with hands-on experience in <strong>LLMs, RAG, vector databases, and cloud infrastructures</strong>.
+              I specialize in <strong>AI model evaluation, data preparation, RAG pipelines, and building practical AI-powered applications</strong>. My technical toolkit spans <strong>Python, SQL, Next.js, React.js, Node.js, and MongoDB</strong>, strengthened through an AI internship at <strong>EtharaAI</strong> and award-winning full-stack projects.
             </p>
 
             <p className={styles.aboutStory}>
-              Whether architecting robust REST APIs, optimizing relational and NoSQL databases, or engineering agentic AI workflows, I take pride in writing clean, scalable code that delivers measurable real-world impact.
+              Whether evaluating LLM response quality against structured criteria, building scalable ETL data pipelines with MySQL &amp; Power BI, or deploying real-time collaborative architectures, I enjoy using AI and modern software engineering to solve real-world problems with high reliability.
             </p>
 
             <div className={styles.aboutStatsGrid}>
@@ -1548,7 +1491,7 @@ export default function Home() {
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 <AnimatedCounter target={4} prefix="0" suffix="+" duration={1.8} />
-                <span className={styles.aboutStatLabel}>Years of coding craft &amp; architecture</span>
+                <span className={styles.aboutStatLabel}>Verified Industry Credentials</span>
               </motion.div>
 
               <motion.div
@@ -1556,7 +1499,7 @@ export default function Home() {
                 whileHover={{ y: -4, scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
-                <AnimatedCounter target={12} suffix="+" duration={1.8} />
+                <AnimatedCounter target={10} suffix="+" duration={1.8} />
                 <span className={styles.aboutStatLabel}>Full-stack &amp; AI projects built</span>
               </motion.div>
 
@@ -1565,8 +1508,8 @@ export default function Home() {
                 whileHover={{ y: -4, scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
-                <AnimatedCounter target={3} prefix="0" suffix="+" duration={1.8} />
-                <span className={styles.aboutStatLabel}>Industry credentials &amp; internships</span>
+                <AnimatedCounter target={8} prefix="" suffix=".62" duration={1.8} />
+                <span className={styles.aboutStatLabel}>Academic CGPA / 10 at KLEF</span>
               </motion.div>
 
               <motion.div
@@ -1575,7 +1518,7 @@ export default function Home() {
                 transition={{ type: "spring", stiffness: 300, damping: 20 }}
               >
                 <AnimatedCounter target={100} suffix="%" duration={2.0} />
-                <span className={styles.aboutStatLabel}>Dedication to performance &amp; UX</span>
+                <span className={styles.aboutStatLabel}>Dedication to performance &amp; quality</span>
               </motion.div>
             </div>
 
@@ -1630,17 +1573,10 @@ export default function Home() {
               line1="Architecting scalable systems,"
               line2="crafting intelligent products."
               gradientWords={["crafting", "intelligent", "products."]}
-              intro="h"
               theme="light"
               interactiveDropHeadline={true}
               pinTriggerRef={skillsIntroWrapRef}
             />
-
-            <div className={styles.skillsQuickTags}>
-              {["MERN Stack", "Spring Boot", "React", "CI/CD", "UI/UX", "Web Development"].map((tag) => (
-                <span key={tag}>{tag}</span>
-              ))}
-            </div>
           </div>
         </div>
 

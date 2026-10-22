@@ -102,24 +102,24 @@ const cogniviewProject = {
   number: '01.',
   name: 'Cogniview',
   titleLine1: 'Cogniview:',
-  titleLine2: 'AI Voice Interview & Evaluation Platform',
-  gradientWords: ['Voice', 'Interview', 'Evaluation', 'Platform', 'AI'],
-  kicker: 'Voice AI • Intelligent Systems',
-  subtitle: 'Speech AI • AST Code Evaluation • Real-Time Telemetry • Microservices',
+  titleLine2: 'AI Voice Interview & Placement Platform',
+  gradientWords: ['Voice', 'Interview', 'Placement', 'Platform', 'AI'],
+  kicker: 'Voice AI • Placement Practice',
+  subtitle: 'Next.js • TypeScript • Firebase • VAPI • REST APIs • Vercel',
   description:
-    'An enterprise-grade voice-enabled interview simulator that conducts real-time technical conversations, evaluates algorithmic reasoning with Gemini 1.5, audits GitHub portfolios, and provides comprehensive performance analytics.',
+    'An AI-powered voice interview platform that enables users to practice interviews through interactive voice conversations and receive real-time feedback. Implemented LLM-based scoring and personalized feedback systems to evaluate communication, technical responses, and overall interview performance.',
   year: '2026',
-  tags: ['Next.js 14', 'TypeScript', 'Gemini 1.5 Pro', 'Firebase', 'Web Audio API', 'Tailwind CSS'],
+  tags: ['Next.js', 'TypeScript', 'Firebase', 'VAPI', 'REST APIs', 'Vercel', 'LLMs'],
   accent: '#80e8e0',
   backdropImage: '/images/background.jpg',
   liveUrl: 'mailto:pratyush.me.ai@gmail.com?subject=Cogniview%20Demo%20Request',
   githubUrl: 'https://github.com/its-pratyushpandey',
-  urlBar: 'app.cogniview.ai/live/interview',
-  prompt: 'Analyze the architectural tradeoffs of Kafka vs RabbitMQ in event-driven microservices.',
+  urlBar: 'cogniview.ai/practice/voice-interview',
+  prompt: 'Evaluate candidate response on distributed consensus, system tradeoffs, and communication depth.',
   scores: [
     { label: 'Problem Solving', value: '96%', pct: 96 },
-    { label: 'System Design', value: '94%', pct: 94 },
-    { label: 'Voice Clarity', value: '95%', pct: 95 },
+    { label: 'Technical Depth', value: '94%', pct: 94 },
+    { label: 'Voice Response', value: '95%', pct: 95 },
   ],
 };
 
@@ -127,14 +127,14 @@ const nexthireProject = {
   number: '02.',
   name: 'NextHire',
   titleLine1: 'NextHire:',
-  titleLine2: 'AI Job Portal & Talent Hub',
-  gradientWords: ['Job', 'Portal', 'Talent', 'Hub', 'AI'],
-  kicker: 'WebSockets • Real-Time Systems',
-  subtitle: '1st Prize Winner // MERN Hackathon • Sub-50ms Sockets • Vector ATS',
+  titleLine2: 'AI Job Portal & Recruitment Workspace',
+  gradientWords: ['Job', 'Portal', 'Recruitment', 'Workspace', 'AI'],
+  kicker: 'AI Recruitment • WebSockets Architecture',
+  subtitle: 'React.js • Node.js • Express.js • MongoDB • JWT • REST APIs • WebSockets',
   description:
-    'Award-winning intelligent recruitment ecosystem connecting candidates with vector ATS resume parsing, sub-50ms live chat rooms, automated matching, and video screening.',
+    'A scalable AI-powered job portal with secure JWT authentication, role-based access control (RBAC), real-time communication, and RESTful APIs for recruiters and job seekers. Built intelligent recruitment features including AI-based resume parsing, semantic resume-job matching, and personalized recommendations.',
   year: '2025',
-  tags: ['React', 'Node.js', 'Express', 'MongoDB', 'WebSockets', 'Redux'],
+  tags: ['React.js', 'Node.js', 'Express.js', 'MongoDB', 'JWT', 'REST APIs', 'WebSockets'],
   accent: '#9b8cff',
   backdropImage: '/images/background2.jpg',
   liveUrl: 'mailto:pratyush.me.ai@gmail.com?subject=NextHire%20Demo%20Request',
@@ -151,29 +151,30 @@ const nexthireProject = {
   graphHeights: [38, 70, 52, 94, 76, 98, 82, 88],
 };
 
-const ariseProject = {
+const codesyncProject = {
   number: '03.',
-  name: 'Arise',
-  titleLine1: 'Arise:',
-  titleLine2: 'AI Career Platform & Resume Studio',
-  gradientWords: ['Career', 'Platform', 'Resume', 'Studio', 'AI'],
-  kicker: 'Career Intelligence • LLM Architecture',
-  subtitle: 'Dynamic ATS Engine • Prisma ORM • Next.js 14 • Gemini AI • Full Stack Development',
+  name: 'CodeSync',
+  titleLine1: 'CodeSync:',
+  titleLine2: 'Collaborative Code Editor & AI Workspace',
+  gradientWords: ['Collaborative', 'Code', 'Editor', 'Workspace', 'AI'],
+  kicker: 'Collaborative Systems • LLM Code Assistance',
+  subtitle: 'Python • Django • MongoDB • Socket.IO • JWT • Backend APIs',
   description:
-    'All-in-one career workspace featuring real-time ATS resume keyword optimization, multi-shot tailored cover letter drafting, and behavioral interview simulation.',
+    'A scalable real-time collaborative code editor using Python and Django, featuring secure JWT authentication, synchronized multi-user code editing, role-based access control (RBAC), and RESTful APIs for seamless collaboration. Integrated LLM-powered code assistance, real-time group chat, and video calls using Socket.IO.',
   year: '2025',
-  tags: ['Next.js 14', 'MongoDB', 'Prisma ORM', 'Gemini AI', 'Clerk'],
-  accent: '#ff9671',
+  tags: ['Python', 'Django', 'MongoDB', 'Socket.IO', 'JWT', 'REST APIs', 'LLMs'],
+  accent: '#43e8b3',
   backdropImage: '/images/myprofile.png',
-  liveUrl: 'mailto:pratyush.me.ai@gmail.com?subject=Arise%20Demo%20Request',
+  liveUrl: 'mailto:pratyush.me.ai@gmail.com?subject=CodeSync%20Demo%20Request',
   githubUrl: 'https://github.com/its-pratyushpandey',
-  urlBar: 'arise.careers/studio/optimizer',
-  score: '95',
-  scoreLabel: 'ATS Readiness',
-  targetRole: 'Senior / Staff Software Engineer',
-  benchmark: 'Top 2% ATS Benchmark',
-  keywords: ['Vector DB', 'Distributed Systems', 'Next.js 14', 'FastAPI & Docker'],
-  aiTip: 'Quantified metrics detected in 4/5 bullet points (+24% estimated ATS pass rate).',
+  urlBar: 'codesync.dev/workspace/collab',
+  collaborators: [
+    { name: 'Pratyush', role: 'Owner / Host', color: '#43e8b3' },
+    { name: 'Alex K.', role: 'Collaborator', color: '#55abf5' },
+    { name: 'Elena R.', role: 'Reviewer', color: '#ff9671' },
+  ],
+  latency: '18ms',
+  aiSuggestion: 'LLM Copilot: Refactored async event handler to use Socket.IO non-blocking broadcast.',
 };
 
 export default function ProjectsShowcase() {
@@ -196,7 +197,7 @@ export default function ProjectsShowcase() {
   const nexthireBackdropImgRef = useRef(null);
   const nexthireNumberRef = useRef(null);
 
-  // Arise (Project 03) refs
+  // CodeSync (Project 03) refs
   const ariseCardRef = useRef(null);
   const ariseViewportWrapRef = useRef(null);
   const ariseViewportRef = useRef(null);
@@ -352,7 +353,7 @@ export default function ProjectsShowcase() {
         }
       }
 
-      // 4. Project 03 — Arise (Warm Orange Identity)
+      // 4. Project 03 — CodeSync (Mint Teal Identity)
       if (ariseCardRef.current) {
         gsap.fromTo(
           ariseViewportWrapRef.current,
@@ -1021,12 +1022,12 @@ export default function ProjectsShowcase() {
         </article>
 
         {/* ------------------------------------------------------------------
-            PROJECT 03 — ARISE (Split: Details Left, Preview Right - Warm Orange)
+            PROJECT 03 — CODESYNC (Split: Details Left, Preview Right - Mint Teal)
             ------------------------------------------------------------------ */}
         <article
           ref={ariseCardRef}
           className={styles.splitProject}
-          style={{ '--stage-accent': ariseProject.accent }}
+          style={{ '--stage-accent': codesyncProject.accent }}
         >
           <div className={`${styles.splitGrid} ${styles.splitGridReversed}`}>
             {/* Visual Column (Right on desktop) */}
@@ -1040,7 +1041,7 @@ export default function ProjectsShowcase() {
                 >
                   <div ref={ariseBackdropImgRef} className={styles.splitBackdrop}>
                     <Image
-                      src={ariseProject.backdropImage}
+                      src={codesyncProject.backdropImage}
                       alt=""
                       fill
                       sizes="(max-width: 1024px) 100vw, 55vw"
@@ -1059,18 +1060,18 @@ export default function ProjectsShowcase() {
                       </div>
                       <div className={styles.windowUrlPill}>
                         <FiTerminal />
-                        <span>https://{ariseProject.urlBar}</span>
+                        <span>https://{codesyncProject.urlBar}</span>
                       </div>
                     </div>
 
                     <div className={styles.ariseCanvas}>
                       <div className={styles.ariseHeaderRow}>
                         <span className={styles.atsStatusBadge}>
-                          <span className={styles.livePulseDotCoral} />
-                          <span>AI Resume Engine v2.4 • Analysis Complete</span>
+                          <span className={styles.livePulseDotCoral} style={{ background: '#43e8b3', boxShadow: '0 0 10px #43e8b3' }} />
+                          <span>CodeSync Engine v2.0 • 3 Peers Live</span>
                         </span>
                         <span className={styles.atsVerifiedTag}>
-                          <FiCheckCircle style={{ marginRight: 4 }} /> ATS Optimal
+                          <FiCheckCircle style={{ marginRight: 4 }} /> Sync: {codesyncProject.latency}
                         </span>
                       </div>
 
@@ -1078,42 +1079,43 @@ export default function ProjectsShowcase() {
                         <div className={styles.atsLeftBlock}>
                           <div className={styles.circleGaugeWrap}>
                             <div className={styles.circleGauge}>
-                              <span className={styles.circleGaugeNum}>{ariseProject.score}</span>
-                              <span className={styles.circleGaugeSub}>/100</span>
+                              <span className={styles.circleGaugeNum}>03</span>
+                              <span className={styles.circleGaugeSub}>Peers</span>
                             </div>
                           </div>
                           <div className={styles.atsBio}>
-                            <span className={styles.atsBioTitle}>{ariseProject.scoreLabel}: 95/100</span>
-                            <span className={styles.atsBioRole}>{ariseProject.targetRole}</span>
-                            <span className={styles.atsBioBench}>{ariseProject.benchmark}</span>
+                            <span className={styles.atsBioTitle}>Python + Django + Socket.IO</span>
+                            <span className={styles.atsBioRole}>Synchronized Multi-Cursor Canvas</span>
+                            <span className={styles.atsBioBench}>Sub-50ms Keystroke Sync &bull; JWT RBAC</span>
                           </div>
                         </div>
                       </div>
 
                       <div className={styles.keywordSection}>
-                        <div className={styles.keywordSectionLabel}>Semantic Keyword Matches:</div>
+                        <div className={styles.keywordSectionLabel}>Active Room Collaborators:</div>
                         <div className={styles.keywordChips}>
-                          {ariseProject.keywords.map((kw) => (
-                            <span key={kw} className={styles.kwPill}>
-                              <FiCheckCircle className={styles.kwIcon} /> {kw}
+                          {codesyncProject.collaborators.map((c) => (
+                            <span key={c.name} className={styles.kwPill}>
+                              <span style={{ width: 6, height: 6, borderRadius: '50%', backgroundColor: c.color, display: 'inline-block', marginRight: 6 }} />
+                              {c.name} ({c.role})
                             </span>
                           ))}
                         </div>
                       </div>
 
                       <div className={styles.aiTipBox}>
-                        <span className={styles.aiTipSparkle}>✦ AI Insight:</span>
-                        <span>{ariseProject.aiTip}</span>
+                        <span className={styles.aiTipSparkle}>✦ AI Copilot:</span>
+                        <span>{codesyncProject.aiSuggestion}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Floating Interactive "View ↗" Badge */}
                   <a
-                    href={ariseProject.liveUrl}
+                    href={codesyncProject.liveUrl}
                     className={styles.floatingViewBadge}
-                    aria-label={`View ${ariseProject.name} live`}
-                    title={`View ${ariseProject.name} live`}
+                    aria-label={`View ${codesyncProject.name} live`}
+                    title={`View ${codesyncProject.name} live`}
                   >
                     View ↗
                   </a>
@@ -1124,14 +1126,14 @@ export default function ProjectsShowcase() {
             {/* Details Column (Left on desktop) */}
             <div className={styles.splitInfoCol}>
               <div ref={ariseNumberRef} className={styles.splitNumber}>
-                {ariseProject.number}
+                {codesyncProject.number}
               </div>
 
               <div className={styles.metaTopCapsuleRow}>
-                <span className={styles.yearPillFilled}>{ariseProject.year}</span>
+                <span className={styles.yearPillFilled}>{codesyncProject.year}</span>
                 <span className={styles.projectCategoryPill}>
                   <span className={styles.projectCategoryDot} />
-                  {ariseProject.kicker}
+                  {codesyncProject.kicker}
                 </span>
                 <motion.div
                   className={styles.pillsRow}
@@ -1143,7 +1145,7 @@ export default function ProjectsShowcase() {
                     visible: { transition: { staggerChildren: 0.04 } },
                   }}
                 >
-                  {ariseProject.tags.map((tag) => (
+                  {codesyncProject.tags.map((tag) => (
                     <motion.span
                       key={tag}
                       className={styles.tagPill}
@@ -1159,24 +1161,24 @@ export default function ProjectsShowcase() {
                 </motion.div>
               </div>
 
-              {/* Editorial Project Title with StaggeredWordReveal & Warm Orange Gradient */}
+              {/* Editorial Project Title with StaggeredWordReveal & Mint Teal Gradient */}
               <h3 className={styles.stageTitle}>
                 <span className={styles.stageTitleLine1}>
-                  <StaggeredWordReveal text={ariseProject.titleLine1} />
+                  <StaggeredWordReveal text={codesyncProject.titleLine1} />
                 </span>
                 <span className={styles.stageTitleLine2}>
                   <StaggeredWordReveal
-                    text={ariseProject.titleLine2}
+                    text={codesyncProject.titleLine2}
                     delay={0.1}
-                    gradientWords={ariseProject.gradientWords}
-                    gradientTheme="orange"
+                    gradientWords={codesyncProject.gradientWords}
+                    gradientTheme="cyan"
                   />
                 </span>
               </h3>
 
               {/* Subtitle with Masked Words */}
               <p className={styles.stageSubtitle}>
-                <StaggeredWordReveal text={ariseProject.subtitle} delay={0.16} />
+                <StaggeredWordReveal text={codesyncProject.subtitle} delay={0.16} />
               </p>
 
               {/* Description Paragraph with Motion Fade */}
@@ -1187,7 +1189,7 @@ export default function ProjectsShowcase() {
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.65, delay: 0.2 }}
               >
-                {ariseProject.description}
+                {codesyncProject.description}
               </motion.p>
 
               <motion.div
@@ -1198,9 +1200,9 @@ export default function ProjectsShowcase() {
                 transition={{ duration: 0.55, delay: 0.25 }}
               >
                 <motion.a
-                  href={ariseProject.liveUrl}
+                  href={codesyncProject.liveUrl}
                   className={styles.actionBtnPrimary}
-                  aria-label={`Discuss ${ariseProject.name}`}
+                  aria-label={`Discuss ${codesyncProject.name}`}
                   whileHover={{ y: -2, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -1208,11 +1210,11 @@ export default function ProjectsShowcase() {
                   <FiArrowUpRight />
                 </motion.a>
                 <motion.a
-                  href={ariseProject.githubUrl}
+                  href={codesyncProject.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.actionBtnOutline}
-                  aria-label={`GitHub source for ${ariseProject.name}`}
+                  aria-label={`GitHub source for ${codesyncProject.name}`}
                   whileHover={{ y: -2, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >

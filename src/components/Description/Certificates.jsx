@@ -3,33 +3,43 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const certificates = [
   {
-    title: 'Accenture Developer Virtual Experience',
-    image: '/accenture.png',
-    year: '2024',
-    link: '/Accenture.pdf',
-    type: 'Other',
-    issuer: 'Accenture',
+    title: 'MongoDB Certified Developer – Associate',
+    image: '/mongodb.svg',
+    year: '2025',
+    link: '/presume.pdf',
+    type: 'Database',
+    issuer: 'MongoDB',
   },
   {
-    title: 'Aviatrix Certified Engineer (ACE) Multicloud Network Associate',
-    image: '/Aviatrix.png',
-    year: '2024',
-    link: '/Aviatrix.pdf',
+    title: 'Oracle Cloud Infrastructure Certified Developer Professional',
+    image: '/aviatrix-mark.png',
+    year: '2025',
+    link: '/presume.pdf',
     type: 'Cloud',
-    issuer: 'Aviatrix',
+    issuer: 'Oracle',
   },
   {
-    title: 'Salesforce Developer Virtual Internship',
-    image: '/salesforce.png',
+    title: 'Cambridge Linguaskill English Certification',
+    image: '/images/google.jpg',
     year: '2024',
-    link: '/Salesforce.pdf',
-    type: 'Cloud',
-    issuer: 'Salesforce',
+    link: '/presume.pdf',
+    type: 'Language',
+    issuer: 'Cambridge Assessment English',
+  },
+  {
+    title: 'GitHub Foundations',
+    image: '/images/background.jpg',
+    year: '2026',
+    link: '/presume.pdf',
+    type: 'DevOps',
+    issuer: 'GitHub',
   },
 ];
 
 const Certificates = () => {
   const [selectedType, setSelectedType] = useState('All');
+
+  const types = ['All', 'Cloud', 'Database', 'DevOps', 'Language'];
 
   const filteredCertificates = certificates.filter(
     (cert) => selectedType === 'All' || cert.type === selectedType
@@ -42,9 +52,11 @@ const Certificates = () => {
         value={selectedType}
         onChange={(e) => setSelectedType(e.target.value)}
       >
-        <option value="All">All</option>
-        <option value="Cloud">Cloud</option>
-        <option value="Other">Other</option>
+        {types.map((type) => (
+          <option key={type} value={type}>
+            {type}
+          </option>
+        ))}
       </select>
       <div className="certificates-grid">
         {filteredCertificates.map((cert, index) => (

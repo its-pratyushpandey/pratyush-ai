@@ -3,16 +3,27 @@ import { motion } from "framer-motion";
 
 const experiences = [
 	{
-		company: "GAO Tek Inc.",
-		role: "Fullstack Developer Intern",
-		period: "2025",
-		location: "Remote",
-		tech: ["React", "Node.js", "Express", "MongoDB", "Firebase", "JWT"],
+		company: "Calibo",
+		role: "AI Trainee",
+		period: "2026",
+		location: "India",
+		tech: ["Python", "Machine Learning", "Generative AI", "LLMs", "RAG", "Azure"],
 		details: [
-			"Developed and maintained dynamic user interfaces using React for a web-based platform.",
-			"Integrated backend APIs using Express and Node.js to support real-time data interaction.",
-			"Implemented secure user authentication and authorization workflows with Firebase and JWT.",
-			"Contributed to feature enhancements, code optimization, and cross-functional collaboration.",
+			"Developing enterprise-grade AI solutions, LLM pipelines, and automated agent workflows solving real-world business problems.",
+			"Collaborating with mentors and engineering teams to design scalable systems and ship production-ready AI features.",
+			"Strengthening engineering fundamentals through REST APIs, vector databases, cloud infrastructure, and iterative delivery.",
+		],
+	},
+	{
+		company: "EtharaAI",
+		role: "AI Intern",
+		period: "Jan 2026 – May 2026",
+		location: "Gurugram, India",
+		tech: ["Python", "LLMs", "RAG", "Model Evaluation", "Prompt Engineering", "Data Annotation"],
+		details: [
+			"Contributed to Large Language Model (LLM) post-training workflows through data preparation, response evaluation, and quality analysis to improve model performance and reliability.",
+			"Performed structured data processing, validation, and prompt evaluation while ensuring data quality, consistency, and accuracy across AI model evaluation workflows.",
+			"Evaluated LLM outputs against structured criteria, identifying issues related to accuracy, relevance, instruction following, and response quality across AI evaluation workflows.",
 		],
 	},
 	{

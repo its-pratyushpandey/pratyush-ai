@@ -32,7 +32,7 @@ import {
   FiTrendingUp,
   FiZap,
 } from 'react-icons/fi';
-import { SiNextdotjs, SiReact, SiSpringboot, SiTypescript } from 'react-icons/si';
+import { SiNextdotjs, SiPython, SiReact, SiTypescript } from 'react-icons/si';
 import Magnetic from '../../common/Magnetic';
 import styles from './CinematicHero.module.scss';
 
@@ -41,31 +41,32 @@ if (typeof window !== 'undefined') {
 }
 
 const ROLES = [
-  'FULL-STACK ARCHITECT',
-  'AI SYSTEMS & RAG ENGINEER',
-  'SPRING BOOT SPECIALIST',
-  'AUTONOMOUS AGENT BUILDER',
-  'DISTRIBUTED APIS ENGINEER',
+  'AI & LLM SYSTEMS ENGINEER',
+  'FULL-STACK DEVELOPER (NEXT.JS & NODE)',
+  'RAG & MODEL EVALUATION SPECIALIST',
+  'DATA PIPELINES & APIS ARCHITECT',
+  'COLLABORATIVE SOFTWARE BUILDER',
 ];
 
 const CODE_SNIPPETS = {
-  spring: {
-    filename: 'DeliverableController.java',
-    lang: 'java',
-    desc: 'High-Throughput Spring Boot 3 REST Gateway',
-    code: `@RestController
-@RequestMapping("/api/v1/systems")
-public class DeliverableController {
+  python: {
+    filename: 'model_evaluation.py',
+    lang: 'python',
+    desc: 'LLM Response Evaluation & RAG Pipeline',
+    code: `import asyncio
+from typing import Dict, Any
+from rag_engine import VectorStore, LLMClient, evaluate_quality
 
-  @PostMapping("/deploy")
-  public ResponseEntity<ShipmentStatus> release(
-      @AuthenticationPrincipal User user,
-      @Valid @RequestBody PipelineSpec spec
-  ) {
-    Metrics.recordLatency("p95", 38 /* ms */);
-    return ResponseEntity.ok(ShipmentStatus.DEPLOYED);
-  }
-}`,
+async def evaluate_response(query: str, ground_truth: str) -> Dict[str, Any]:
+    # 1. Semantic top-k context retrieval via VectorStore
+    context = await VectorStore.similarity_search(query, top_k=5)
+    
+    # 2. Dynamic prompt enrichment and streaming generation
+    response = await LLMClient.generate(prompt=query, context=context)
+    
+    # 3. Model evaluation: accuracy, relevance & instruction following
+    metrics = evaluate_quality(response, ground_truth)
+    return {"metrics": metrics, "latency_ms": 38, "status": "VERIFIED"}`,
   },
   ai: {
     filename: 'AgenticRAGPipeline.ts',
@@ -86,20 +87,22 @@ export async function executeAgentWorkflow(query: string) {
 }`,
   },
   cluster: {
-    filename: 'ClusterTopology.yml',
+    filename: 'docker-compose.yml',
     lang: 'yaml',
-    desc: 'Docker & Kubernetes Multi-Tier Orchestration',
+    desc: 'Docker & Multi-Container Microservices Topology',
     code: `version: '3.8'
 services:
-  gateway:
-    image: pratyush/api-gateway:latest
-    ports: ["8080:8080"]
+  api-service:
+    image: pratyush/ai-service:latest
+    ports: ["8000:8000"]
+    environment:
+      - MODEL_EVALUATION=active
+      - DB_URI=mongodb://mongo:27017/cogniview
     deploy:
-      replicas: 4
       resources:
         limits: { cpus: '2.0', memory: '4G' }
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 10s`,
   },
 };
@@ -118,13 +121,13 @@ const ARCHITECTURE_NODES = [
   },
   {
     id: 'gateway',
-    title: 'API Gateway',
-    tech: 'Spring Boot 3.3 / Java 21',
-    meta: 'JWT Auth & Circuit Breaker • Port :8080',
-    latency: '24ms',
+    title: 'API & Real-Time Gateway',
+    tech: 'Python FastAPI / Node.js & Sockets',
+    meta: 'JWT Auth, RBAC & Socket.IO • Port :8000',
+    latency: '18ms',
     throughput: '8.2k req/s',
     status: 'ACTIVE',
-    icon: SiSpringboot,
+    icon: SiPython,
     color: '#43e8b3',
   },
   {
@@ -152,9 +155,9 @@ const ARCHITECTURE_NODES = [
 ];
 
 const METRICS_HUD = [
-  { value: '04+', label: 'Years Dev Craft', sub: 'Java, TypeScript, Python', icon: FiCode },
-  { value: '12+', label: 'Production Apps', sub: 'Full-Stack & Applied AI', icon: FiLayers },
-  { value: '<38ms', label: 'P95 API Latency', sub: 'Spring & Next.js Endpoints', icon: FiZap },
+  { value: '04+', label: 'Years Dev Craft', sub: 'Python, TypeScript, SQL', icon: FiCode },
+  { value: '10+', label: 'Production Apps', sub: 'Full-Stack & Applied AI', icon: FiLayers },
+  { value: '<38ms', label: 'P95 API Latency', sub: 'FastAPI & Next.js Endpoints', icon: FiZap },
   { value: '99.9%', label: 'Uptime Standard', sub: 'Fault-Tolerant Architectures', icon: FiShield },
 ];
 
@@ -174,6 +177,107 @@ const entranceVariants = {
   }),
 };
 
+function DigitalCoreCanvas() {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let animId = null;
+    let angle = 0;
+
+    const setCanvasSize = () => {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
+      const width = rect.width || 400;
+      const height = rect.height || 260;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+    };
+
+    setCanvasSize();
+    window.addEventListener('resize', setCanvasSize);
+
+    const renderGyro = () => {
+      if (!canvas) return;
+      const rect = canvas.getBoundingClientRect();
+      const w = rect.width || 400;
+      const h = rect.height || 260;
+      const cx = w / 2;
+      const cy = h / 2;
+
+      ctx.clearRect(0, 0, w, h);
+      angle += 0.018;
+
+      const rings = [
+        { radius: Math.min(115, w * 0.28), rotSpeed: angle * 1.0, color: '#55abf5', tilt: 0.55 },
+        { radius: Math.min(85, w * 0.21), rotSpeed: -angle * 1.35, color: '#9b8cff', tilt: -0.45 },
+        { radius: Math.min(58, w * 0.14), rotSpeed: angle * 1.8, color: '#43e8b3', tilt: 0.8 },
+      ];
+
+      rings.forEach((ring) => {
+        ctx.save();
+        ctx.translate(cx, cy);
+
+        ctx.beginPath();
+        const steps = 60;
+        for (let i = 0; i <= steps; i++) {
+          const theta = (i / steps) * Math.PI * 2;
+          const x = ring.radius * Math.cos(theta + ring.rotSpeed);
+          const y = ring.radius * Math.sin(theta + ring.rotSpeed) * Math.cos(ring.tilt);
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = ring.color;
+        ctx.lineWidth = 1.5;
+        ctx.shadowColor = ring.color;
+        ctx.shadowBlur = 12;
+        ctx.stroke();
+
+        // Data node traveling on ring
+        const nodeTheta = ring.rotSpeed * 2.2;
+        const nx = ring.radius * Math.cos(nodeTheta);
+        const ny = ring.radius * Math.sin(nodeTheta) * Math.cos(ring.tilt);
+        ctx.beginPath();
+        ctx.arc(nx, ny, 4.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = '#ffffff';
+        ctx.shadowBlur = 8;
+        ctx.fill();
+
+        ctx.restore();
+      });
+
+      // Core pulsing center
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, 14 + Math.sin(angle * 4) * 3, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.shadowColor = '#6366f1';
+      ctx.shadowBlur = 24;
+      ctx.fill();
+      ctx.restore();
+
+      animId = requestAnimationFrame(renderGyro);
+    };
+
+    animId = requestAnimationFrame(renderGyro);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('resize', setCanvasSize);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} className={styles.gyroCanvas} />;
+}
+
 export default function CinematicHero({
   profile = {},
   isLoading = false,
@@ -181,7 +285,6 @@ export default function CinematicHero({
 }) {
   const containerRef = useRef(null);
   const canvasRef = useRef(null);
-  const gyroCanvasRef = useRef(null);
   const cardRef = useRef(null);
   const track1Ref = useRef(null);
   const track2Ref = useRef(null);
@@ -195,7 +298,7 @@ export default function CinematicHero({
   const [roleText, setRoleText] = useState(ROLES[0]);
   const [roleIndex, setRoleIndex] = useState(0);
   const [activeTab, setActiveTab] = useState('topology'); // 'topology' | 'code' | 'core' | 'metrics'
-  const [activeCodeKey, setActiveCodeKey] = useState('spring');
+  const [activeCodeKey, setActiveCodeKey] = useState('python');
   const [activeNode, setActiveNode] = useState(ARCHITECTURE_NODES[0]);
   const [liveClock, setLiveClock] = useState('');
   const [packetBurst, setPacketBurst] = useState(false);
@@ -324,17 +427,17 @@ export default function CinematicHero({
     if (benchmarkStatus === 'running') return;
     setBenchmarkStatus('running');
     setTerminalLogs([
-      '⚡ [SYS.INIT] Initializing JVM 21 and Node.js v20 runtime...',
-      '🚀 [COMPILE] Binding REST endpoints & security filter chains...',
-      '📡 [DISPATCH] Broadcasting 1,000 synthetic HTTP/2 load packets...',
+      '⚡ [SYS.INIT] Initializing Python 3.11 & FastAPI async worker pool...',
+      '🚀 [MODEL_EVAL] Loading evaluation datasets & test rubrics...',
+      '📡 [DISPATCH] Streaming test prompts through RAG pipeline...',
     ]);
 
     setTimeout(() => {
       setTerminalLogs((prev) => [
         ...prev,
-        '⚡ [CACHE] Redis hit ratio: 99.4% (Latency: 2.1ms)',
-        '🤖 [AI_RAG] Vector similarity score: 0.982 (Gemini 1.5 Pro)',
-        '✔ [RESULT] Status: 200 OK | P95 Latency: 38ms | 0 packet drop [OPTIMAL]',
+        '⚡ [CACHE] Redis hit ratio: 99.4% (Latency: 1.8ms)',
+        '🤖 [EVALUATION] Response accuracy: 98.7% | Hallucination: 0.0%',
+        '✔ [RESULT] Status: 200 OK | P95 Latency: 38ms | Instruction-Following: 100% [OPTIMAL]',
       ]);
       setBenchmarkStatus('success');
 
@@ -468,85 +571,7 @@ export default function CinematicHero({
     };
   }, []);
 
-  // 7. 3D Kinetic Gyroscope / Orbital Core Canvas (Tab 3)
-  useEffect(() => {
-    if (activeTab !== 'core') return;
-    const canvas = gyroCanvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let animId = null;
-    let angle = 0;
-
-    const renderGyro = () => {
-      if (!isInViewportRef.current) {
-        animId = requestAnimationFrame(renderGyro);
-        return;
-      }
-
-      const w = (canvas.width = canvas.offsetWidth || 400);
-      const h = (canvas.height = canvas.offsetHeight || 380);
-      const cx = w / 2;
-      const cy = h / 2;
-
-      ctx.clearRect(0, 0, w, h);
-      angle += 0.018;
-
-      const rings = [
-        { radius: 125, rotSpeed: angle * 1.0, color: '#55abf5', tilt: 0.55 },
-        { radius: 95, rotSpeed: -angle * 1.35, color: '#9b8cff', tilt: -0.45 },
-        { radius: 65, rotSpeed: angle * 1.8, color: '#43e8b3', tilt: 0.8 },
-      ];
-
-      rings.forEach((ring) => {
-        ctx.save();
-        ctx.translate(cx, cy);
-
-        ctx.beginPath();
-        const steps = 60;
-        for (let i = 0; i <= steps; i++) {
-          const theta = (i / steps) * Math.PI * 2;
-          const x = ring.radius * Math.cos(theta + ring.rotSpeed);
-          const y = ring.radius * Math.sin(theta + ring.rotSpeed) * Math.cos(ring.tilt);
-          if (i === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
-        }
-        ctx.strokeStyle = ring.color;
-        ctx.lineWidth = 1.5;
-        ctx.shadowColor = ring.color;
-        ctx.shadowBlur = 14;
-        ctx.stroke();
-
-        // Data node traveling on ring
-        const nodeTheta = ring.rotSpeed * 2.2;
-        const nx = ring.radius * Math.cos(nodeTheta);
-        const ny = ring.radius * Math.sin(nodeTheta) * Math.cos(ring.tilt);
-        ctx.beginPath();
-        ctx.arc(nx, ny, 4.5, 0, Math.PI * 2);
-        ctx.fillStyle = '#ffffff';
-        ctx.fill();
-
-        ctx.restore();
-      });
-
-      // Core pulsing center
-      ctx.beginPath();
-      ctx.arc(cx, cy, 14 + Math.sin(angle * 4) * 3, 0, Math.PI * 2);
-      ctx.fillStyle = '#ffffff';
-      ctx.shadowColor = '#6366f1';
-      ctx.shadowBlur = 28;
-      ctx.fill();
-
-      animId = requestAnimationFrame(renderGyro);
-    };
-
-    renderGyro();
-
-    return () => cancelAnimationFrame(animId);
-  }, [activeTab]);
-
-  // 8. Kinetic Opposing Typography Ribbons with Scroll Momentum
+  // 7. Kinetic Opposing Typography Ribbons with Scroll Momentum
   useEffect(() => {
     let animId = null;
     let offset1 = 0;
@@ -668,10 +693,10 @@ export default function CinematicHero({
       {/* 3. Dual Kinetic Typographic Velocity Ribbons (BEHIND ALL CONTENT) */}
       <div ref={ribbonContainerRef} className={styles.kineticRibbonContainer} aria-hidden="true">
         <div ref={track1Ref} className={styles.kineticTrackTop}>
-          <span>FULL-STACK ARCHITECT &bull; DISTRIBUTED MICROSERVICES &bull; NEXT.JS 14 &bull; SPRING BOOT &bull; AGENTIC RAG &bull; HIGH-THROUGHPUT SYSTEMS &bull; FULL-STACK ARCHITECT &bull; NEXT.JS 14 &bull; SPRING BOOT &bull; </span>
+          <span>AI SYSTEMS &bull; LARGE LANGUAGE MODELS &bull; NEXT.JS 14 &bull; PYTHON &bull; RAG PIPELINES &bull; MODEL EVALUATION &bull; FULL-STACK DEVELOPER &bull; NEXT.JS 14 &bull; PYTHON &bull; </span>
         </div>
         <div ref={track2Ref} className={styles.kineticTrackBottom}>
-          <span>REACTIVE INTERFACES &bull; MULTI-AGENT SWARMS &bull; SUB-50MS APIS &bull; FAULT TOLERANCE &bull; CLOUD DEVOPS &bull; DOCKER CI/CD &bull; REACTIVE INTERFACES &bull; MULTI-AGENT SWARMS &bull; </span>
+          <span>REACTIVE INTERFACES &bull; DATA PIPELINES &bull; REST APIS &bull; FAULT TOLERANCE &bull; CLOUD DEVOPS &bull; DOCKER CI/CD &bull; REACTIVE INTERFACES &bull; WEBSOCKETS &bull; </span>
         </div>
       </div>
 
@@ -768,9 +793,9 @@ export default function CinematicHero({
             animate={animationState}
             custom={5}
           >
-            Specializing in resilient distributed architectures, sub-50ms REST microservices,
-            and production-grade intelligent AI systems from foundational relational schemas
-            to fluid reactive frontends with <strong>Java, Spring Boot, React, Next.js, and LLMs</strong>.
+            Specializing in AI model evaluation, data preparation, scalable RAG pipelines,
+            and production-grade full-stack architectures from foundational database schemas
+            to fluid reactive interfaces with <strong>Python, Next.js, React, Node.js, SQL, and LLMs</strong>.
           </motion.p>
 
           {/* Live Telemetry Metrics HUD Strip */}
@@ -1040,7 +1065,7 @@ export default function CinematicHero({
                     {/* Syntax Highlighted Code Viewer */}
                     <div className={styles.codeContainer}>
                       <pre className={styles.codePre}>
-                        <code>{CODE_SNIPPETS[activeCodeKey].code}</code>
+                        <code>{(CODE_SNIPPETS[activeCodeKey] || CODE_SNIPPETS.python).code}</code>
                       </pre>
                     </div>
 
@@ -1071,7 +1096,7 @@ export default function CinematicHero({
                       </button>
 
                       <span className={styles.codeDescTag}>
-                        {CODE_SNIPPETS[activeCodeKey].desc}
+                        {(CODE_SNIPPETS[activeCodeKey] || CODE_SNIPPETS.python).desc}
                       </span>
                     </div>
 
@@ -1106,7 +1131,7 @@ export default function CinematicHero({
                     </div>
 
                     <div className={styles.gyroCanvasWrap}>
-                      <canvas ref={gyroCanvasRef} className={styles.gyroCanvas} />
+                      <DigitalCoreCanvas />
                     </div>
 
                     <div className={styles.coreFooterSpecs}>
@@ -1145,31 +1170,43 @@ export default function CinematicHero({
 
                     <div className={styles.metricsDetailGrid}>
                       <div className={styles.metricGaugeCard}>
-                        <span className={styles.gaugeLabel}>Redis Cache Hit Rate</span>
+                        <div className={styles.gaugeHeader}>
+                          <span className={styles.gaugeLabel}>Redis Cache Hit Rate</span>
+                          <span className={styles.gaugePulse}>● 1.8ms</span>
+                        </div>
                         <strong className={styles.gaugeVal}>99.4%</strong>
                         <div className={styles.gaugeBar}><span style={{ width: '99.4%' }} /></div>
                       </div>
                       <div className={styles.metricGaugeCard}>
-                        <span className={styles.gaugeLabel}>JVM Heap Utilization</span>
-                        <strong className={styles.gaugeVal}>34.8%</strong>
-                        <div className={styles.gaugeBar}><span style={{ width: '34.8%' }} /></div>
+                        <div className={styles.gaugeHeader}>
+                          <span className={styles.gaugeLabel}>Python / FastAPI Heap</span>
+                          <span className={styles.gaugePulse}>● NORMAL</span>
+                        </div>
+                        <strong className={styles.gaugeVal}>28.4%</strong>
+                        <div className={styles.gaugeBar}><span style={{ width: '28.4%' }} /></div>
                       </div>
                       <div className={styles.metricGaugeCard}>
-                        <span className={styles.gaugeLabel}>HTTP/2 P95 Latency</span>
+                        <div className={styles.gaugeHeader}>
+                          <span className={styles.gaugeLabel}>HTTP/2 P95 Latency</span>
+                          <span className={styles.gaugePulse}>● OPTIMAL</span>
+                        </div>
                         <strong className={styles.gaugeVal}>38ms</strong>
                         <div className={styles.gaugeBar}><span style={{ width: '85%' }} /></div>
                       </div>
                       <div className={styles.metricGaugeCard}>
-                        <span className={styles.gaugeLabel}>Service Availability</span>
+                        <div className={styles.gaugeHeader}>
+                          <span className={styles.gaugeLabel}>Service Availability</span>
+                          <span className={styles.gaugePulse}>● 4 AZs</span>
+                        </div>
                         <strong className={styles.gaugeVal}>99.98%</strong>
                         <div className={styles.gaugeBar}><span style={{ width: '99.98%' }} /></div>
                       </div>
                     </div>
 
                     <div className={styles.clusterLiveLogs}>
-                      <span>&bull; [AUTOSCALER] 4 pods active across availability zones</span>
-                      <span>&bull; [SECURITY] TLS 1.3 mutual handshake verified</span>
-                      <span>&bull; [AI_ROUTER] Gemini 1.5 streaming pipeline ready</span>
+                      <span>&bull; [AUTOSCALER] 4 pods active across availability zones (Python &amp; Node)</span>
+                      <span>&bull; [SECURITY] TLS 1.3 mutual handshake verified (Port :8000 &amp; :3000)</span>
+                      <span>&bull; [AI_EVAL] RAG pipeline evaluation latency &lt;38ms (Model Evaluation Active)</span>
                     </div>
                   </motion.div>
                 )}

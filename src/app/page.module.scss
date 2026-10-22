@@ -907,8 +907,9 @@
 }
 
 .navResume {
-  border-color: rgba(255, 255, 255, .7);
-  color: white !important;
+  background: white;
+  color: #06070a !important;
+  border: none;
 }
 
 .hero {
@@ -1367,29 +1368,6 @@
   }
 }
 
-.headerTalkBtn {
-  background: #ffffff !important;
-  color: #06070a !important;
-  border-radius: 9999px !important;
-  padding: 8px 18px !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.3) !important;
-  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease !important;
-
-  &:hover {
-    background-color: #f1f3f9 !important;
-    transform: translateY(-1px) scale(1.03) !important;
-    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35) !important;
-  }
-
-  &::after {
-    display: none !important;
-  }
-}
 
 .header::after {
   background: linear-gradient(90deg, transparent, var(--portfolio-blue), var(--portfolio-violet), transparent);
@@ -1415,9 +1393,19 @@
 
 .logo span,
 .heroHeader .logo span {
-  background: linear-gradient(135deg, var(--portfolio-violet), var(--portfolio-blue));
-  box-shadow: 0 0 20px rgba(93, 110, 229, .35);
-  color: #05070b;
+  background: #ffffff !important;
+  color: #06070a !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.3) !important;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease !important;
+}
+
+.logo:hover span,
+.heroHeader .logo:hover span {
+  background-color: #f1f3f9 !important;
+  color: #06070a !important;
+  transform: translateY(-1px) scale(1.06);
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35) !important;
 }
 
 .nav a,
@@ -1452,16 +1440,45 @@
 
 .navResume,
 .heroHeader .navResume {
-  background: linear-gradient(100deg, var(--portfolio-violet), var(--portfolio-blue));
-  border: 0;
-  box-shadow: 0 8px 22px rgba(93, 110, 229, .25);
-  color: #05070b !important;
-  transition: box-shadow .3s ease, transform .3s ease;
-}
+  background: #ffffff !important;
+  color: #06070a !important;
+  border: none !important;
+  border-radius: 9999px !important;
+  padding: 8px 18px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.3) !important;
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease !important;
+  text-decoration: none !important;
+  line-height: 1;
 
-.navResume:hover {
-  box-shadow: 0 12px 30px rgba(85, 171, 245, .34);
-  transform: translateY(-2px);
+  svg {
+    font-size: 13px !important;
+    color: #06070a !important;
+    stroke-width: 2.2px;
+    display: inline-block;
+    transition: transform 0.2s ease, color 0.2s ease;
+  }
+
+  &:hover {
+    background-color: #f1f3f9 !important;
+    color: #06070a !important;
+    transform: translateY(-1px) scale(1.03) !important;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35) !important;
+
+    svg {
+      transform: translate(1px, -1px);
+      color: #06070a !important;
+    }
+  }
+
+  &::after {
+    display: none !important;
+  }
 }
 
 .heroHeader .menuButton {
@@ -1965,27 +1982,6 @@
 .header,
 .heroHeader {
   background-color: #070a10;
-}
-
-/* Global Ambient Cursor Follower Glow */
-.cursorGlow {
-  background: radial-gradient(circle, rgba(107, 94, 232, 0.16) 0%, rgba(128, 232, 224, 0.08) 40%, transparent 70%);
-  border-radius: 50%;
-  filter: blur(28px);
-  height: 340px;
-  left: -170px;
-  pointer-events: none;
-  position: fixed;
-  top: -170px;
-  width: 340px;
-  will-change: transform;
-  z-index: 9999;
-}
-
-@media (pointer: coarse) {
-  .cursorGlow {
-    display: none;
-  }
 }
 
 /* Hero Section Animations & Floating Tech Badges */

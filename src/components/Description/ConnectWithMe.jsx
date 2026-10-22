@@ -3,12 +3,11 @@ import { motion } from 'framer-motion';
 import styles from './ConnectWithMe.module.scss';
 
 const links = [
-  { name: 'GitHub', url: 'https://github.com', icon: '🐙' },
-  { name: 'LinkedIn', url: 'https://linkedin.com', icon: '🔗' },
-  { name: 'HackerRank', url: 'https://hackerrank.com', icon: '💻' },
-  { name: 'CodeChef', url: 'https://codechef.com', icon: '🍴' },
-  { name: 'LeetCode', url: 'https://leetcode.com', icon: '📘' },
+  { name: 'GitHub', url: 'https://github.com/Pratyush-2005', icon: '🐙' },
+  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/pratyush-pandey-', icon: '🔗' },
+  { name: 'LeetCode', url: 'https://leetcode.com/u/pratyush_pandey/', icon: '📘' },
   { name: 'Email', url: 'mailto:pratyush.me.ai@gmail.com', icon: '✉️' },
+  { name: 'Phone', url: 'tel:+917562920811', icon: '📞', description: '+91-7562920811' },
   { name: 'Location', url: '#', icon: '📍', description: 'Vijayawada, India' },
 ];
 

@@ -342,36 +342,11 @@ export default function KineticDropHeadline({
     };
   }, [wordMeta, pinTriggerRef, groundLineRef]);
 
-  // Ambient spotlight following cursor via direct DOM ref (0 React re-renders)
-  const handleMouseMove = (e) => {
-    if (!containerRef.current || !spotlightRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    spotlightRef.current.style.background = `radial-gradient(420px circle at ${x}px ${y}px, rgba(79, 86, 214, 0.12), transparent 70%)`;
-    spotlightRef.current.style.opacity = '1';
-  };
-
-  const handleMouseLeave = () => {
-    if (spotlightRef.current) {
-      spotlightRef.current.style.opacity = '0';
-    }
-  };
-
   return (
     <div
       ref={containerRef}
       className={`${styles.kineticHeadlineWrap} ${className}`}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
     >
-      {/* Ambient electric blueprint cursor spotlight */}
-      <div
-        ref={spotlightRef}
-        className={styles.ambientSpotlight}
-        aria-hidden="true"
-      />
-
       {/* Kinetic Headline */}
       <h2
         className={styles.kineticHeadline}
@@ -411,21 +386,7 @@ export default function KineticDropHeadline({
         ref={internalGroundRef}
         className={styles.groundShelves}
         aria-hidden="true"
-      >
-        <div className={styles.shelfHeader}>
-          <div className={styles.shelfDatum}>
-            <span className={styles.datumIndicator} />
-            <span>ELEVATION 0.00m // ARCHITECTURAL GLYPH BASELINES</span>
-          </div>
-          <div className={styles.shelfMeta}>
-            <span className={styles.shelfBadge}>56 INDEPENDENT BLOCKS</span>
-            <span>[3 DATUM TIERS]</span>
-          </div>
-        </div>
-
-        <div className={styles.shelfTracks}>
-        </div>
-      </div>
+      />
     </div>
   );
 }

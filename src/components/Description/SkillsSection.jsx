@@ -1,61 +1,88 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  FaJava,
   FaJs,
   FaReact,
   FaNodeJs,
-  FaAws,
   FaGitAlt,
   FaGithub,
-  FaGitlab,
+  FaPython,
+  FaDatabase,
+  FaDocker,
 } from "react-icons/fa";
 import {
-  SiCplusplus,
   SiTypescript,
-  SiRedux,
   SiMongodb,
   SiMysql,
-  SiFirebase,
   SiNextdotjs,
-  SiSpringboot,
   SiExpress,
-  SiTailwindcss,
+  SiPostman,
+  SiNumpy,
+  SiPandas,
+  SiJenkins,
 } from "react-icons/si";
 import styles from "./SkillsSection.module.scss";
 
 const skillCategories = [
   {
-    title: "Languages I Code In",
+    title: "Programming Languages",
     skills: [
-      { name: "Java", icon: <FaJava className={styles.icon} /> },
-      { name: "C++", icon: <SiCplusplus className={styles.icon} /> },
+      { name: "Python", icon: <FaPython className={styles.icon} /> },
       { name: "JavaScript", icon: <FaJs className={styles.icon} /> },
+      { name: "TypeScript", icon: <SiTypescript className={styles.icon} /> },
+      { name: "SQL", icon: <FaDatabase className={styles.icon} /> },
     ],
   },
   {
-    title: "Core Technologies",
+    title: "AI & Large Language Models",
     skills: [
-      { name: "ReactJS", icon: <FaReact className={styles.icon} /> },
-      { name: "NextJS", icon: <SiNextdotjs className={styles.icon} /> },
-      { name: "Typescript", icon: <SiTypescript className={styles.icon} /> },
-      { name: "NodeJS", icon: <FaNodeJs className={styles.icon} /> },
-      { name: "ExpressJS", icon: <SiExpress className={styles.icon} /> },
-      { name: "SpringBoot", icon: <SiSpringboot className={styles.icon} /> },
+      { name: "LLMs", icon: <span className={styles.icon}>🤖</span> },
+      { name: "RAG Systems", icon: <span className={styles.icon}>⚡</span> },
+      { name: "Prompt Engineering", icon: <span className={styles.icon}>✍️</span> },
+      { name: "Hugging Face", icon: <span className={styles.icon}>🤗</span> },
+      { name: "LLM APIs", icon: <span className={styles.icon}>🔌</span> },
+    ],
+  },
+  {
+    title: "Machine Learning & Evaluation",
+    skills: [
+      { name: "Model Evaluation", icon: <span className={styles.icon}>🎯</span> },
+      { name: "Data Preparation", icon: <span className={styles.icon}>📊</span> },
+      { name: "Data Quality", icon: <span className={styles.icon}>✓</span> },
+      { name: "NumPy", icon: <SiNumpy className={styles.icon} /> },
+      { name: "Pandas", icon: <SiPandas className={styles.icon} /> },
+    ],
+  },
+  {
+    title: "Full-Stack Development",
+    skills: [
+      { name: "React.js", icon: <FaReact className={styles.icon} /> },
+      { name: "Next.js", icon: <SiNextdotjs className={styles.icon} /> },
+      { name: "Node.js", icon: <FaNodeJs className={styles.icon} /> },
+      { name: "Express.js", icon: <SiExpress className={styles.icon} /> },
       { name: "MongoDB", icon: <SiMongodb className={styles.icon} /> },
-      { name: "MySQL", icon: <SiMysql className={styles.icon} /> },
-      { name: "Firebase", icon: <SiFirebase className={styles.icon} /> },
-      { name: "AWS", icon: <FaAws className={styles.icon} /> },
-      { name: "Redux", icon: <SiRedux className={styles.icon} /> },
-      { name: "Git", icon: <FaGitAlt className={styles.icon} /> },
+      { name: "REST APIs", icon: <span className={styles.icon}>🌐</span> },
     ],
   },
   {
-    title: "Developer Tools",
+    title: "Data Engineering & Analytics",
     skills: [
+      { name: "Data Pipelines", icon: <span className={styles.icon}>🔄</span> },
+      { name: "ETL / ELT", icon: <span className={styles.icon}>⚙️</span> },
+      { name: "MySQL", icon: <SiMysql className={styles.icon} /> },
+      { name: "Data Validation", icon: <span className={styles.icon}>🛡️</span> },
+      { name: "Power BI", icon: <span className={styles.icon}>📈</span> },
+    ],
+  },
+  {
+    title: "DevOps & Developer Tools",
+    skills: [
+      { name: "Docker", icon: <FaDocker className={styles.icon} /> },
+      { name: "Jenkins", icon: <SiJenkins className={styles.icon} /> },
+      { name: "Git", icon: <FaGitAlt className={styles.icon} /> },
       { name: "GitHub", icon: <FaGithub className={styles.icon} /> },
-      { name: "GitLab", icon: <FaGitlab className={styles.icon} /> },
-      { name: "TailwindCSS", icon: <SiTailwindcss className={styles.icon} /> },
+      { name: "CI / CD", icon: <span className={styles.icon}>🚀</span> },
+      { name: "Postman", icon: <SiPostman className={styles.icon} /> },
     ],
   },
 ];
@@ -66,48 +93,70 @@ const containerVariants = {
     opacity: 1,
     y: 0,
     transition: {
-      staggerChildren: 0.2,
       duration: 0.6,
-      ease: [0.76, 0, 0.24, 1],
+      when: "beforeChildren",
+      staggerChildren: 0.1,
     },
   },
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, scale: 0.8 },
-  visible: { opacity: 1, scale: 1 },
+const categoryVariants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.4,
+      when: "beforeChildren",
+      staggerChildren: 0.05,
+    },
+  },
+};
+
+const skillVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.3 },
+  },
 };
 
 export const SkillsSection = () => {
   return (
-    <motion.section
-      className={styles.skillsSection}
-      initial="hidden"
-      animate="visible"
+    <motion.div
+      className={styles.container}
       variants={containerVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.1 }}
     >
-      {skillCategories.map((category, index) => (
-        <motion.div
-          key={index}
-          className={styles.category}
-          variants={itemVariants}
-        >
-          <h2 className={styles.title}>{category.title}</h2>
-          <div className={styles.skillsGrid}>
-            {category.skills.map((skill, idx) => (
-              <motion.div
-                key={idx}
-                className={styles.skillCard}
-                whileHover={{ scale: 1.1 }}
-              >
-                {skill.icon}
-                <span className={styles.skillName}>{skill.name}</span>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      ))}
-    </motion.section>
+      <div className={styles.grid}>
+        {skillCategories.map((category) => (
+          <motion.div
+            key={category.title}
+            className={styles.category}
+            variants={categoryVariants}
+          >
+            <h3 className={styles.categoryTitle}>{category.title}</h3>
+            <div className={styles.skillsList}>
+              {category.skills.map((skill) => (
+                <motion.div
+                  key={skill.name}
+                  className={styles.skillItem}
+                  variants={skillVariants}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {skill.icon}
+                  <span className={styles.skillName}>{skill.name}</span>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </motion.div>
   );
 };
 

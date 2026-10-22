@@ -18,9 +18,11 @@ import {
   FiLinkedin,
   FiMapPin,
   FiMessageCircle,
+  FiPhone,
   FiRefreshCw,
   FiSend,
 } from "react-icons/fi";
+import { SiLeetcode } from "react-icons/si";
 import styles from "./ContactSection.module.scss";
 import pageStyles from "../../app/page.module.scss";
 
@@ -87,8 +89,10 @@ const DEFAULT_PROFILE = {
   name: "Pratyush Kumar Pandey",
   shortName: "Pratyush Pandey",
   email: "pratyush.me.ai@gmail.com",
+  phone: "+91-7562920811",
   github: "https://github.com/its-pratyushpandey",
-  linkedin: "https://www.linkedin.com/in/pratyush-pandey1/",
+  linkedin: "https://www.linkedin.com/in/pratyush-pandey-/",
+  leetcode: "https://leetcode.com/u/pratyush_pandey/",
   resume: "https://dev.pratyushpandey.me/presume.pdf",
   location: "Vijayawada, India",
   maps: "https://maps.app.goo.gl/dPjAwKErtBJW6kRo9",
@@ -520,6 +524,23 @@ const ContactSection = forwardRef(function ContactSection({ profile = DEFAULT_PR
               </div>
             </div>
 
+            {/* Phone Card */}
+            <a
+              href={`tel:${profile.phone || "+917562920811"}`}
+              className={styles.contactCard}
+              aria-label={`Call or WhatsApp: ${profile.phone || "+91-7562920811"}`}
+            >
+              <div className={styles.cardIcon}>
+                <FiPhone />
+              </div>
+              <div className={styles.cardBody}>
+                <span className={styles.cardLabel}>Direct Phone</span>
+                <strong className={styles.cardValue}>{profile.phone || "+91-7562920811"}</strong>
+                
+              </div>
+              <FiArrowUpRight className={styles.cardArrow} aria-hidden="true" />
+            </a>
+
             {/* Location Card */}
             <a
               href={profile.maps}
@@ -579,6 +600,16 @@ const ContactSection = forwardRef(function ContactSection({ profile = DEFAULT_PR
                   title="LinkedIn"
                 >
                   <FiLinkedin />
+                </a>
+                <a
+                  href={profile.leetcode || "https://leetcode.com"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.socialButton}
+                  aria-label="LeetCode Profile (opens in new tab)"
+                  title="LeetCode"
+                >
+                  <SiLeetcode />
                 </a>
                 <a
                   href={profile.resume}

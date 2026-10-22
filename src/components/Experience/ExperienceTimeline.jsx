@@ -833,7 +833,7 @@ export default function ExperienceTimeline({ experience = [] }) {
                   <div className={styles.stationPeriod}>Certifications &amp; Standards</div>
                   <p className={styles.stationDesc}>
                     Deep-dive into verified industry credentials spanning MongoDB developer
-                    certifications, Aviatrix Cloud Network Engineering, and enterprise platforms.
+                    certifications, Oracle Cloud Infrastructure, Cambridge English, and GitHub Foundations.
                   </p>
                 </div>
 
@@ -1145,7 +1145,7 @@ export default function ExperienceTimeline({ experience = [] }) {
                 <h3 className={styles.cardCompanyTitle}>Verified Credentials</h3>
                 <div className={styles.stationPeriod}>Certifications &amp; Standards</div>
                 <p className={styles.cardOverview}>
-                  Deep-dive into verified industry credentials spanning MongoDB developer certifications, Aviatrix Cloud Network Engineering, and enterprise platforms.
+                  Deep-dive into verified industry credentials spanning MongoDB developer certifications, Oracle Cloud Infrastructure, Cambridge English, and GitHub Foundations.
                 </p>
                 <a
                   href="#credentials"

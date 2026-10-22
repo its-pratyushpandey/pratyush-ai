@@ -1,23 +1,25 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { FiArrowUpRight, FiCheckCircle } from "react-icons/fi";
+import { FiArrowUpRight, FiCheckCircle, FiChevronDown } from "react-icons/fi";
 import styles from "./CredentialsSection.module.scss";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
+const INITIAL_COUNT = 3;
+
 const CREDENTIALS = [
   {
     id: "mongodb",
-    name: "MongoDB Associate Developer",
+    name: "MongoDB Certified Developer – Associate",
     issuer: "MongoDB",
-    issueDate: "2024",
-    credentialType: "Developer Certification",
+    issueDate: "2025",
+    credentialType: "Associate Developer",
     verificationStatus: "Verified Credential",
     image: "/mongodb.svg",
     href: "/presume.pdf",
@@ -26,37 +28,65 @@ const CREDENTIALS = [
     competencies: ["Document Modeling", "Aggregations", "Query Optimization", "NoSQL Architecture"],
   },
   {
-    id: "aviatrix",
-    name: "Aviatrix Certified Engineer (ACE)",
-    issuer: "Aviatrix",
-    issueDate: "2024",
-    credentialType: "Multicloud Network Associate",
-    verificationStatus: "Verified Certificate",
+    id: "oracle",
+    name: "Oracle Cloud Infrastructure Certified Developer Professional",
+    issuer: "Oracle",
+    issueDate: "2025",
+    credentialType: "Cloud Professional",
+    verificationStatus: "Verified Professional",
     image: "/aviatrix-mark.png",
-    href: "/Aviatrix.pdf",
+    href: "/presume.pdf",
     description:
-      "Certified multi-cloud network design, enterprise transit routing, egress filtering, and secure hybrid cloud architecture across AWS, Azure, and GCP.",
-    competencies: ["Multi-Cloud Networking", "Transit Routing", "Cloud Security", "Hybrid Infrastructure"],
+      "Certified in cloud-native development, containerized microservices, serverless functions, CI/CD automation, and secure enterprise infrastructure.",
+    competencies: ["Cloud Architecture", "Containerization", "Microservices", "Cloud Security"],
   },
   {
-    id: "salesforce",
-    name: "Salesforce Developer Virtual Internship",
-    issuer: "Salesforce",
+    id: "cambridge",
+    name: "Cambridge Linguaskill English Certification",
+    issuer: "Cambridge",
     issueDate: "2024",
-    credentialType: "Virtual Internship",
-    verificationStatus: "Verified Credential",
-    image: "/salesforce.png",
-    href: "/Salesforce.pdf",
+    credentialType: "Language Proficiency",
+    verificationStatus: "Verified Certification",
+    image: "/images/background.jpg",
+    href: "/presume.pdf",
     description:
-      "Architected enterprise cloud workflows, Apex triggers, Lightning Web Components, automated business processes, and secure role-based data models.",
-    competencies: ["Apex Programming", "Lightning Components", "Process Automation", "Enterprise Cloud"],
+      "Certified professional English communication proficiency with top-tier technical writing, global team coordination, and executive presentation fluency.",
+    competencies: ["Technical Writing", "Global Communication", "Executive Presentations", "Collaboration"],
+  },
+  {
+    id: "github",
+    name: "GitHub Foundations",
+    issuer: "GitHub",
+    issueDate: "2026",
+    credentialType: "Developer Certification",
+    verificationStatus: "Verified Credential",
+    image: "/images/background2.jpg",
+    href: "/presume.pdf",
+    description:
+      "Certified proficiency in modern Git workflows, GitHub Actions CI/CD pipelines, repository governance, pull-request architectures, and open-source collaboration.",
+    competencies: ["Git Workflows", "GitHub Actions CI/CD", "Security & Auditing", "Collaboration"],
   },
 ];
 
 export default function CredentialsSection() {
+  const [showAll, setShowAll] = useState(false);
   const containerRef = useRef(null);
   const topLineRef = useRef(null);
   const cardsRef = useRef([]);
+
+  const visibleCredentials = showAll ? CREDENTIALS : CREDENTIALS.slice(0, INITIAL_COUNT);
+
+  const handleToggleShowAll = () => {
+    setShowAll((prev) => {
+      const next = !prev;
+      setTimeout(() => {
+        if (typeof window !== "undefined" && ScrollTrigger) {
+          ScrollTrigger.refresh();
+        }
+      }, 350);
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (typeof window === "undefined" || !containerRef.current) return;
@@ -134,73 +164,113 @@ export default function CredentialsSection() {
 
       {/* Staggered Credential Cards Grid */}
       <div className={styles.cardsGrid} role="list">
-        {CREDENTIALS.map((cert, index) => (
-          <motion.a
-            key={cert.id}
-            ref={(el) => (cardsRef.current[index] = el)}
-            href={cert.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.card}
-            role="listitem"
-            aria-label={`View ${cert.name} certificate issued by ${cert.issuer} (opens in new tab)`}
-            whileTap={{ scale: 0.985 }}
-            transition={{ type: "spring", stiffness: 350, damping: 25 }}
-          >
-            {/* Top gradient border highlight (animates on hover) */}
-            <span className={styles.cardTopBorder} aria-hidden="true" />
+        <AnimatePresence mode="sync">
+          {visibleCredentials.map((cert, index) => {
+            const isExpandable = index >= INITIAL_COUNT;
+            return (
+              <motion.a
+                key={cert.id}
+                ref={(el) => (cardsRef.current[index] = el)}
+                href={cert.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.card}
+                role="listitem"
+                aria-label={`View ${cert.name} certificate issued by ${cert.issuer} (opens in new tab)`}
+                initial={isExpandable ? { opacity: 0, y: 30, scale: 0.96 } : false}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.96 }}
+                transition={{
+                  duration: 0.45,
+                  ease: [0.22, 1, 0.36, 1],
+                  delay: isExpandable ? (index - INITIAL_COUNT) * 0.08 : 0,
+                }}
+                whileTap={{ scale: 0.985 }}
+              >
+                {/* Top gradient border highlight (animates on hover) */}
+                <span className={styles.cardTopBorder} aria-hidden="true" />
 
-            {/* Card Header: Brand Logo + Verified Badge */}
-            <div className={styles.cardHeader}>
-              <div className={styles.logoContainer}>
-                <img
-                  src={cert.image}
-                  alt={`${cert.issuer} logo`}
-                  className={styles.logoImg}
-                  loading="lazy"
-                />
-              </div>
+                {/* Card Header: Brand Logo + Verified Badge */}
+                <div className={styles.cardHeader}>
+                  <div className={styles.logoContainer}>
+                    <img
+                      src={cert.image}
+                      alt={`${cert.issuer} logo`}
+                      className={styles.logoImg}
+                      loading="lazy"
+                    />
+                  </div>
 
-              {/* Verified Status Pill */}
-              <div className={styles.badgePill}>
-                <FiCheckCircle className={styles.badgeIcon} aria-hidden="true" />
-                <span>{cert.verificationStatus}</span>
-              </div>
-            </div>
+                  {/* Verified Status Pill */}
+                  <div className={styles.badgePill}>
+                    <FiCheckCircle className={styles.badgeIcon} aria-hidden="true" />
+                    <span>{cert.verificationStatus}</span>
+                  </div>
+                </div>
 
-            {/* Card Content */}
-            <div className={styles.cardContent}>
-              <div className={styles.cardMetaRow}>
-                <span className={styles.issuerTag}>
-                  {cert.issuer} {"//"} {cert.issueDate}
-                </span>
-                <span className={styles.typeTag}>{cert.credentialType}</span>
-              </div>
+                {/* Card Content */}
+                <div className={styles.cardContent}>
+                  <div className={styles.cardMetaRow}>
+                    <span className={styles.issuerTag}>
+                      {cert.issuer} {"//"} {cert.issueDate}
+                    </span>
+                    <span className={styles.typeTag}>{cert.credentialType}</span>
+                  </div>
 
-              <h3 className={styles.cardTitle}>{cert.name}</h3>
+                  <h3 className={styles.cardTitle}>{cert.name}</h3>
 
-              <p className={styles.cardDescription}>{cert.description}</p>
+                  <p className={styles.cardDescription}>{cert.description}</p>
 
-              {/* Technical Competency Tags */}
-              <div className={styles.tagList} aria-label="Core competencies">
-                {cert.competencies.map((tag) => (
-                  <span key={tag} className={styles.competencyTag}>
-                    {tag}
+                  {/* Technical Competency Tags */}
+                  <div className={styles.tagList} aria-label="Core competencies">
+                    {cert.competencies.map((tag) => (
+                      <span key={tag} className={styles.competencyTag}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Card Footer Action Bar */}
+                <div className={styles.cardFooter}>
+                  <span className={styles.footerLinkText}>View Certificate Document</span>
+                  <span className={styles.footerLinkIconWrap} aria-hidden="true">
+                    <FiArrowUpRight className={styles.cardActionIcon} />
                   </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Card Footer Action Bar */}
-            <div className={styles.cardFooter}>
-              <span className={styles.footerLinkText}>View Certificate Document</span>
-              <span className={styles.footerLinkIconWrap} aria-hidden="true">
-                <FiArrowUpRight className={styles.cardActionIcon} />
-              </span>
-            </div>
-          </motion.a>
-        ))}
+                </div>
+              </motion.a>
+            );
+          })}
+        </AnimatePresence>
       </div>
+
+      {/* View More / Show Less Action Control (if more than 3 certifications) */}
+      {CREDENTIALS.length > INITIAL_COUNT && (
+        <div className={styles.viewMoreContainer}>
+          <button
+            type="button"
+            className={styles.viewMoreButton}
+            onClick={handleToggleShowAll}
+            aria-expanded={showAll}
+            aria-label={
+              showAll
+                ? "Show fewer certifications"
+                : `View ${CREDENTIALS.length - INITIAL_COUNT} more certifications`
+            }
+          >
+            <span className={styles.viewMoreDot} aria-hidden="true" />
+            <span>
+              {showAll
+                ? "Show Less"
+                : `View More Certifications (+${CREDENTIALS.length - INITIAL_COUNT})`}
+            </span>
+            <FiChevronDown
+              className={`${styles.viewMoreChevron} ${showAll ? styles.viewMoreChevronOpen : ""}`}
+              aria-hidden="true"
+            />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
