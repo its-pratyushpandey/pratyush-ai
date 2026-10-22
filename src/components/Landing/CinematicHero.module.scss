@@ -1,0 +1,1524 @@
+.cinematicHero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: transparent;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  color: #ffffff;
+  padding: 0;
+  margin: 0;
+  contain: paint;
+}
+
+/* ==========================================================================
+   1. Atmospheric Canvas, Ambient Glow & Noise
+   ========================================================================== */
+.heroAtmosphere {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  overflow: hidden;
+  will-change: transform, opacity;
+}
+
+.particleCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.radialAuraIndigo {
+  position: absolute;
+  top: 35%;
+  left: 65%;
+  transform: translate(-50%, -50%);
+  width: clamp(600px, 60vw, 1200px);
+  height: clamp(600px, 60vw, 1200px);
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.16) 0%,
+    rgba(139, 92, 246, 0.08) 35%,
+    transparent 70%
+  );
+  filter: blur(100px);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.radialAuraCyan {
+  position: absolute;
+  bottom: 10%;
+  left: 20%;
+  transform: translate(-50%, -50%);
+  width: clamp(500px, 50vw, 900px);
+  height: clamp(500px, 50vw, 900px);
+  background: radial-gradient(
+    circle,
+    rgba(6, 182, 212, 0.10) 0%,
+    rgba(67, 232, 179, 0.04) 40%,
+    transparent 70%
+  );
+  filter: blur(90px);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.viewportVignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 50% 50%,
+    transparent 50%,
+    rgba(5, 5, 7, 0.45) 85%,
+    transparent 100%
+  );
+}
+
+.filmGrainOverlay {
+  position: absolute;
+  inset: -100px;
+  opacity: 0.025;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  mix-blend-mode: screen;
+}
+
+/* ==========================================================================
+   2. Precision Blueprint Coordinate Header Line
+   ========================================================================== */
+.blueprintCoordBar {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(86px, 11vh, 102px) clamp(24px, 5vw, 64px) 0;
+  color: rgba(255, 255, 255, 0.4);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.coordGroupLeft,
+.coordGroupRight {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.blueprintPlus {
+  color: rgba(99, 102, 241, 0.85);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.coordSep {
+  color: rgba(255, 255, 255, 0.18);
+}
+
+.blueprintParam {
+  color: rgba(99, 102, 241, 0.8);
+}
+
+.radarPulse {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radarCore {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.radarRing {
+  position: absolute;
+  inset: -2px;
+  border: 1px solid rgba(16, 185, 129, 0.7);
+  border-radius: 50%;
+  animation: radarPing 2.4s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+@keyframes radarPing {
+  0% { transform: scale(0.8); opacity: 0.9; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+.blueprintRule {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.12) 100%
+  );
+}
+
+/* ==========================================================================
+   3. Dual Kinetic Typographic Velocity Ribbons (BEHIND ALL CONTENT)
+   ========================================================================== */
+.kineticRibbonContainer {
+  position: absolute;
+  top: 45%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  width: 100vw;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  will-change: transform, opacity;
+}
+
+.kineticTrackTop,
+.kineticTrackBottom {
+  display: inline-flex;
+  white-space: nowrap;
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(60px, 9vw, 130px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.035);
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.06);
+  will-change: transform;
+}
+
+/* ==========================================================================
+   4. Two-Column Architectural Stage
+   ========================================================================== */
+.mainStageGrid {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: minmax(0, 1.16fr) minmax(360px, 0.84fr);
+  gap: clamp(36px, 5vw, 68px);
+  align-items: center;
+  max-width: 1440px;
+  width: 100%;
+  margin: 0 auto;
+  padding: clamp(20px, 3vh, 40px) clamp(24px, 5vw, 64px) clamp(20px, 3vh, 32px);
+  box-sizing: border-box;
+  will-change: transform, opacity;
+}
+
+/* ==========================================================================
+   LEFT COLUMN: Editorial Typography, Matrix Role, Telemetry, CTAs
+   ========================================================================== */
+.leftContentCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 720px;
+}
+
+/* Status Availability Pill */
+.availabilityPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  margin-bottom: 22px;
+}
+
+.pillRadarDot {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pillCore {
+  width: 6px;
+  height: 6px;
+  background-color: #10b981;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #10b981;
+}
+
+.pillRing {
+  position: absolute;
+  inset: -3px;
+  border: 1px solid rgba(16, 185, 129, 0.75);
+  border-radius: 50%;
+  animation: radarPing 2.2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+.pillText {
+  color: #34d399;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.pillBadgeId {
+  color: rgba(255, 255, 255, 0.45);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+  padding-left: 8px;
+}
+
+/* Headline Block */
+.headlineBlock {
+  margin-bottom: 20px;
+}
+
+.headlineIndex {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(165, 180, 252, 0.85);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.grandHeadline {
+  font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(48px, 6.6vw, 96px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.26em;
+}
+
+.firstName {
+  color: #ffffff;
+  display: inline-flex;
+}
+
+.lastName {
+  background: linear-gradient(135deg, #ffffff 30%, #c7d2fe 80%, #818cf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-flex;
+}
+
+.interactiveChar {
+  display: inline-block;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), text-shadow 0.2s ease;
+  will-change: transform;
+
+  &:hover {
+    text-shadow: 0 0 20px rgba(99, 102, 241, 0.85);
+  }
+}
+
+/* Matrix Role Scrambler & Equalizer */
+.scrambleRoleWrapper {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.scrambleTerminalTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: clamp(12px, 1.15vw, 15px);
+  color: #c7d2fe;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 18px rgba(99, 102, 241, 0.15);
+}
+
+.scramblePrompt {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+.scrambleRole {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.cursorBlink {
+  color: #6366f1;
+  font-weight: 700;
+  animation: cursorPulse 0.9s infinite;
+}
+
+@keyframes cursorPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Dynamic Soundwave Equalizer */
+.audioFrequencyMeter {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 24px;
+  padding: 0 6px;
+}
+
+.eqBar {
+  width: 2.5px;
+  background: linear-gradient(to top, #6366f1, #38bdf8);
+  border-radius: 2px;
+  height: 30%;
+  animation: eqBounce 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes eqBounce {
+  0% { height: 20%; }
+  50% { height: var(--eq-height, 60%); }
+  100% { height: 35%; }
+}
+
+/* Editorial Narrative */
+.editorialNarrative {
+  font-family: 'Manrope', sans-serif;
+  font-size: clamp(14px, 1.1vw, 16.5px);
+  font-weight: 400;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0 0 28px 0;
+  max-width: 580px;
+
+  strong {
+    color: #ffffff;
+    font-weight: 600;
+  }
+}
+
+/* Telemetry Metrics HUD Strip */
+.telemetryHUDGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 630px;
+  margin-bottom: 32px;
+}
+
+.telemetryCard {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color 0.25s ease, background 0.25s ease;
+  cursor: default;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(99, 102, 241, 0.45);
+  }
+}
+
+.telemetryTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.telemetryVal {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(18px, 1.5vw, 23px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+}
+
+.telemetryIcon {
+  font-size: 14px;
+  color: #818cf8;
+}
+
+.telemetryLabel {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.25;
+}
+
+.telemetrySub {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.02em;
+}
+
+/* Action Controls Group */
+.actionControlsGroup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.primaryPillCTA {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+  color: #06070a !important;
+  padding: 13px 24px;
+  border-radius: 9999px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25), 0 0 15px rgba(255, 255, 255, 0.15);
+  text-decoration: none;
+  cursor: pointer;
+  transition: box-shadow 0.25s ease, transform 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 6px 28px rgba(99, 102, 241, 0.45), 0 0 25px rgba(255, 255, 255, 0.3);
+
+    .ctaArrow {
+      transform: translate(2px, -2px);
+    }
+  }
+}
+
+.ctaArrow {
+  font-size: 15px;
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.secondaryPillCTA {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 12px 22px;
+  border-radius: 9999px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.35);
+  }
+}
+
+.ctaDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  box-shadow: 0 0 8px #3b82f6;
+}
+
+.tertiaryPillCTA {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 12px 20px;
+  border-radius: 9999px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
+
+  &:hover {
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+}
+
+/* ==========================================================================
+   RIGHT COLUMN: Interactive Architecture Cockpit & Live System Console
+   (100% IMAGE-FREE • PURE VECTOR, CODE & MOTION ENGINE)
+   ========================================================================== */
+.rightCockpitCol {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px;
+}
+
+.cockpitCard {
+  position: relative;
+  width: 100%;
+  max-width: 530px;
+  background: rgba(13, 16, 26, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  transform-style: preserve-3d;
+  transform: rotateX(var(--card-tilt-x, 0deg)) rotateY(var(--card-tilt-y, 0deg));
+  transition: transform 0.15s ease-out;
+  box-sizing: border-box;
+  will-change: transform;
+}
+
+/* Glare & Aura Backdrop */
+.cockpitGlare {
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background: radial-gradient(
+    circle at var(--card-spot-x, 50%) var(--card-spot-y, 50%),
+    rgba(255, 255, 255, 0.12) 0%,
+    transparent 65%
+  );
+  pointer-events: none;
+  z-index: 6;
+}
+
+.cockpitAuraBackdrop {
+  position: absolute;
+  inset: -20px;
+  border-radius: 36px;
+  background: radial-gradient(
+    circle,
+    rgba(99, 102, 241, 0.22) 0%,
+    rgba(67, 232, 179, 0.08) 45%,
+    transparent 75%
+  );
+  filter: blur(35px);
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Corner Precision Crosshairs */
+.crossTL,
+.crossTR,
+.crossBL,
+.crossBR {
+  position: absolute;
+  color: rgba(255, 255, 255, 0.35);
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.crossTL { top: 8px; left: 10px; }
+.crossTR { top: 8px; right: 10px; }
+.crossBL { bottom: 8px; left: 10px; }
+.crossBR { bottom: 8px; right: 10px; }
+
+/* Cockpit Header */
+.cockpitHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 14px;
+  position: relative;
+  z-index: 3;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.cockpitStatus {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.statusLiveOrb {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.cockpitTitle {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.06em;
+}
+
+.cockpitLatency {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Tab Buttons */
+.cockpitTabs {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.cockpitTabBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  padding: 5px 10px;
+  border-radius: 9999px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    color: #ffffff;
+  }
+}
+
+.tabActive {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.tabIcon {
+  font-size: 12px;
+}
+
+/* Cockpit Viewport Frame */
+.cockpitViewport {
+  position: relative;
+  width: 100%;
+  min-height: 410px;
+  border-radius: 18px;
+  background: #070910;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* ==========================================================================
+   VIEW 1: Interactive System Architecture Topology Graph
+   ========================================================================== */
+.topologyWrapper {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.topologySubHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.06em;
+}
+
+.packetBurstBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  color: #c7d2fe;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(99, 102, 241, 0.3);
+    color: #ffffff;
+  }
+}
+
+.topologyNodeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.topologyNodeCard {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--node-accent, #6366f1);
+    transform: translateY(-2px);
+  }
+}
+
+.nodeCardSelected {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--node-accent, #6366f1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 12px var(--node-accent, #6366f1);
+}
+
+.nodeCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nodeIcon {
+  font-size: 16px;
+  color: var(--node-accent, #6366f1);
+}
+
+.nodeLatencyBadge {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.nodeTitle {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.nodeTech {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--node-accent, #6366f1);
+}
+
+.nodeMeta {
+  font-family: 'Manrope', sans-serif;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.3;
+}
+
+/* Bus Connector Line */
+.busConnector {
+  position: relative;
+  padding: 12px 4px 6px;
+}
+
+.busLine {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    #55abf5 0%,
+    #43e8b3 33%,
+    #9b8cff 66%,
+    #ff9671 100%
+  );
+  opacity: 0.6;
+}
+
+.busTravelingPacket {
+  position: absolute;
+  top: 11px;
+  left: 0;
+  width: 24px;
+  height: 4px;
+  border-radius: 2px;
+  background: #ffffff;
+  box-shadow: 0 0 10px #ffffff;
+  animation: busTravel 2.6s linear infinite;
+}
+
+.busBurstActive {
+  background: #38bdf8;
+  box-shadow: 0 0 18px #38bdf8;
+  animation-duration: 1.2s;
+}
+
+@keyframes busTravel {
+  0% { left: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { left: calc(100% - 24px); opacity: 0; }
+}
+
+.busLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 8.5px;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Node Inspector Banner */
+.nodeInspectorBanner {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-left: 3px solid var(--inspector-accent, #6366f1);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
+.inspectorLeft {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  strong {
+    font-family: 'Manrope', sans-serif;
+    font-size: 11.5px;
+    color: #ffffff;
+  }
+
+  p {
+    margin: 2px 0 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 9.5px;
+    color: rgba(255, 255, 255, 0.55);
+  }
+}
+
+.inspectorStatusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--inspector-accent, #6366f1);
+}
+
+.inspectorLatencyTag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   VIEW 2: Interactive Code Benchmark & Execution Runtime
+   ========================================================================== */
+.codeViewWrapper {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.codeFileRibbon {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+}
+
+.fileTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.fileTabActive {
+  background: rgba(99, 102, 241, 0.16);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #ffffff;
+}
+
+.fileDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #6366f1;
+}
+
+.codeContainer {
+  background: #04060a;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 12px 14px;
+  overflow: auto;
+  max-height: 220px;
+}
+
+.codePre {
+  margin: 0;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #c7d2fe;
+
+  code {
+    font-family: inherit;
+  }
+}
+
+.codeFooterBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.runBenchmarkBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(99, 102, 241, 0.15);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  color: #c7d2fe;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+
+  &:hover:not(:disabled) {
+    background: rgba(99, 102, 241, 0.28);
+    color: #ffffff;
+    border-color: rgba(99, 102, 241, 0.6);
+  }
+
+  &:disabled {
+    opacity: 0.85;
+    cursor: wait;
+  }
+}
+
+.btnSuccess {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #34d399;
+}
+
+.spinIcon {
+  animation: spinSlow 1s linear infinite;
+}
+
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.codeDescTag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.liveStdoutConsole {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: #a5b4fc;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  max-height: 85px;
+  overflow-y: auto;
+}
+
+.stdoutLine {
+  line-height: 1.35;
+}
+
+/* ==========================================================================
+   VIEW 3: Kinetic 3D Gyroscope Digital Core (Canvas)
+   ========================================================================== */
+.coreViewWrapper {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+.coreHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.08em;
+}
+
+.gyroCanvasWrap {
+  width: 100%;
+  height: 270px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gyroCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.coreFooterSpecs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
+.coreSpecItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  span {
+    font-family: 'DM Mono', monospace;
+    font-size: 8.5px;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  strong {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    color: #ffffff;
+  }
+}
+
+/* ==========================================================================
+   VIEW 4: Real-Time Cluster Telemetry Gauges
+   ========================================================================== */
+.metricsViewWrapper {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.metricsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.45);
+  letter-spacing: 0.08em;
+}
+
+.liveTag {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.metricsDetailGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.metricGaugeCard {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gaugeLabel {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.gaugeVal {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.gaugeBar {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #38bdf8);
+    border-radius: 2px;
+  }
+}
+
+.clusterLiveLogs {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Cockpit Footer */
+.cockpitFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.04em;
+  position: relative;
+  z-index: 3;
+}
+
+.cockpitFooterLeft {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footDot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #6366f1;
+}
+
+/* ==========================================================================
+   5. Bottom Architectural Navigation & Telemetry Bar
+   ========================================================================== */
+.heroFooterBar {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(24px, 5vw, 64px) clamp(20px, 3vh, 36px);
+  color: rgba(255, 255, 255, 0.55);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  will-change: transform, opacity;
+}
+
+.footerLeft,
+.footerRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.footerClockWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.clockPulseDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #10b981;
+}
+
+.footerLocation {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footerDivider {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.footerTime {
+  color: #a5b4fc;
+}
+
+.scrollIndicatorLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.45);
+  text-decoration: none;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  transition: color 0.25s ease;
+  cursor: pointer;
+
+  &:hover {
+    color: #ffffff;
+  }
+}
+
+.scrollArrow {
+  display: inline-flex;
+  align-items: center;
+  color: #818cf8;
+}
+
+.socialQuickLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  font-size: 11px;
+  transition: color 0.25s ease;
+
+  &:hover {
+    color: #ffffff;
+  }
+}
+
+/* ==========================================================================
+   Responsive Art Direction & Viewport Adaptations
+   ========================================================================== */
+@media (max-width: 1140px) {
+  .mainStageGrid {
+    grid-template-columns: 1fr;
+    gap: 44px;
+    padding-top: 16px;
+    padding-bottom: 24px;
+  }
+
+  .leftContentCol {
+    max-width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+
+  .grandHeadline {
+    justify-content: center;
+  }
+
+  .scrambleRoleWrapper {
+    justify-content: center;
+  }
+
+  .editorialNarrative {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .telemetryHUDGrid {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .actionControlsGroup {
+    justify-content: center;
+  }
+
+  .rightCockpitCol {
+    width: 100%;
+  }
+
+  .cockpitCard {
+    max-width: 600px;
+  }
+}
+
+@media (max-width: 768px) {
+  .blueprintCoordBar {
+    display: none;
+  }
+
+  .mainStageGrid {
+    padding-top: 86px;
+    padding-bottom: 20px;
+    gap: 32px;
+  }
+
+  .grandHeadline {
+    font-size: clamp(38px, 11vw, 56px);
+  }
+
+  .telemetryHUDGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cockpitCard {
+    max-width: 100%;
+    padding: 14px;
+  }
+
+  .cockpitViewport {
+    min-height: 380px;
+  }
+
+  .heroFooterBar {
+    flex-direction: column;
+    gap: 14px;
+    text-align: center;
+  }
+
+  .footerLeft,
+  .footerRight {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .primaryPillCTA,
+  .secondaryPillCTA,
+  .tertiaryPillCTA {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .actionControlsGroup {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .topologyNodeGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .cockpitTabs {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding: 3px 4px;
+  }
+
+  .cockpitTabBtn {
+    padding: 6px 9px;
+    font-size: 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .metricsDetailGrid {
+    grid-template-columns: 1fr;
+  }
+}

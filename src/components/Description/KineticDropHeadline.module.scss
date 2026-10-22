@@ -1,0 +1,253 @@
+/* KineticDropHeadline.module.scss
+   Architectural kinetic typography with pinned scroll-driven letter drop to 3-tier ground shelves
+   Letters are 100% visible immediately, drop individually in unique styles,
+   and settle with generous spacing across 3 datum shelves.
+*/
+
+.kineticHeadlineWrap {
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+  z-index: 2 !important;
+  width: 100% !important;
+  overflow: visible !important;
+}
+
+.ambientSpotlight {
+  position: absolute;
+  inset: -40px -50px;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 24px;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: background, opacity;
+}
+
+.kineticHeadline {
+  display: flex !important;
+  flex-direction: column !important;
+  position: relative !important;
+  z-index: 2 !important;
+  margin: 32px 0 24px !important;
+  perspective: 1200px !important;
+  perspective-origin: 50% 25% !important;
+  user-select: none !important;
+  width: 100% !important;
+  overflow: visible !important;
+}
+
+.line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  position: relative;
+  z-index: 1;
+  line-height: 0.86;
+  margin-bottom: clamp(4px, 0.8vw, 10px);
+  width: 100%;
+}
+
+.wordBlock {
+  display: inline-flex;
+  align-items: baseline;
+  position: relative;
+  white-space: nowrap;
+  cursor: pointer;
+  margin-right: clamp(12px, 1.8vw, 28px);
+  margin-bottom: clamp(3px, 0.6vw, 8px);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.wordFloatWrap {
+  display: inline-flex;
+  align-items: baseline;
+  position: relative;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  transform-style: preserve-3d;
+  border-radius: 8px;
+}
+
+.wordHovered {
+  filter: drop-shadow(0 16px 36px rgba(73, 86, 214, 0.32));
+  transform: translateY(-3px);
+
+  .letterInner {
+    animation: wordFloatWave 1.4s cubic-bezier(0.45, 0, 0.55, 1) infinite alternate;
+  }
+}
+
+.letterWrapper {
+  display: inline-block;
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+  /* 100% visible immediately when page loads or arrives */
+  opacity: 1;
+}
+
+.letterInner {
+  display: inline-block;
+  font-family: 'Plus Jakarta Sans', 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(46px, 8vw, 126px);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 0.86;
+  text-transform: uppercase;
+  transform-origin: 50% 80%;
+  will-change: transform;
+  transition: text-shadow 0.3s ease, filter 0.3s ease;
+}
+
+/* Line 1 solid cobalt architectural color (matching blueprint canvas) */
+.letterSolid {
+  color: #4956d6 !important;
+  -webkit-text-fill-color: #4956d6 !important;
+}
+
+/* Line 2 cyan-to-indigo vivid gradient (matching screenshot & capabilities theme) */
+.letterGradient {
+  background: linear-gradient(135deg, #0284c7 0%, #2563eb 45%, #6366f1 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  color: transparent !important;
+}
+
+@keyframes wordFloatWave {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(-1.4deg);
+  }
+  100% {
+    transform: translateY(3.5px) rotate(1.2deg);
+  }
+}
+
+/* Architectural Ground Datum Shelves (Where fallen letters land with generous spacing) */
+.groundShelves {
+  position: relative;
+  width: 100%;
+  margin-top: clamp(28px, 4vh, 48px);
+  z-index: 5;
+  padding-top: 8px;
+}
+
+.shelfHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: #0284c7;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.shelfDatum {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.datumIndicator {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #0284c7;
+  box-shadow: 0 0 8px #0284c7;
+}
+
+.shelfMeta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  color: rgba(62, 83, 108, 0.85);
+}
+
+.shelfBadge {
+  background: rgba(2, 132, 199, 0.1);
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: #0284c7;
+}
+
+.shelfTracks {
+  display: flex;
+  flex-direction: column;
+  gap: 34px; // 34px + 10px height = 44px tier spacing matching rowHeight
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.shelfRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  height: 10px;
+}
+
+.tierTag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: rgba(2, 132, 199, 0.6);
+  flex-shrink: 0;
+}
+
+.tierLine {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(2, 132, 199, 0.3) 0%, rgba(99, 102, 241, 0.25) 50%, rgba(2, 132, 199, 0.1) 100%);
+  border-radius: 1px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .letterInner {
+    font-size: clamp(38px, 7.6vw, 86px);
+    line-height: 0.88;
+  }
+  .wordBlock {
+    margin-right: clamp(10px, 1.6vw, 22px);
+  }
+}
+
+@media (max-width: 768px) {
+  .kineticHeadline {
+    margin: 22px 0 16px !important;
+  }
+  .letterInner {
+    font-size: clamp(28px, 8.8vw, 52px);
+    line-height: 0.92;
+    letter-spacing: -0.04em;
+  }
+  .wordBlock {
+    margin-right: clamp(7px, 2vw, 14px);
+    margin-bottom: 4px;
+  }
+  .shelfMeta {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .letterInner {
+    font-size: clamp(24px, 9.2vw, 38px);
+    line-height: 0.94;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wordHovered .letterInner {
+    animation: none !important;
+  }
+  .letterWrapper {
+    transform: none !important;
+  }
+}

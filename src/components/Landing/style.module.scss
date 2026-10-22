@@ -1,0 +1,87 @@
+.landing{
+    position: relative;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(20, 21, 22, 0.3) 0%, rgba(20, 21, 22, 0.7) 100%);
+
+    img{
+      object-fit: cover;
+      filter: brightness(0.8) contrast(1.1) saturate(0.9);
+      transition: all 0.3s ease;
+      z-index: -1;
+    }
+    
+    // Add subtle overlay for better text readability
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        135deg, 
+        rgba(20, 21, 22, 0.2) 0%, 
+        rgba(20, 21, 22, 0.4) 50%, 
+        rgba(20, 21, 22, 0.6) 100%
+      );
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    .sliderContainer{
+      position: absolute;
+      top: calc(100vh - 350px);
+      z-index: 2;
+    }
+    
+    .slider{
+      position: relative;
+      white-space: nowrap;
+    }
+    
+    .slider p{
+      position: relative;
+      margin: 0px;
+      color: white;
+      font-size: 230px;
+      font-weight: 500;
+      padding-right: 50px;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+      z-index: 2;
+    }
+    
+    .slider p:nth-of-type(2){
+      position: absolute;
+      left: 100%;
+      top: 0;
+    }
+  
+    .description{
+      position: absolute;
+      top: 35%;
+      left: 65%;
+      color: white;
+      font-size: 24px;
+      font-weight: 300;
+      z-index: 2;
+      backdrop-filter: blur(2px);
+      padding: 20px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      
+      p{
+        margin: 0px;
+        margin-bottom: 10px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+      }
+      svg{
+        transform: scale(2);
+        margin-bottom: 100px;
+        filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+      }
+    }
+  }
+  

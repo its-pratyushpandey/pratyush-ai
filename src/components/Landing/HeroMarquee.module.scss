@@ -1,0 +1,183 @@
+.heroMarqueeContainer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(32px, 4.5vh, 52px);
+  z-index: 2;
+  overflow: hidden;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: rotate(-0.5deg);
+  transform-origin: center center;
+  user-select: none;
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+
+  // Soft edge vignette mask so text emerges seamlessly from both edges
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+}
+
+.sliderTrack {
+  position: relative;
+  display: flex;
+  white-space: nowrap;
+  width: max-content;
+  padding: 10px 0 16px;
+  will-change: transform;
+}
+
+.phraseBlock {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
+  will-change: transform;
+
+  &:nth-of-type(2) {
+    position: absolute;
+    left: 100%;
+    top: 0;
+  }
+}
+
+.phraseItem {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  pointer-events: auto;
+  padding-right: clamp(24px, 3.2vw, 54px);
+}
+
+// Commanding, professional large text in Plus Jakarta Sans
+.marqueeText {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 15%, rgba(241, 245, 249, 0.78) 75%, rgba(203, 213, 225, 0.52) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif;
+  font-size: clamp(56px, 8vw, 122px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.8));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
+  display: inline-block;
+
+  &:hover {
+    transform: translateY(-2px);
+    filter: drop-shadow(0 6px 26px rgba(85, 171, 245, 0.4));
+  }
+}
+
+// Clean typographic em-dash (pure text, no icons)
+.dashSeparator {
+  color: rgba(255, 255, 255, 0.22);
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  font-size: clamp(40px, 6vw, 88px);
+  font-weight: 300;
+  line-height: 1;
+  margin-left: clamp(20px, 2.5vw, 42px);
+  transform: translateY(-0.06em);
+  display: inline-block;
+  user-select: none;
+  pointer-events: none;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.6));
+}
+
+@media (max-width: 1024px) {
+  .heroMarqueeContainer {
+    bottom: clamp(26px, 4vh, 44px);
+    transform: rotate(-0.4deg);
+  }
+
+  .marqueeText {
+    font-size: clamp(44px, 7vw, 80px);
+    letter-spacing: -0.035em;
+  }
+
+  .dashSeparator {
+    font-size: clamp(30px, 5vw, 56px);
+    margin-left: clamp(16px, 2vw, 30px);
+  }
+
+  .phraseItem {
+    padding-right: clamp(18px, 2.2vw, 32px);
+  }
+}
+
+@media (max-width: 768px) {
+  .heroMarqueeContainer {
+    bottom: 28px;
+    transform: none;
+    mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      black 4%,
+      black 96%,
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      black 4%,
+      black 96%,
+      transparent 100%
+    );
+  }
+
+  .marqueeText {
+    font-size: clamp(34px, 9vw, 50px);
+    letter-spacing: -0.03em;
+  }
+
+  .dashSeparator {
+    font-size: clamp(24px, 6.5vw, 36px);
+    margin-left: 14px;
+  }
+
+  .phraseItem {
+    padding-right: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroMarqueeContainer {
+    bottom: 20px;
+    transform: none;
+  }
+
+  .marqueeText {
+    font-size: clamp(28px, 8vw, 38px);
+  }
+
+  .dashSeparator {
+    font-size: clamp(20px, 5.5vw, 26px);
+    margin-left: 10px;
+  }
+
+  .phraseItem {
+    padding-right: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroMarqueeContainer {
+    transform: none;
+  }
+}

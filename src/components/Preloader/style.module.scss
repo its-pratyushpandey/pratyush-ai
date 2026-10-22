@@ -1,0 +1,364 @@
+.introduction {
+    height: 100vh;
+    height: 100dvh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background-color: #000000;
+    overflow: visible;
+    user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+
+    svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: calc(100% + 300px);
+        pointer-events: none;
+        z-index: 1;
+
+        path {
+            fill: #000000;
+        }
+    }
+}
+
+.ambientGlow {
+    position: absolute;
+    width: clamp(340px, 60vw, 760px);
+    height: clamp(340px, 60vw, 760px);
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.055) 0%, rgba(255, 255, 255, 0.015) 40%, transparent 70%);
+    filter: blur(80px);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.ambientVignette {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.75) 100%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.gridOverlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: clamp(36px, 4.5vw, 56px) clamp(36px, 4.5vw, 56px);
+    mask-image: radial-gradient(circle at center, black 35%, transparent 80%);
+    -webkit-mask-image: radial-gradient(circle at center, black 35%, transparent 80%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.topBar {
+    position: absolute;
+    top: max(clamp(20px, 3.5vw, 42px), env(safe-area-inset-top));
+    left: max(clamp(20px, 4.5vw, 64px), env(safe-area-inset-left));
+    right: max(clamp(20px, 4.5vw, 64px), env(safe-area-inset-right));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(10px, 1.1vw, 12px);
+    letter-spacing: 0.18em;
+    color: rgba(255, 255, 255, 0.55);
+    text-transform: uppercase;
+}
+
+.topIdentity {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+}
+
+.topNameDesktop {
+    display: inline;
+}
+
+.topNameMobile {
+    display: none;
+}
+
+.topStatusDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+    animation: statusPulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+.topMeta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.5);
+
+    .topDivider {
+        opacity: 0.35;
+    }
+}
+
+.centerStage {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(16px, 2.5vh, 24px);
+    padding: 0 clamp(16px, 4vw, 32px);
+    max-width: 960px;
+    width: 100%;
+    text-align: center;
+}
+
+.tagPill {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: clamp(5px, 0.9vh, 7px) clamp(13px, 2vw, 18px);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(9px, 1.05vw, 11px);
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    color: rgba(255, 255, 255, 0.9);
+    text-transform: uppercase;
+}
+
+.pulseDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 8px #ffffff, 0 0 18px rgba(255, 255, 255, 0.7);
+    animation: pulseDotGlow 1.8s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+.tagText {
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.9);
+    white-space: nowrap;
+}
+
+.wordWrapper {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0;
+    min-height: clamp(50px, 8.5vw, 94px);
+    max-width: 92vw;
+}
+
+.bullet {
+    display: inline-block;
+    width: clamp(8px, 1.3vw, 13px);
+    height: clamp(8px, 1.3vw, 13px);
+    background: #ffffff;
+    border-radius: 50%;
+    margin-right: clamp(10px, 1.8vw, 18px);
+    flex-shrink: 0;
+    box-shadow: 0 0 14px rgba(255, 255, 255, 0.95), 0 0 28px rgba(255, 255, 255, 0.45);
+}
+
+.wordText {
+    display: inline-block;
+    color: #ffffff;
+    font-family: 'Syne', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: clamp(28px, 6.2vw, 76px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+    white-space: nowrap;
+    text-shadow: 0 0 35px rgba(255, 255, 255, 0.25);
+}
+
+.bottomBar {
+    position: absolute;
+    bottom: max(clamp(24px, 4.5vw, 48px), env(safe-area-inset-bottom));
+    left: max(clamp(20px, 4.5vw, 64px), env(safe-area-inset-left));
+    right: max(clamp(20px, 4.5vw, 64px), env(safe-area-inset-right));
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(12px, 2vh, 16px);
+}
+
+.progressTrack {
+    width: 100%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.85) 60%, #ffffff 100%);
+    border-radius: 999px;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.75);
+}
+
+.bottomMeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+}
+
+.metaStatus {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+
+    span {
+        font-family: 'DM Mono', monospace;
+        font-size: clamp(10px, 1.1vw, 12px);
+        letter-spacing: 0.16em;
+        color: rgba(255, 255, 255, 0.5);
+        text-transform: uppercase;
+    }
+
+    .skipPrompt {
+        font-size: clamp(9px, 0.95vw, 10px);
+        letter-spacing: 0.14em;
+        color: rgba(255, 255, 255, 0.32);
+        transition: color 0.2s ease;
+    }
+}
+
+.introduction:hover .skipPrompt {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.percentage {
+    font-family: 'DM Mono', monospace;
+    font-size: clamp(24px, 3.4vw, 42px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+    color: #ffffff;
+    text-shadow: 0 0 24px rgba(255, 255, 255, 0.25);
+    flex-shrink: 0;
+}
+
+@keyframes pulseDotGlow {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 8px #ffffff, 0 0 16px rgba(255, 255, 255, 0.6);
+    }
+    50% {
+        transform: scale(1.18);
+        opacity: 0.85;
+        box-shadow: 0 0 12px #ffffff, 0 0 24px rgba(255, 255, 255, 0.85);
+    }
+}
+
+@keyframes statusPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.4;
+    }
+}
+
+/* Tablet & Mobile Responsiveness */
+@media (max-width: 768px) {
+    .wordWrapper {
+        min-height: clamp(46px, 9vw, 64px);
+    }
+}
+
+@media (max-width: 600px) {
+    .topBar {
+        font-size: 10px;
+        letter-spacing: 0.14em;
+    }
+
+    .topNameDesktop {
+        display: none;
+    }
+
+    .topNameMobile {
+        display: inline;
+    }
+
+    .topMetaInit,
+    .topDivider {
+        display: none;
+    }
+
+    .wordWrapper {
+        min-height: 44px;
+    }
+
+    .wordText {
+        font-size: clamp(26px, 8.2vw, 44px);
+    }
+
+    .bullet {
+        width: 7px;
+        height: 7px;
+        margin-right: 10px;
+    }
+
+    .metaStatus .skipPrompt {
+        display: none;
+    }
+
+    .percentage {
+        font-size: clamp(20px, 5.5vw, 28px);
+    }
+}
+
+@media (max-width: 380px) {
+    .topIdentity {
+        gap: 6px;
+        font-size: 9px;
+    }
+
+    .topMeta {
+        font-size: 9px;
+    }
+
+    .tagPill {
+        padding: 4px 10px;
+        font-size: 9px;
+        letter-spacing: 0.16em;
+    }
+
+    .wordText {
+        font-size: clamp(23px, 7.8vw, 30px);
+    }
+
+    .bullet {
+        width: 6px;
+        height: 6px;
+        margin-right: 8px;
+    }
+}
