@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@motionone/react": "^10.16.4",
     "@react-spring/web": "^10.0.1",
     "@rive-app/react-canvas": "^4.22.1",
     "animejs": "^4.0.2",
