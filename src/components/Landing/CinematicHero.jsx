@@ -177,6 +177,21 @@ const entranceVariants = {
   }),
 };
 
+const characterRevealVariants = {
+  hidden: { opacity: 0, y: '110%', rotateX: -80, filter: 'blur(10px)' },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    filter: 'blur(0px)',
+    transition: {
+      duration: 0.8,
+      delay: 0.35 + i * 0.045,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
+
 function DigitalCoreCanvas() {
   const canvasRef = useRef(null);
 
@@ -679,15 +694,27 @@ export default function CinematicHero({
       {/* 2. Precision Blueprint Coordinate Header Line */}
       <motion.div
         className={styles.blueprintCoordBar}
-        aria-hidden="true"
         variants={entranceVariants}
         initial="hidden"
         animate={animationState}
         custom={0}
       >
-        
-      
-      
+        <div className={styles.coordGroupLeft}>
+          <span className={styles.blueprintPlus}>+</span>
+          
+          <span className={styles.coordSep}>/</span>
+          <span className={styles.blueprintParam}>BUILD 2026.11</span>
+        </div>
+        <span className={styles.blueprintRule} />
+        <div className={styles.coordGroupRight}>
+          <span className={styles.radarPulse}>
+            <span className={styles.radarCore} />
+            <span className={styles.radarRing} />
+          </span>
+          <span>NODE: VIJAYAWADA, IN</span>
+          <span className={styles.coordSep}>/</span>
+          <span className={styles.blueprintParam}>LIVE {liveClock || '--:--:-- IST'}</span>
+        </div>
       </motion.div>
 
       {/* 3. Dual Kinetic Typographic Velocity Ribbons (BEHIND ALL CONTENT) */}
@@ -706,8 +733,7 @@ export default function CinematicHero({
             LEFT COLUMN: Editorial Typography, Matrix Scramble Role, Telemetry, CTAs
             ========================================================================= */}
         <div className={styles.leftContentCol}>
-          {/* Status Eyebrow Badge */}
-          
+         
 
           {/* Grand Staggered Master Headline with Interactive Letters */}
           <div className={styles.headlineBlock}>
@@ -734,6 +760,10 @@ export default function CinematicHero({
                   <motion.span
                     key={`fn-${cIdx}`}
                     className={styles.interactiveChar}
+                    variants={characterRevealVariants}
+                    initial="hidden"
+                    animate={animationState}
+                    custom={cIdx}
                     whileHover={{ y: -6, color: '#c7d2fe', scale: 1.05 }}
                     transition={{ type: 'spring', stiffness: 500, damping: 15 }}
                   >
@@ -746,6 +776,10 @@ export default function CinematicHero({
                   <motion.span
                     key={`ln-${cIdx}`}
                     className={styles.interactiveChar}
+                    variants={characterRevealVariants}
+                    initial="hidden"
+                    animate={animationState}
+                    custom={cIdx + 8}
                     whileHover={{ y: -6, scale: 1.05 }}
                     transition={{ type: 'spring', stiffness: 500, damping: 15 }}
                   >
@@ -768,6 +802,13 @@ export default function CinematicHero({
                 <span className={styles.scrambleRole}>{roleText}</span>
                 <span className={styles.cursorBlink}>_</span>
               </div>
+              <span className={styles.roleCycleStatus} aria-label={`Role ${roleIndex + 1} of ${ROLES.length}`}>
+                <span className={styles.roleCycleLabel}>PROFILE SIGNAL</span>
+                <span className={styles.roleCycleTrack}>
+                  <span style={{ width: `${((roleIndex + 1) / ROLES.length) * 100}%` }} />
+                </span>
+                <span className={styles.roleCycleCount}>0{roleIndex + 1}/0{ROLES.length}</span>
+              </span>
 
               {/* Dynamic Soundwave Equalizer */}
               <div className={styles.audioFrequencyMeter} aria-hidden="true">
@@ -797,6 +838,16 @@ export default function CinematicHero({
             and production-grade full-stack architectures from foundational database schemas
             to fluid reactive interfaces with <strong>Python, Next.js, React, Node.js, SQL, and LLMs</strong>.
           </motion.p>
+          <motion.div
+            className={styles.heroSignalLine}
+            variants={entranceVariants}
+            initial="hidden"
+            animate={animationState}
+            custom={5.5}
+          >
+            <span className={styles.signalLine} />
+            <span>Turning complex systems into clear, useful products</span>
+          </motion.div>
 
           {/* Live Telemetry Metrics HUD Strip */}
           <motion.div

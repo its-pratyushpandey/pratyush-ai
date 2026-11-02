@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { SkillsSection } from '../Description/SkillsSection';
 import Certificates from '../Description/Certificates';
 import ExperienceSection from '../Description/ExperienceSection';
-import ConnectWithMe from '../Description/ConnectWithMe';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -83,7 +82,6 @@ export default function index() {
             <SkillsSection />
             <Certificates />
             <ExperienceSection />
-            <ConnectWithMe />
             <div ref={container} className={styles.slidingImages}>
                 <motion.div style={{x: x1}} className={styles.slider}>
                         {

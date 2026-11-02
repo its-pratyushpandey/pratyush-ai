@@ -3976,7 +3976,8 @@
 
 .wordInner {
   display: inline-block;
-  color: #f6f7fb;
+  color: inherit;
+  will-change: transform, opacity, filter;
 }
 
 .wordGradient {
@@ -5389,6 +5390,7 @@
 .wordInner {
   display: inline-block;
   will-change: transform, opacity, filter;
+  color: inherit;
 }
 
 .wordHighlight {
@@ -5633,25 +5635,48 @@
 }
 
 .editorialHeadline {
-  font-family: 'Plus Jakarta Sans', 'Manrope', -apple-system, sans-serif;
-  font-size: clamp(42px, 5.8vw, 84px);
+  font-family: 'Plus Jakarta Sans', 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(38px, 5.2vw, 82px);
   font-weight: 800;
-  letter-spacing: -0.05em;
-  line-height: 1.04;
+  letter-spacing: -0.045em;
+  line-height: 1.05;
   margin: 0;
   display: flex;
   flex-direction: column;
   position: relative;
   z-index: 1;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 
   .editorialHeadlineLine1 {
     color: #f8fafc;
+    -webkit-text-fill-color: #f8fafc;
+    display: block;
+    line-height: 1.05;
+    margin-bottom: clamp(3px, 0.45vw, 8px);
+
+    .wordInner {
+      color: #f8fafc;
+      -webkit-text-fill-color: #f8fafc;
+    }
   }
 
   .editorialHeadlineLine2 {
     background: linear-gradient(135deg, #55abf5 0%, #818cf8 50%, #c084fc 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: block;
+    line-height: 1.05;
+
+    .wordInner {
+      background: linear-gradient(135deg, #55abf5 0%, #818cf8 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
   }
 }
 
@@ -5675,11 +5700,14 @@
     color: #55abf5;
   }
 
-  .editorialHeadline .editorialHeadlineLine1 {
+  .editorialHeadline .editorialHeadlineLine1,
+  .editorialHeadline .editorialHeadlineLine1 .wordInner {
     color: #f8fafc;
+    -webkit-text-fill-color: #f8fafc;
   }
 
-  .editorialHeadline .editorialHeadlineLine2 {
+  .editorialHeadline .editorialHeadlineLine2,
+  .editorialHeadline .editorialHeadlineLine2 .wordInner {
     background: linear-gradient(135deg, #55abf5 0%, #818cf8 50%, #c084fc 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -5697,62 +5725,191 @@
   }
 }
 
-// Light theme variation (for sections on light/blueprint surfaces like Experience, Credentials, Contact)
+// Light theme variation (for sections on light/blueprint surfaces like About, Capabilities, Credentials, Contact)
 .editorialHeaderWrap.light {
   .sectionWatermark {
-    color: var(--snap-watermark, rgba(50, 65, 135, 0.048));
+    color: rgba(30, 41, 89, 0.045) !important;
+    text-shadow: none !important;
     transition: none !important;
   }
 
   .editorialEyebrow {
-    color: var(--snap-eyebrow, #5c62d6);
+    color: #4338ca !important;
     transition: none !important;
   }
 
-  .editorialHeadline .editorialHeadlineLine1 {
-    color: var(--snap-text-heading, #12153a);
-    transition: none !important;
-  }
+  .editorialHeadline {
+    .editorialHeadlineLine1,
+    .editorialHeadlineLine1 .wordInner {
+      color: #0b1329 !important;
+      -webkit-text-fill-color: #0b1329 !important;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.85);
+      transition: none !important;
+    }
 
-  .editorialHeadline .editorialHeadlineLine2 {
-    background: var(--snap-heading-gradient, linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #818cf8 100%));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: none !important;
+    .editorialHeadlineLine2,
+    .editorialHeadlineLine2 .wordInner {
+      background: linear-gradient(135deg, #3730a3 0%, #4f46e5 45%, #7c3aed 100%) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      display: inline-block;
+      transition: none !important;
+    }
   }
 
   :global(.wordGradient),
   .wordGradient {
-    background: var(--snap-heading-gradient, linear-gradient(135deg, #4338ca 0%, #6366f1 50%, #818cf8 100%));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    background: linear-gradient(135deg, #3730a3 0%, #4f46e5 45%, #7c3aed 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
     transition: none !important;
   }
 
   .editorialIntro {
-    color: var(--snap-text-intro, #3b4267);
+    color: #334155 !important;
+    font-size: clamp(14.5px, 1.25vw, 17px);
+    line-height: 1.7;
+    max-width: 620px;
+    margin: 20px 0 0;
+    position: relative;
+    z-index: 1;
     transition: none !important;
+  }
+}
+
+// Bespoke section typography palette refinements
+.about {
+  .editorialHeaderWrap {
+    .editorialHeadline {
+      .editorialHeadlineLine1,
+      .editorialHeadlineLine1 .wordInner {
+        color: #0b1329 !important;
+        -webkit-text-fill-color: #0b1329 !important;
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.9);
+      }
+
+      .editorialHeadlineLine2,
+      .editorialHeadlineLine2 .wordInner {
+        background: linear-gradient(135deg, #312e81 0%, #4f46e5 45%, #7c3aed 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+      }
+    }
+  }
+}
+
+.credentials {
+  .editorialHeaderWrap {
+    .editorialEyebrow {
+      color: #0284c7 !important;
+    }
+
+    .editorialHeadline {
+      .editorialHeadlineLine1,
+      .editorialHeadlineLine1 .wordInner {
+        color: #061830 !important;
+        -webkit-text-fill-color: #061830 !important;
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.85);
+      }
+
+      .editorialHeadlineLine2,
+      .editorialHeadlineLine2 .wordInner {
+        background: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #4f46e5 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+      }
+    }
+  }
+}
+
+.contactHeadingWrap,
+.contact {
+  .editorialHeaderWrap {
+    .editorialEyebrow {
+      color: #2563eb !important;
+    }
+
+    .editorialHeadline {
+      .editorialHeadlineLine1,
+      .editorialHeadlineLine1 .wordInner {
+        color: #09162a !important;
+        -webkit-text-fill-color: #09162a !important;
+        text-shadow: 0 1px 1px rgba(255, 255, 255, 0.9);
+      }
+
+      .editorialHeadlineLine2,
+      .editorialHeadlineLine2 .wordInner {
+        background: linear-gradient(135deg, #1d4ed8 0%, #4f46e5 45%, #7c3aed 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+      }
+    }
+  }
+}
+
+// Direct support for ContactSection when .editorialHeaderWrap is on root level of contact heading
+.contactHeadingWrap.light,
+.contactHeadingWrap {
+  .editorialEyebrow {
+    color: #2563eb !important;
+  }
+
+  .editorialHeadline {
+    .editorialHeadlineLine1,
+    .editorialHeadlineLine1 .wordInner {
+      color: #09162a !important;
+      -webkit-text-fill-color: #09162a !important;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.9);
+    }
+
+    .editorialHeadlineLine2,
+    .editorialHeadlineLine2 .wordInner {
+      background: linear-gradient(135deg, #1d4ed8 0%, #4f46e5 45%, #7c3aed 100%) !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .editorialHeadline {
+    font-size: clamp(34px, 5.8vw, 62px);
+    letter-spacing: -0.04em;
+    line-height: 1.08;
   }
 }
 
 @media (max-width: 768px) {
   .editorialHeaderWrap {
-    margin-bottom: 40px;
+    margin-bottom: 36px;
   }
 
   .sectionWatermark {
-    font-size: clamp(52px, 14vw, 100px);
-    top: -10px;
+    font-size: clamp(48px, 13vw, 92px);
+    top: -8px;
   }
 
   .editorialHeadline {
-    font-size: clamp(34px, 8.5vw, 56px);
-    line-height: 1.08;
+    font-size: clamp(28px, 7.5vw, 44px);
+    line-height: 1.1;
+    letter-spacing: -0.035em;
   }
 
   .editorialEyebrow {
-    font-size: 10px;
+    font-size: 10.5px;
     margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .editorialHeadline {
+    font-size: clamp(25px, 7.2vw, 34px);
+    line-height: 1.14;
+    letter-spacing: -0.03em;
+  }
+
+  .wordMask {
+    margin-right: 0.22em;
   }
 }
 

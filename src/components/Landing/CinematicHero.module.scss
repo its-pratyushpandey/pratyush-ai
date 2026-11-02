@@ -224,6 +224,7 @@
   margin: 0 auto;
   padding: clamp(20px, 3vh, 40px) clamp(24px, 5vw, 64px) clamp(20px, 3vh, 32px);
   box-sizing: border-box;
+  min-width: 0;
   will-change: transform, opacity;
 }
 
@@ -310,6 +311,10 @@
   margin-bottom: 10px;
 }
 
+.headlineIndex span:first-child {
+  color: #43e8b3;
+}
+
 .grandHeadline {
   font-family: 'Syne', 'Plus Jakarta Sans', sans-serif;
   font-size: clamp(48px, 6.6vw, 96px);
@@ -338,6 +343,7 @@
 .interactiveChar {
   display: inline-block;
   cursor: pointer;
+  transform-origin: 50% 100%;
   transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), text-shadow 0.2s ease;
   will-change: transform;
 
@@ -352,6 +358,41 @@
   align-items: center;
   gap: 14px;
   flex-wrap: wrap;
+}
+
+.roleCycleStatus {
+  align-items: center;
+  color: rgba(255, 255, 255, 0.42);
+  display: inline-flex;
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  gap: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.roleCycleLabel {
+  color: rgba(165, 180, 252, 0.72);
+}
+
+.roleCycleTrack {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  height: 3px;
+  overflow: hidden;
+  width: 42px;
+}
+
+.roleCycleTrack span {
+  background: linear-gradient(90deg, #43e8b3, #55abf5);
+  border-radius: inherit;
+  display: block;
+  height: 100%;
+  transition: width 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.roleCycleCount {
+  color: rgba(255, 255, 255, 0.58);
 }
 
 .scrambleTerminalTag {
@@ -427,6 +468,24 @@
     color: #ffffff;
     font-weight: 600;
   }
+}
+
+.heroSignalLine {
+  align-items: center;
+  color: rgba(255, 255, 255, 0.42);
+  display: flex;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  gap: 9px;
+  letter-spacing: 0.08em;
+  margin: -7px 0 26px;
+  text-transform: uppercase;
+}
+
+.signalLine {
+  background: linear-gradient(90deg, #43e8b3, rgba(67, 232, 179, 0));
+  height: 1px;
+  width: 34px;
 }
 
 /* Telemetry Metrics HUD Strip */
@@ -597,6 +656,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 0;
   perspective: 1200px;
 }
 
@@ -618,6 +678,7 @@
   transform: rotateX(var(--card-tilt-x, 0deg)) rotateY(var(--card-tilt-y, 0deg));
   transition: transform 0.15s ease-out;
   box-sizing: border-box;
+  min-width: 0;
   will-change: transform;
 }
 
@@ -765,6 +826,7 @@
   border: 1px solid rgba(255, 255, 255, 0.06);
   box-sizing: border-box;
   overflow: hidden;
+  min-width: 0;
 }
 
 /* ==========================================================================
@@ -777,6 +839,7 @@
   gap: 14px;
   height: 100%;
   box-sizing: border-box;
+  min-width: 0;
 }
 
 .topologySubHeader {
@@ -1311,12 +1374,27 @@
   letter-spacing: 0.04em;
   position: relative;
   z-index: 3;
+  min-width: 0;
 }
 
 .cockpitFooterLeft {
   display: flex;
   align-items: center;
   gap: 6px;
+  min-width: 0;
+}
+
+.cockpitFooterLeft span:last-child,
+.cockpitFooterRight {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cockpitFooterRight {
+  flex-shrink: 1;
+  min-width: 0;
+  text-align: right;
 }
 
 .footDot {
@@ -1481,6 +1559,16 @@
   .cockpitCard {
     max-width: 100%;
     padding: 14px;
+  }
+
+  .cockpitFooter,
+  .cockpitFooterLeft {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .cockpitFooterRight {
+    display: none;
   }
 
   .cockpitViewport {

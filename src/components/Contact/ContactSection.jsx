@@ -1,7 +1,7 @@
 "use client";
 
-import React, { forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import {
@@ -9,26 +9,61 @@ import {
   FiArrowUp,
   FiArrowUpRight,
   FiAtSign,
-  FiBookOpen,
   FiCheck,
   FiClock,
   FiCode,
   FiCopy,
-  FiGithub,
-  FiLinkedin,
   FiMapPin,
-  FiMessageCircle,
   FiPhone,
-  FiRefreshCw,
   FiSend,
 } from "react-icons/fi";
-import { SiLeetcode } from "react-icons/si";
 import styles from "./ContactSection.module.scss";
 import pageStyles from "../../app/page.module.scss";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
+
+const footerGroups = [
+  {
+    label: "Professional",
+    links: [
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/pratyush-pandey1/" },
+      { label: "GitHub", href: "https://github.com/its-pratyushpandey" },
+      { label: "Peerlist", href: "https://peerlist.io/pratyushmeai" },
+      { label: "Product Hunt", href: "https://www.producthunt.com/@pratyush_kumar_pandey" },
+    ],
+  },
+  {
+    label: "Writing",
+    links: [
+      { label: "Medium", href: "https://medium.com/@pratyush.me.ai" },
+      { label: "DEV Community", href: "https://dev.to/pratyush_kumarpandey_0f5" },
+      { label: "Hashnode", href: "https://hashnode.com/@pratyushpandey" },
+      { label: "In Plain English", href: "https://plainenglish.io/author/pratyush-kumar-pandey" },
+      { label: "Substack", href: "https://substack.com/@pratyushkumarpandey" },
+    ],
+  },
+  {
+    label: "Build & Learn",
+    links: [
+      { label: "LeetCode", href: "https://leetcode.com/u/mNJTujizno3/" },
+      { label: "CodeChef", href: "https://www.codechef.com/users/rayomensukuna1" },
+      { label: "GeeksforGeeks", href: "https://www.geeksforgeeks.org/profile/pratyuscruz" },
+      { label: "Kaggle", href: "https://www.kaggle.com/pratyushkumarpandeyy" },
+      { label: "Devpost", href: "https://devpost.com/pratyush-me-ai" },
+    ],
+  },
+  {
+    label: "Elsewhere",
+    links: [
+      { label: "X / Twitter", href: "https://x.com/prat86517" },
+      { label: "YouTube", href: "https://www.youtube.com/@PratyushKumarPandey-j1n" },
+      { label: "Reddit", href: "https://www.reddit.com/user/Pandey_Pratyush/" },
+       { label: "Instagram", href: "https://www.instagram.com/its.pratyush_pandey" },
+    ],
+  },
+];
 
 function StaggeredWordReveal({
   text,
@@ -91,8 +126,8 @@ const DEFAULT_PROFILE = {
   email: "pratyush.me.ai@gmail.com",
   phone: "+91-7562920811",
   github: "https://github.com/its-pratyushpandey",
-  linkedin: "https://www.linkedin.com/in/pratyush-pandey-/",
-  leetcode: "https://leetcode.com/u/pratyush_pandey/",
+  linkedin: "https://www.linkedin.com/in/pratyush-pandey1/",
+  leetcode: "https://leetcode.com/u/mNJTujizno3/",
   resume: "https://dev.pratyushpandey.me/presume.pdf",
   location: "Vijayawada, India",
   maps: "https://maps.app.goo.gl/dPjAwKErtBJW6kRo9",
@@ -108,16 +143,9 @@ const ContactSection = forwardRef(function ContactSection({ profile = DEFAULT_PR
   const bridgeLineRightRef = useRef(null);
   const bridgePillRef = useRef(null);
   const cardsWrapRef = useRef(null);
-  const formCardRef = useRef(null);
-  const footerRef = useRef(null);
-
-  // Accessible IDs
-  const nameId = useId();
-  const emailId = useId();
-  const messageId = useId();
-  const nameErrorId = useId();
-  const emailErrorId = useId();
-  const messageErrorId = useId();
+  const formRef = useRef(null);
+  const directoryRef = useRef(null);
+  const bottomBarRef = useRef(null);
 
   // Local Time State (Asia/Kolkata)
   const [localTime, setLocalTime] = useState("");
@@ -127,22 +155,16 @@ const ContactSection = forwardRef(function ContactSection({ profile = DEFAULT_PR
   const copyTimerRef = useRef(null);
 
   // Form State
-  const [formData, setFormData] = useState({
+  const [formState, setFormState] = useState({
     name: "",
     email: "",
     message: "",
     hp_company: "",
   });
-  const [touched, setTouched] = useState({
-    name: false,
-    email: false,
-    message: false,
-  });
-  const [submissionStatus, setSubmissionStatus] = useState("idle"); // 'idle' | 'submitting' | 'success' | 'error'
-  const [errorMessage, setErrorMessage] = useState("");
-  const [isConfigured, setIsConfigured] = useState(true);
+  const [formStatus, setFormStatus] = useState({ type: "idle", message: "" });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // 1. Timezone Clock (Asia/Kolkata), updating every 60 seconds
+  // 1. Timezone Clock (Asia/Kolkata), updating every 30 seconds
   useEffect(() => {
     const updateTime = () => {
       try {
@@ -159,7 +181,7 @@ const ContactSection = forwardRef(function ContactSection({ profile = DEFAULT_PR
     };
 
     updateTime();
-    const interval = setInterval(updateTime, 60000);
+    const interval = setInterval(updateTime, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -181,16 +203,16 @@ const ContactSection = forwardRef(function ContactSection({ profile = DEFAULT_PR
 
     const ctx = gsap.context(() => {
       if (prefersReducedMotion) {
-        // Immediate display without motion
         gsap.set(
           [
             bridgePillRef.current,
             bridgeLineLeftRef.current,
             bridgeLineRightRef.current,
-            formCardRef.current,
-            footerRef.current,
+            formRef.current,
+            directoryRef.current,
+            bottomBarRef.current,
           ],
-          { opacity: 1, y: 0, x: 0, scaleX: 1 }
+          { opacity: 1, y: 0, scaleX: 1 }
         );
         if (cardsWrapRef.current) {
           gsap.set(cardsWrapRef.current.children, { opacity: 1, y: 0 });
@@ -229,7 +251,7 @@ const ContactSection = forwardRef(function ContactSection({ profile = DEFAULT_PR
       // Transition bridge line expansion
       tl.fromTo(
         bridgePillRef.current,
-        { opacity: 0, scale: 0.85 },
+        { opacity: 0, scale: 0.88 },
         { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out" }
       )
         .fromTo(
@@ -241,28 +263,35 @@ const ContactSection = forwardRef(function ContactSection({ profile = DEFAULT_PR
         // Staggered reveal of contact information cards
         .fromTo(
           cardsWrapRef.current ? cardsWrapRef.current.children : [],
-          { opacity: 0, y: 28 },
+          { opacity: 0, y: 26 },
           {
             opacity: 1,
             y: 0,
             duration: 0.6,
-            stagger: 0.1,
+            stagger: 0.09,
             ease: "power3.out",
           },
           "-=0.2"
         )
-        // Form card entrance
+        // Form panel reveal
         .fromTo(
-          formCardRef.current,
-          { opacity: 0, y: 32 },
-          { opacity: 1, y: 0, duration: 0.75, ease: "power3.out" },
-          "-=0.35"
+          formRef.current,
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" },
+          "-=0.2"
         )
-        // Footer subtle reveal
+        // Directory grid reveal
         .fromTo(
-          footerRef.current,
+          directoryRef.current,
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" },
+          "-=0.25"
+        )
+        // Bottom bar reveal
+        .fromTo(
+          bottomBarRef.current,
           { opacity: 0, y: 16 },
-          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+          { opacity: 1, y: 0, duration: 0.55, ease: "power2.out" },
           "-=0.2"
         );
     }, sectionEl);
@@ -276,8 +305,9 @@ const ContactSection = forwardRef(function ContactSection({ profile = DEFAULT_PR
     e.stopPropagation();
 
     try {
+      const emailToCopy = profile.email || DEFAULT_PROFILE.email;
       if (typeof navigator !== "undefined" && navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(profile.email);
+        await navigator.clipboard.writeText(emailToCopy);
         setCopyStatus("copied");
         if (copyTimerRef.current) clearTimeout(copyTimerRef.current);
         copyTimerRef.current = setTimeout(() => setCopyStatus("idle"), 2500);
@@ -291,66 +321,6 @@ const ContactSection = forwardRef(function ContactSection({ profile = DEFAULT_PR
     }
   };
 
-  // 4. Form Validation & Submission
-  const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+$/;
-
-  const isNameValid = formData.name.trim().length >= 2;
-  const isEmailValid = emailRegex.test(formData.email.trim());
-  const isMessageValid = formData.message.trim().length >= 10;
-
-  const handleBlur = (field) => {
-    setTouched((prev) => ({ ...prev, [field]: true }));
-  };
-
-  const handleChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setTouched({ name: true, email: true, message: true });
-
-    if (!isNameValid || !isEmailValid || !isMessageValid) {
-      return;
-    }
-
-    setSubmissionStatus("submitting");
-    setErrorMessage("");
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (response.ok && data.ok) {
-        setSubmissionStatus("success");
-      } else {
-        setSubmissionStatus("error");
-        setIsConfigured(data.configured !== false);
-        setErrorMessage(
-          data.error ||
-            "Unable to deliver your message at this time. Please try again or reach out directly via email."
-        );
-      }
-    } catch (err) {
-      setSubmissionStatus("error");
-      setErrorMessage(
-        "A network error occurred while sending your message. Please check your connection or reach out via direct email."
-      );
-    }
-  };
-
-  const handleResetForm = () => {
-    setFormData({ name: "", email: "", message: "", hp_company: "" });
-    setTouched({ name: false, email: false, message: false });
-    setSubmissionStatus("idle");
-    setErrorMessage("");
-  };
-
   const scrollToTop = (e) => {
     e.preventDefault();
     if (typeof window !== "undefined") {
@@ -358,9 +328,53 @@ const ContactSection = forwardRef(function ContactSection({ profile = DEFAULT_PR
     }
   };
 
-  const mailtoHref = `mailto:${profile.email}?subject=${encodeURIComponent(
-    `Project inquiry from ${formData.name || "Portfolio visitor"}`
-  )}&body=${encodeURIComponent(formData.message || "")}`;
+  const handleFormChange = (event) => {
+    const { name, value } = event.target;
+    setFormState((current) => ({ ...current, [name]: value }));
+    if (formStatus.type !== "idle") {
+      setFormStatus({ type: "idle", message: "" });
+    }
+  };
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setFormStatus({ type: "idle", message: "" });
+
+    try {
+      const response = await fetch("/api/contact", {
+        body: JSON.stringify(formState),
+        headers: { "Content-Type": "application/json" },
+        method: "POST",
+      });
+      const result = await response.json();
+
+      if (!response.ok || !result.ok) {
+        throw new Error(result.error || "Unable to send your message right now.");
+      }
+
+      setFormStatus({
+        type: "success",
+        message: result.message || "Message sent successfully. I’ll be in touch soon.",
+      });
+      setFormState({ name: "", email: "", message: "", hp_company: "" });
+    } catch (error) {
+      setFormStatus({
+        type: "error",
+        message: error.message || "Unable to send your message right now.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const userEmail = profile.email || DEFAULT_PROFILE.email;
+  const userPhone = profile.phone || DEFAULT_PROFILE.phone;
+  const userLocation = profile.location || DEFAULT_PROFILE.location;
+  const userMaps = profile.maps || DEFAULT_PROFILE.maps;
+  const userName = profile.name || DEFAULT_PROFILE.name;
 
   return (
     <section
@@ -390,506 +404,318 @@ const ContactSection = forwardRef(function ContactSection({ profile = DEFAULT_PR
         </div>
       </div>
 
-      {/* Main Section Header with SectionTitle Text Style (Exact matching 05 / CREDENTIALS) */}
-      <div className={`${pageStyles.editorialHeaderWrap} ${pageStyles.light} ${pageStyles.contactHeadingWrap}`}>
-        {/* Background Ghost Watermark Title */}
-        <div ref={watermarkRef} className={pageStyles.sectionWatermark} aria-hidden="true">
-          CONTACT
-        </div>
+      <div className={styles.container}>
+        {/* Main Section Editorial Header (Exact match to screenshot) */}
+        <div className={`${pageStyles.editorialHeaderWrap} ${pageStyles.light} ${pageStyles.contactHeadingWrap}`}>
+          {/* Background Ghost Watermark Title */}
+          <div ref={watermarkRef} className={pageStyles.sectionWatermark} aria-hidden="true">
+            CONTACT
+          </div>
 
-        {/* Eyebrow Badge with Glowing Dot */}
-        <motion.div
-          className={pageStyles.editorialEyebrow}
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className={pageStyles.editorialEyebrowDot} />
-          <span>06 / GET IN TOUCH</span>
-        </motion.div>
-
-        {/* Staggered Multi-Line Animated Headline */}
-        <h2 id="contact-heading" className={pageStyles.editorialHeadline}>
-          <span className={pageStyles.editorialHeadlineLine1}>
-            <StaggeredWordReveal text="Have an idea?" />
-          </span>
-          <span className={pageStyles.editorialHeadlineLine2}>
-            <StaggeredWordReveal
-              text="Let's make it real."
-              delay={0.15}
-              gradientWords={["make", "it", "real."]}
-            />
-          </span>
-        </h2>
-
-        {/* Subtitle / Intro paragraph */}
-        <motion.p
-          className={pageStyles.editorialIntro}
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.65, delay: 0.2 }}
-        >
-          Whether it&apos;s a new opportunity, an engineering collaboration, or a chat about AI and
-          full-stack systems — I&apos;d love to connect.
-        </motion.p>
-
-        {/* START A CONVERSATION Link */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          style={{ marginTop: "24px" }}
-        >
-          <a
-            href={`mailto:${profile.email}`}
-            className={pageStyles.contactCta}
-            aria-label="Start a conversation via direct email"
+          {/* Eyebrow Badge with Glowing Dot */}
+          <motion.div
+            className={pageStyles.editorialEyebrow}
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6 }}
           >
-            Start a conversation <FiArrowUpRight />
-          </a>
-        </motion.div>
-      </div>
+            <span className={pageStyles.editorialEyebrowDot} />
+            <span>06 / GET IN TOUCH</span>
+          </motion.div>
 
-      {/* Two-Column Grid: Contact Details (Left) & Form (Right) */}
-      <div className={styles.contactGrid}>
-        {/* Left Column: Information Cards & Socials */}
-        <div className={styles.contactInfoCol}>
-          <div className={styles.introCallout}>
-            <span className={styles.introStepNum}>01</span>
-            <p>
-              Let&apos;s build something
-              <br />
-              <strong>useful, thoughtful, and memorable.</strong>
-            </p>
+          {/* Staggered Multi-Line Animated Headline */}
+          <h2 id="contact-heading" className={pageStyles.editorialHeadline}>
+            <span className={pageStyles.editorialHeadlineLine1}>
+              <StaggeredWordReveal text="Have an idea?" />
+            </span>
+            <span className={pageStyles.editorialHeadlineLine2}>
+              <StaggeredWordReveal
+                text="Let's make it real."
+                delay={0.15}
+                gradientWords={["Let's", "make", "it", "real.", "real", "Lets"]}
+              />
+            </span>
+          </h2>
+
+          {/* Subtitle / Intro paragraph */}
+          <motion.p
+            className={pageStyles.editorialIntro}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.65, delay: 0.2 }}
+          >
+            Whether it&apos;s a new opportunity, an engineering collaboration, or a chat about AI and
+            full-stack systems — I&apos;d love to connect.
+          </motion.p>
+
+          {/* START A CONVERSATION Link */}
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            style={{ marginTop: "24px" }}
+          >
+            <a
+              href={`mailto:${userEmail}`}
+              className={pageStyles.contactCta}
+              aria-label="Start a conversation via direct email"
+            >
+              Start a conversation <FiArrowUpRight />
+            </a>
+          </motion.div>
+        </div>
+
+        {/* Contact Information Cards Hub (4-card balanced dashboard) */}
+        <div ref={cardsWrapRef} className={styles.cardsGrid}>
+          {/* Email Card */}
+          <div className={styles.contactCard}>
+            <div className={styles.cardIcon}>
+              <FiAtSign aria-hidden="true" />
+            </div>
+            <div className={styles.cardBody}>
+              <span className={styles.cardLabel}>Email Address</span>
+              <strong className={styles.cardValue} title={userEmail}>
+                {userEmail}
+              </strong>
+              <span className={styles.cardSubtitle}>Direct inbox response</span>
+            </div>
+            <div className={styles.cardActions}>
+              <button
+                type="button"
+                onClick={handleCopyEmail}
+                className={`${styles.copyButton} ${
+                  copyStatus === "copied"
+                    ? styles.copySuccess
+                    : copyStatus === "error"
+                    ? styles.copyError
+                    : ""
+                }`}
+                aria-label={
+                  copyStatus === "copied"
+                    ? "Email copied to clipboard"
+                    : copyStatus === "error"
+                    ? "Failed to copy email"
+                    : "Copy email address"
+                }
+                title="Copy email to clipboard"
+              >
+                {copyStatus === "copied" ? (
+                  <>
+                    <FiCheck aria-hidden="true" /> Copied!
+                  </>
+                ) : copyStatus === "error" ? (
+                  <>
+                    <FiAlertCircle aria-hidden="true" /> Failed
+                  </>
+                ) : (
+                  <>
+                    <FiCopy aria-hidden="true" /> Copy
+                  </>
+                )}
+              </button>
+              <a
+                href={`mailto:${userEmail}`}
+                className={styles.cardDirectLink}
+                aria-label="Open email client"
+                title="Open mail client"
+              >
+                <FiArrowUpRight aria-hidden="true" />
+              </a>
+            </div>
           </div>
 
-          <div ref={cardsWrapRef} className={styles.cardsStack}>
-            {/* Email Card */}
-            <div className={styles.contactCard}>
-              <div className={styles.cardIcon}>
-                <FiAtSign />
-              </div>
-              <div className={styles.cardBody}>
-                <span className={styles.cardLabel}>Email Address</span>
-                <strong className={styles.cardValue} title={profile.email}>
-                  {profile.email}
-                </strong>
-                <span className={styles.cardSubtitle}>Direct inbox response</span>
-              </div>
-              <div className={styles.cardActions}>
-                <button
-                  type="button"
-                  onClick={handleCopyEmail}
-                  className={`${styles.copyButton} ${
-                    copyStatus === "copied"
-                      ? styles.copySuccess
-                      : copyStatus === "error"
-                      ? styles.copyError
-                      : ""
-                  }`}
-                  aria-label={
-                    copyStatus === "copied"
-                      ? "Email copied to clipboard"
-                      : copyStatus === "error"
-                      ? "Failed to copy email"
-                      : "Copy email address"
-                  }
-                  title="Copy email to clipboard"
-                >
-                  {copyStatus === "copied" ? (
-                    <>
-                      <FiCheck /> Copied!
-                    </>
-                  ) : copyStatus === "error" ? (
-                    <>
-                      <FiAlertCircle /> Failed
-                    </>
-                  ) : (
-                    <>
-                      <FiCopy /> Copy
-                    </>
-                  )}
-                </button>
-                <a
-                  href={`mailto:${profile.email}`}
-                  className={styles.cardDirectLink}
-                  aria-label="Open email client"
-                  title="Open mail client"
-                >
-                  <FiArrowUpRight />
-                </a>
-              </div>
+          {/* Phone Card */}
+          <a
+            href={`tel:${userPhone}`}
+            className={styles.contactCard}
+            aria-label={`Call or WhatsApp: ${userPhone}`}
+          >
+            <div className={styles.cardIcon}>
+              <FiPhone aria-hidden="true" />
             </div>
-
-            {/* Phone Card */}
-            <a
-              href={`tel:${profile.phone || "+917562920811"}`}
-              className={styles.contactCard}
-              aria-label={`Call or WhatsApp: ${profile.phone || "+91-7562920811"}`}
-            >
-              <div className={styles.cardIcon}>
-                <FiPhone />
-              </div>
-              <div className={styles.cardBody}>
-                <span className={styles.cardLabel}>Direct Phone</span>
-                <strong className={styles.cardValue}>{profile.phone || "+91-7562920811"}</strong>
-                
-              </div>
-              <FiArrowUpRight className={styles.cardArrow} aria-hidden="true" />
-            </a>
-
-            {/* Location Card */}
-            <a
-              href={profile.maps}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.contactCard}
-              aria-label={`Location: ${profile.location} (opens Google Maps)`}
-            >
-              <div className={styles.cardIcon}>
-                <FiMapPin />
-              </div>
-              <div className={styles.cardBody}>
-                <span className={styles.cardLabel}>Based In</span>
-                <strong className={styles.cardValue}>{profile.location}</strong>
-                <span className={styles.cardSubtitle}>Andhra Pradesh, India</span>
-              </div>
-              <FiArrowUpRight className={styles.cardArrow} aria-hidden="true" />
-            </a>
-
-            {/* Local Time Card */}
-            <div className={styles.contactCard} aria-label={`Current local time in Vijayawada, India: ${localTime || "15:30"} IST`}>
-              <div className={styles.cardIcon}>
-                <FiClock />
-              </div>
-              <div className={styles.cardBody}>
-                <span className={styles.cardLabel}>Local Time</span>
-                <strong className={styles.cardValue}>
-                  <span className={styles.liveClockBadge}>
-                    <span className={styles.liveClockDot} />
-                    {localTime || "--:--"} IST
-                  </span>
-                </strong>
-                <span className={styles.cardSubtitle}>Asia/Kolkata (UTC +05:30)</span>
-              </div>
+            <div className={styles.cardBody}>
+              <span className={styles.cardLabel}>Direct Phone</span>
+              <strong className={styles.cardValue}>{userPhone}</strong>
+              <span className={styles.cardSubtitle}>Call or WhatsApp</span>
             </div>
+            <FiArrowUpRight className={styles.cardArrow} aria-hidden="true" />
+          </a>
 
-            {/* Social Block */}
-            <div className={styles.socialsBlock}>
-              <span className={styles.socialsTitle}>Find Me Online</span>
-              <div className={styles.socialsList}>
-                <a
-                  href={profile.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.socialButton}
-                  aria-label="GitHub Profile (opens in new tab)"
-                  title="GitHub"
-                >
-                  <FiGithub />
-                </a>
-                <a
-                  href={profile.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.socialButton}
-                  aria-label="LinkedIn Profile (opens in new tab)"
-                  title="LinkedIn"
-                >
-                  <FiLinkedin />
-                </a>
-                <a
-                  href={profile.leetcode || "https://leetcode.com"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.socialButton}
-                  aria-label="LeetCode Profile (opens in new tab)"
-                  title="LeetCode"
-                >
-                  <SiLeetcode />
-                </a>
-                <a
-                  href={profile.resume}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={styles.socialButton}
-                  aria-label="View Resume PDF (opens in new tab)"
-                  title="Resume"
-                >
-                  <FiBookOpen />
-                </a>
-              </div>
+          {/* Location Card */}
+          <a
+            href={userMaps}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.contactCard}
+            aria-label={`Location: ${userLocation} (opens Google Maps)`}
+          >
+            <div className={styles.cardIcon}>
+              <FiMapPin aria-hidden="true" />
+            </div>
+            <div className={styles.cardBody}>
+              <span className={styles.cardLabel}>Based In</span>
+              <strong className={styles.cardValue}>{userLocation}</strong>
+              <span className={styles.cardSubtitle}>Andhra Pradesh, India</span>
+            </div>
+            <FiArrowUpRight className={styles.cardArrow} aria-hidden="true" />
+          </a>
+
+          {/* Local Time Card */}
+          <div
+            className={styles.contactCard}
+            aria-label={`Current local time in Vijayawada, India: ${localTime || "16:30"} IST`}
+          >
+            <div className={styles.cardIcon}>
+              <FiClock aria-hidden="true" />
+            </div>
+            <div className={styles.cardBody}>
+              <span className={styles.cardLabel}>Local Time</span>
+              <strong className={styles.cardValue}>
+                <span className={styles.liveClockBadge}>
+                  <span className={styles.liveClockDot} />
+                  {localTime || "--:--"} IST
+                </span>
+              </strong>
+              <span className={styles.cardSubtitle}>Asia/Kolkata (UTC +05:30)</span>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Contact Form */}
-        <div ref={formCardRef} className={styles.formCard}>
-          <AnimatePresence mode="wait">
-            {submissionStatus === "success" ? (
-              <motion.div
-                key="success-card"
-                className={styles.successCard}
-                initial={{ opacity: 0, scale: 0.95, y: 15 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: -15 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                role="status"
-                aria-live="polite"
-              >
-                <div className={styles.successIconWrap}>
-                  <FiCheck />
-                </div>
-                <h3 className={styles.successTitle}>Message received!</h3>
-                <p className={styles.successDescription}>
-                  Thank you, <strong>{formData.name || "friend"}</strong>! Your inquiry has been
-                  received. I review incoming messages daily and will be in touch shortly.
-                </p>
-                <button
-                  type="button"
-                  onClick={handleResetForm}
-                  className={styles.successResetButton}
-                >
-                  <FiRefreshCw /> Send another note
-                </button>
-              </motion.div>
-            ) : (
-              <motion.form
-                key="contact-form"
-                className={styles.formBody}
-                onSubmit={handleSubmit}
-                noValidate
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className={styles.formHeader}>
-                  <span className={styles.formStepNum}>02</span>
-                  <div className={styles.formHeaderCopy}>
-                    <h3>Tell me about your project</h3>
-                    <p>I usually reply within 24 hours.</p>
-                  </div>
-                  <FiMessageCircle className={styles.formHeaderIcon} aria-hidden="true" />
-                </div>
+        {/* Project Inquiry Form Panel */}
+        <div ref={formRef} className={styles.contactFormPanel}>
+          <div className={styles.formIntro}>
+            <span className={styles.formEyebrow}>Let&apos;s collaborate</span>
+            <h3>Tell me what you&apos;re working on.</h3>
+            <p>
+              Share a little context and I&apos;ll get back to you with thoughtful next steps,
+              usually within 24 hours.
+            </p>
+            <div className={styles.formMeta}>
+              <span><span className={styles.formMetaDot} /> Open to select roles &amp; projects</span>
+              <span>Full-Stack · AI · Product Engineering</span>
+            </div>
+          </div>
 
-                {/* Honeypot field for anti-spam protection */}
+          <form className={styles.contactForm} onSubmit={handleFormSubmit}>
+            <div className={styles.formFields}>
+              <label>
+                <span>Your name</span>
                 <input
                   type="text"
-                  name="hp_company"
-                  value={formData.hp_company}
-                  onChange={(e) => handleChange("hp_company", e.target.value)}
-                  tabIndex={-1}
-                  autoComplete="off"
-                  className={styles.hpField}
-                  aria-hidden="true"
+                  name="name"
+                  value={formState.name}
+                  onChange={handleFormChange}
+                  placeholder="Jane Smith"
+                  autoComplete="name"
+                  minLength={2}
+                  maxLength={100}
+                  required
                 />
+              </label>
+              <label>
+                <span>Email address</span>
+                <input
+                  type="email"
+                  name="email"
+                  value={formState.email}
+                  onChange={handleFormChange}
+                  placeholder="jane@company.com"
+                  autoComplete="email"
+                  maxLength={150}
+                  required
+                />
+              </label>
+              <label className={styles.formMessageField}>
+                <span>Project Details</span>
+                <textarea
+                  name="message"
+                  value={formState.message}
+                  onChange={handleFormChange}
+                  placeholder="Tell me about your idea, timeline, or scope..."
+                  minLength={10}
+                  maxLength={3000}
+                  rows={5}
+                  required
+                />
+                <small>{formState.message.length}/3000 (min 10)</small>
+              </label>
+            </div>
+            <input
+              className={styles.honeypot}
+              type="text"
+              name="hp_company"
+              value={formState.hp_company}
+              onChange={handleFormChange}
+              tabIndex="-1"
+              autoComplete="off"
+              aria-hidden="true"
+            />
+            <div className={styles.formFooter}>
+              <span className={`${styles.formStatus} ${styles[`formStatus${formStatus.type}`]}`} role="status">
+                {formStatus.message}
+              </span>
+              <button type="submit" className={styles.formSubmit} disabled={isSubmitting}>
+                {isSubmitting ? "Sending..." : "Send message"}
+                {isSubmitting ? <span className={styles.submitSpinner} /> : <FiSend aria-hidden="true" />}
+              </button>
+            </div>
+          </form>
+        </div>
 
-                {/* Name Field */}
-                <div className={styles.fieldGroup}>
-                  <label htmlFor={nameId} className={styles.fieldLabel}>
-                    <span>Your Name</span>
-                  </label>
-                  <div className={styles.inputWrapper}>
-                    <input
-                      id={nameId}
-                      name="name"
-                      type="text"
-                      required
-                      placeholder="Jane Doe"
-                      value={formData.name}
-                      onChange={(e) => handleChange("name", e.target.value)}
-                      onBlur={() => handleBlur("name")}
-                      aria-invalid={touched.name && !isNameValid ? "true" : "false"}
-                      aria-describedby={touched.name && !isNameValid ? nameErrorId : undefined}
-                      className={`${styles.fieldInput} ${
-                        touched.name && isNameValid
-                          ? styles.inputValid
-                          : touched.name && !isNameValid
-                          ? styles.inputInvalid
-                          : ""
-                      }`}
-                    />
-                    {touched.name && (
-                      <span
-                        className={`${styles.fieldStatusIcon} ${
-                          isNameValid ? styles.validIcon : styles.invalidIcon
-                        }`}
-                        aria-hidden="true"
-                      >
-                        {isNameValid ? <FiCheck /> : <FiAlertCircle />}
-                      </span>
-                    )}
-                  </div>
-                  {touched.name && !isNameValid && (
-                    <span id={nameErrorId} className={styles.fieldErrorText} role="alert">
-                      <FiAlertCircle /> Please enter your name (at least 2 characters).
-                    </span>
-                  )}
-                </div>
+        {/* Section Architectural Divider */}
+        <div className={styles.sectionDivider} aria-hidden="true" />
 
-                {/* Email Field */}
-                <div className={styles.fieldGroup}>
-                  <label htmlFor={emailId} className={styles.fieldLabel}>
-                    <span>Email Address</span>
-                  </label>
-                  <div className={styles.inputWrapper}>
-                    <input
-                      id={emailId}
-                      name="email"
-                      type="email"
-                      required
-                      placeholder="you@example.com"
-                      value={formData.email}
-                      onChange={(e) => handleChange("email", e.target.value)}
-                      onBlur={() => handleBlur("email")}
-                      aria-invalid={touched.email && !isEmailValid ? "true" : "false"}
-                      aria-describedby={touched.email && !isEmailValid ? emailErrorId : undefined}
-                      className={`${styles.fieldInput} ${
-                        touched.email && isEmailValid
-                          ? styles.inputValid
-                          : touched.email && !isEmailValid
-                          ? styles.inputInvalid
-                          : ""
-                      }`}
-                    />
-                    {touched.email && (
-                      <span
-                        className={`${styles.fieldStatusIcon} ${
-                          isEmailValid ? styles.validIcon : styles.invalidIcon
-                        }`}
-                        aria-hidden="true"
-                      >
-                        {isEmailValid ? <FiCheck /> : <FiAlertCircle />}
-                      </span>
-                    )}
-                  </div>
-                  {touched.email && !isEmailValid && (
-                    <span id={emailErrorId} className={styles.fieldErrorText} role="alert">
-                      <FiAlertCircle /> Please enter a valid email address.
-                    </span>
-                  )}
-                </div>
-
-                {/* Message Field */}
-                <div className={styles.fieldGroup}>
-                  <div className={styles.fieldLabel}>
-                    <label htmlFor={messageId}>Project Details</label>
-                    <span className={styles.fieldCount}>
-                      {formData.message.length}/3000 (min 10)
-                    </span>
-                  </div>
-                  <div className={styles.inputWrapper}>
-                    <textarea
-                      id={messageId}
-                      name="message"
-                      rows={4}
-                      required
-                      placeholder="Tell me a little about your idea, timeline, or scope..."
-                      value={formData.message}
-                      onChange={(e) => handleChange("message", e.target.value)}
-                      onBlur={() => handleBlur("message")}
-                      aria-invalid={touched.message && !isMessageValid ? "true" : "false"}
-                      aria-describedby={touched.message && !isMessageValid ? messageErrorId : undefined}
-                      className={`${styles.fieldTextarea} ${
-                        touched.message && isMessageValid
-                          ? styles.inputValid
-                          : touched.message && !isMessageValid
-                          ? styles.inputInvalid
-                          : ""
-                      }`}
-                    />
-                  </div>
-                  {touched.message && !isMessageValid && (
-                    <span id={messageErrorId} className={styles.fieldErrorText} role="alert">
-                      <FiAlertCircle /> Message must be at least 10 characters long.
-                    </span>
-                  )}
-                </div>
-
-                {/* Submission Error Banner & Fallback Actions */}
-                {submissionStatus === "error" && (
-                  <div className={styles.alertBanner} role="alert">
-                    <div className={styles.alertHeader}>
-                      <FiAlertCircle />
-                      <span>{isConfigured ? "Submission issue" : "Direct Email Service Notice"}</span>
-                    </div>
-                    <p className={styles.alertMessage}>{errorMessage}</p>
-                    <div className={styles.alertActions}>
-                      <button
-                        type="submit"
-                        disabled={submissionStatus === "submitting"}
-                        className={styles.retryButton}
-                      >
-                        <FiRefreshCw /> Retry sending
-                      </button>
-                      <a href={mailtoHref} className={styles.mailFallbackButton}>
-                        <FiSend /> Open in Mail App
-                      </a>
-                    </div>
-                  </div>
-                )}
-
-                {/* Form Footer */}
-                <div className={styles.formFooter}>
-                  <span className={styles.formDisclaimer}>
-                    Every good collaboration starts with a conversation.
-                  </span>
-                  <button
-                    type="submit"
-                    className={styles.submitButton}
-                    disabled={submissionStatus === "submitting"}
-                    aria-label="Send project inquiry message"
+        {/* 4-Column Directory Links */}
+        <div ref={directoryRef} className={styles.directoryGrid}>
+          {footerGroups.map((group) => (
+            <div className={styles.directoryCol} key={group.label}>
+              <span className={styles.directoryColLabel}>{group.label}</span>
+              <div className={styles.directoryLinksList}>
+                {group.links.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.directoryLink}
                   >
-                    {submissionStatus === "submitting" ? (
-                      <>
-                        <span className={styles.spinner}>
-                          <FiRefreshCw />
-                        </span>
-                        Sending message...
-                      </>
-                    ) : (
-                      <>
-                        Send message <FiSend className={styles.submitArrow} />
-                      </>
-                    )}
-                  </button>
-                </div>
-              </motion.form>
-            )}
-          </AnimatePresence>
+                    <span>{link.label}</span>
+                    <FiArrowUpRight className={styles.linkArrow} aria-hidden="true" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
+
+        {/* Bottom Bar: Copyright, Status, Credits, Back to Top */}
+        <footer ref={bottomBarRef} className={styles.bottomBar}>
+          <div className={styles.bottomLeft}>
+            <span className={styles.copyrightText}>
+              © {new Date().getFullYear()} {userName}
+            </span>
+           
+          </div>
+
+          <div className={styles.bottomCenter}>
+            <span>Crafted with precision &amp; care</span>
+            <FiCode className={styles.codeIcon} aria-hidden="true" />
+          </div>
+
+          <button
+            onClick={scrollToTop}
+            type="button"
+            className={styles.backToTopButton}
+            aria-label="Scroll back to top of page"
+          >
+            <span>Back to top</span>
+            <FiArrowUp className={styles.backToTopArrow} aria-hidden="true" />
+          </button>
+        </footer>
       </div>
-
-      {/* Footer Component */}
-      <footer ref={footerRef} className={styles.footer}>
-        <div className={styles.footerLeft}>
-          <span className={styles.copyrightText}>
-            © {new Date().getFullYear()} {profile.name}
-          </span>
-          <span className={styles.footerStatusBadge}>
-            <span className={styles.footerStatusDot} />
-            Available for select roles
-          </span>
-        </div>
-
-        <div className={styles.footerCenter}>
-          <span>Crafted with precision &amp; care</span>
-          <FiCode aria-hidden="true" />
-        </div>
-
-        <button
-          onClick={scrollToTop}
-          type="button"
-          className={styles.backToTopButton}
-          aria-label="Scroll back to top of page"
-        >
-          Back to top <FiArrowUp className={styles.backToTopArrow} aria-hidden="true" />
-        </button>
-      </footer>
     </section>
   );
 });

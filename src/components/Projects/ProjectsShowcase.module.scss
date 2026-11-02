@@ -1547,15 +1547,30 @@
   color: rgba(210, 225, 248, 0.78);
   margin: 0;
   line-height: 1.5;
+  letter-spacing: 0.02em;
+  opacity: 0.82;
 }
 
 .stageDesc {
+  border-left: 2px solid var(--stage-accent);
   font-family: 'Manrope', sans-serif;
-  font-size: clamp(14px, 1.05vw, 16px);
-  line-height: 1.7;
+  font-size: clamp(15px, 1.08vw, 17px);
+  line-height: 1.55;
   color: rgba(215, 228, 245, 0.72);
-  margin: 0;
-  max-width: 580px;
+  margin: 2px 0 0;
+  max-width: 500px;
+  padding: 3px 0 3px 16px;
+  position: relative;
+}
+
+.stageDesc::after {
+  background: linear-gradient(180deg, var(--stage-accent), transparent);
+  content: "";
+  height: 22px;
+  left: -2px;
+  position: absolute;
+  top: 0;
+  width: 2px;
 }
 
 .stageActions {

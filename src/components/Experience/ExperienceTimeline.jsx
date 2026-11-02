@@ -1,13 +1,18 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { motion } from "framer-motion";
+import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import {
   FiArrowLeft,
   FiArrowRight,
   FiChevronRight,
+  FiMaximize2,
+  FiX,
+  FiCamera,
+  FiCheckCircle,
 } from "react-icons/fi";
 import styles from "./ExperienceTimeline.module.scss";
 
@@ -19,9 +24,9 @@ const JOURNEY_STATION_COLORS = {
   0: "#eef3f8", // Intro: Ice Platinum Slate
   1: "#e1effe", // Calibo: Cool Azure Ice Blue
   2: "#daf5ed", // EtharaAI: Refreshing Seafoam Aqua Mint
-  3: "#fef5d6", // MERN Hackathon: Luminous Warm Solar Pearl / Champagne Amber
-  4: "#e2ebfc", // FSAD Hackathon: Electric Indigo Frost
-  5: "#dbf3f6", // PFSD Hackathon: Nordic Glacial Sky Teal
+  3: "#fff7ed", // Smart India Hackathon: Saffron & Warm Amber Glow
+  4: "#fff1f2", // Adobe Hackathon: Adobe Crimson & Rose Quartz
+  5: "#eef2ff", // HackVega Hackathon: Cosmic Cobalt & Electric Indigo
   6: "#eff2f7", // Outro: Platinum Frost Silver
 };
 
@@ -38,6 +43,9 @@ export default function ExperienceTimeline({ experience = [] }) {
   const [mobileSvgHeight, setMobileSvgHeight] = useState(2400);
   const [mobileReachedNodes, setMobileReachedNodes] = useState([]);
   const [activeMobileIndex, setActiveMobileIndex] = useState(0);
+
+  // Active workplace photo lightbox modal
+  const [activePhotoModal, setActivePhotoModal] = useState(null);
 
   const [reducedMotion, setReducedMotion] = useState(false);
 
@@ -66,6 +74,17 @@ export default function ExperienceTimeline({ experience = [] }) {
     mq.addEventListener?.("change", handleMotionChange);
     return () => mq.removeEventListener?.("change", handleMotionChange);
   }, []);
+
+  // Close photo modal on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape" && activePhotoModal) {
+        setActivePhotoModal(null);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activePhotoModal]);
 
   // 1. Desktop: Compute continuous curvy rope path passing through every milestone anchor grommet
   const calculateDesktopRopePath = useCallback(() => {
@@ -473,6 +492,33 @@ export default function ExperienceTimeline({ experience = [] }) {
           from the right on scroll down!
           ==================================================================== */}
       <div ref={pinContainerRef} className={styles.desktopTimelineWrap}>
+        {/* Dynamic Ambient Stage Backdrop: Atmospheric environment responding to active milestone */}
+        <div className={styles.ambientStageBackdrop} aria-hidden="true">
+          {experience.map((item, idx) => {
+            if (!item.bgImage) return null;
+            const isTarget = activeStation === idx + 1;
+            return (
+              <div
+                key={`ambient-${item.company}`}
+                className={`${styles.ambientStageLayer} ${
+                  isTarget ? styles.ambientStageActive : ""
+                }`}
+              >
+                <Image
+                  src={item.bgImage}
+                  alt=""
+                  fill
+                  priority={idx === 0}
+                  className={styles.ambientStageImg}
+                  sizes="100vw"
+                />
+                <div className={styles.ambientStageScrim} />
+                <div className={styles.ambientStageTint} />
+              </div>
+            );
+          })}
+        </div>
+
         {/* Top Pinned Editorial Header */}
         <header className={styles.pinnedHeader}>
           {/* Low-opacity ghost watermark word behind headline */}
@@ -658,10 +704,10 @@ export default function ExperienceTimeline({ experience = [] }) {
                 <div>
                   <span className={styles.stationKicker}>00 // CHRONOLOGY</span>
                   <h3 className={styles.stationTitle}>Where Ideas Met Execution</h3>
-                  <div className={styles.stationPeriod}>2024 — 2026 Journey</div>
+                  <div className={styles.stationPeriod}>2023 — 2026 Journey</div>
                   <p className={styles.stationDesc}>
                     5 engineering milestones connected along an evolving path. From
-                    hackathon architectures to production AI pipelines and distributed
+                    national hackathon architectures to production AI pipelines and distributed
                     cloud microservices.
                   </p>
                 </div>
@@ -712,11 +758,30 @@ export default function ExperienceTimeline({ experience = [] }) {
                   <article
                     id={`milestone-${idx}`}
                     tabIndex={0}
-                    className={`${styles.milestoneCard} ${getCardAppearanceClass(stationIdx)}`}
+                    className={`${styles.milestoneCard} ${getCardAppearanceClass(stationIdx)} ${
+                      item.bgImage ? styles.hasCustomBg : ""
+                    }`}
+                    style={{ ...(item.accentGradient ? { "--card-accent-grad": item.accentGradient } : {}) }}
                     aria-label={`${item.company} — ${item.role}`}
                   >
-                    <div>
-                      {/* Top Meta: Period + Domain badge + Location */}
+                    {/* Background photo layer for cards with real workplace imagery */}
+                    {item.bgImage && (
+                      <div className={styles.cardBgMedia}>
+                        <Image
+                          src={item.bgImage}
+                          alt={`${item.company} workplace`}
+                          fill
+                          priority={idx === 0}
+                          className={styles.cardBgImg}
+                          sizes="(max-width: 860px) 100vw, 540px"
+                        />
+                        <div className={styles.cardBgOverlay} />
+                        <div className={styles.cardBgVignette} />
+                      </div>
+                    )}
+
+                    <div className={styles.cardInnerContent}>
+                      {/* Top Meta: Period + Domain badge + Workplace Photo Badge + Location */}
                       <div className={styles.cardTopMeta}>
                         <div className={styles.cardMetaLeft}>
                           <span className={styles.cardPeriodBadge}>{item.period}</span>
@@ -725,12 +790,30 @@ export default function ExperienceTimeline({ experience = [] }) {
                           )}
                         </div>
 
-                        <div className={styles.cardLocationBadge}>
-                          <span>{item.countryCode || item.location}</span>
-                          <span className={styles.locationPulseDot}>
-                            <span className={styles.pulseRing} />
-                            <span className={styles.pulseCore} />
-                          </span>
+                        <div className={styles.cardMetaRight}>
+                          {item.bgImage && (
+                            <button
+                              type="button"
+                              className={styles.workplacePhotoBtn}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActivePhotoModal(item);
+                              }}
+                              title={`View ${item.company} workplace photo`}
+                              aria-label={`View ${item.company} workplace photo`}
+                            >
+                              <FiCamera size={11} className={styles.photoBtnIcon} />
+                              <span className={styles.photoBtnText}>{item.workplaceLabel || "Office"}</span>
+                              <FiMaximize2 size={10} className={styles.photoBtnExpand} />
+                            </button>
+                          )}
+                          <div className={styles.cardLocationBadge}>
+                            <span>{item.countryCode || item.location}</span>
+                            <span className={styles.locationPulseDot}>
+                              <span className={styles.pulseRing} />
+                              <span className={styles.pulseCore} />
+                            </span>
+                          </div>
                         </div>
                       </div>
 
@@ -793,6 +876,11 @@ export default function ExperienceTimeline({ experience = [] }) {
                       <span className={styles.cardStatusBadge}>
                         {item.type?.split("//")[0]?.trim() || "Milestone"}
                       </span>
+                      {item.bgImage && (
+                        <span className={styles.cardVerifiedBadge}>
+                          <FiCheckCircle size={11} /> Verified Workplace
+                        </span>
+                      )}
                       <span className={styles.cardOrderNum}>
                         0{idx + 1} of 0{experience.length}
                       </span>
@@ -865,7 +953,7 @@ export default function ExperienceTimeline({ experience = [] }) {
             </span>
             <span className={styles.activeRoleText}>
               // {activeStation === 0
-                ? "2024 — 2026 Journey"
+                ? "2023 — 2026 Journey"
                 : activeStation === 6
                 ? "Certifications & Standards"
                 : currentExperienceItem?.role}
@@ -1014,10 +1102,10 @@ export default function ExperienceTimeline({ experience = [] }) {
               >
                 <span className={styles.stationKicker}>00 // CHRONOLOGY</span>
                 <h3 className={styles.cardCompanyTitle}>Where Ideas Met Execution</h3>
-                <div className={styles.stationPeriod}>2024 — 2026 Journey</div>
+                <div className={styles.stationPeriod}>2023 — 2026 Journey</div>
                 <p className={styles.cardOverview}>
                   5 engineering milestones connected along an evolving path. From
-                  hackathon architectures to production AI pipelines and distributed
+                  national hackathon architectures to production AI pipelines and distributed
                   cloud microservices.
                 </p>
               </motion.article>
@@ -1045,75 +1133,120 @@ export default function ExperienceTimeline({ experience = [] }) {
                   <motion.article
                     className={`${styles.mobileCard} ${
                       isCurrentMobile ? styles.mobileCardActive : ""
-                    }`}
+                    } ${item.bgImage ? styles.hasCustomBg : ""}`}
+                    style={{ ...(item.accentGradient ? { "--card-accent-grad": item.accentGradient } : {}) }}
                     initial={{ opacity: 0, x: 30, scale: 0.96 }}
                     whileInView={{ opacity: 1, x: 0, scale: 1 }}
                     viewport={{ once: true, amount: 0.2 }}
                     transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
                   >
-                    {/* Top Meta */}
-                    <div className={styles.cardTopMeta}>
-                      <span className={styles.cardPeriodBadge}>{item.period}</span>
-                      <div className={styles.cardLocationBadge}>
-                        <span>{item.countryCode || item.location}</span>
-                        <span className={styles.locationPulseDot}>
-                          <span className={styles.pulseRing} />
-                          <span className={styles.pulseCore} />
+                    {/* Background photo layer for mobile cards with real workplace imagery */}
+                    {item.bgImage && (
+                      <div className={styles.cardBgMedia}>
+                        <Image
+                          src={item.bgImage}
+                          alt={`${item.company} workplace`}
+                          fill
+                          priority={idx === 0}
+                          className={styles.cardBgImg}
+                          sizes="(max-width: 860px) 100vw, 420px"
+                        />
+                        <div className={styles.cardBgOverlay} />
+                        <div className={styles.cardBgVignette} />
+                      </div>
+                    )}
+
+                    <div className={styles.cardInnerContent}>
+                      {/* Top Meta */}
+                      <div className={styles.cardTopMeta}>
+                        <div className={styles.cardMetaLeft}>
+                          <span className={styles.cardPeriodBadge}>{item.period}</span>
+                          {item.type && (
+                            <span className={styles.cardTypeBadge}>{item.type}</span>
+                          )}
+                        </div>
+
+                        <div className={styles.cardMetaRight}>
+                          {item.bgImage && (
+                            <button
+                              type="button"
+                              className={styles.workplacePhotoBtn}
+                              onClick={() => setActivePhotoModal(item)}
+                              title={`View ${item.company} workplace photo`}
+                              aria-label={`View ${item.company} workplace photo`}
+                            >
+                              <FiCamera size={11} className={styles.photoBtnIcon} />
+                              <span className={styles.photoBtnText}>{item.workplaceLabel || "Office"}</span>
+                              <FiMaximize2 size={10} className={styles.photoBtnExpand} />
+                            </button>
+                          )}
+                          <div className={styles.cardLocationBadge}>
+                            <span>{item.countryCode || item.location}</span>
+                            <span className={styles.locationPulseDot}>
+                              <span className={styles.pulseRing} />
+                              <span className={styles.pulseCore} />
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Company & Role */}
+                      <div className={styles.cardTitles}>
+                        <h3 className={styles.cardCompanyTitle}>{item.company}</h3>
+                        <h4 className={styles.cardRoleSubtitle}>{item.role}</h4>
+                      </div>
+
+                      {/* Tech Stack */}
+                      {item.tech && item.tech.length > 0 && (
+                        <div className={styles.cardTechList}>
+                          {item.tech.slice(0, 5).map((tech) => (
+                            <span key={tech} className={styles.cardTechPill}>
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Narrative Overview */}
+                      {item.overview && (
+                        <p className={styles.cardOverview}>{item.overview}</p>
+                      )}
+
+                      {/* Highlights */}
+                      <ul className={styles.cardHighlightsList}>
+                        {item.achievements?.slice(0, 2).map((ach, aIdx) => (
+                          <li key={aIdx} className={styles.highlightItem}>
+                            <span className={styles.achievementArrow} aria-hidden="true">
+                              →
+                            </span>
+                            <span className={styles.highlightText}>{ach}</span>
+                          </li>
+                        ))}
+
+                        {item.bullets?.slice(0, 1).map((b, bIdx) => (
+                          <li key={bIdx} className={styles.highlightItem}>
+                            <span className={styles.bulletDot} aria-hidden="true">
+                              •
+                            </span>
+                            <span className={styles.highlightText}>{b}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      {/* Footer */}
+                      <div className={styles.cardFooterMeta}>
+                        <span className={styles.cardStatusBadge}>
+                          {item.type?.split("//")[0]?.trim() || "Milestone"}
+                        </span>
+                        {item.bgImage && (
+                          <span className={styles.cardVerifiedBadge}>
+                            <FiCheckCircle size={10} /> Verified Workplace
+                          </span>
+                        )}
+                        <span className={styles.cardOrderNum}>
+                          0{idx + 1} of 0{experience.length}
                         </span>
                       </div>
-                    </div>
-
-                    {/* Company & Role */}
-                    <div className={styles.cardTitles}>
-                      <h3 className={styles.cardCompanyTitle}>{item.company}</h3>
-                      <h4 className={styles.cardRoleSubtitle}>{item.role}</h4>
-                    </div>
-
-                    {/* Tech Stack */}
-                    {item.tech && item.tech.length > 0 && (
-                      <div className={styles.cardTechList}>
-                        {item.tech.slice(0, 5).map((tech) => (
-                          <span key={tech} className={styles.cardTechPill}>
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Narrative Overview */}
-                    {item.overview && (
-                      <p className={styles.cardOverview}>{item.overview}</p>
-                    )}
-
-                    {/* Highlights */}
-                    <ul className={styles.cardHighlightsList}>
-                      {item.achievements?.slice(0, 2).map((ach, aIdx) => (
-                        <li key={aIdx} className={styles.highlightItem}>
-                          <span className={styles.achievementArrow} aria-hidden="true">
-                            →
-                          </span>
-                          <span className={styles.highlightText}>{ach}</span>
-                        </li>
-                      ))}
-
-                      {item.bullets?.slice(0, 1).map((b, bIdx) => (
-                        <li key={bIdx} className={styles.highlightItem}>
-                          <span className={styles.bulletDot} aria-hidden="true">
-                            •
-                          </span>
-                          <span className={styles.highlightText}>{b}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    {/* Footer */}
-                    <div className={styles.cardFooterMeta}>
-                      <span className={styles.cardStatusBadge}>
-                        {item.type?.split("//")[0]?.trim() || "Milestone"}
-                      </span>
-                      <span className={styles.cardOrderNum}>
-                        0{idx + 1} of 0{experience.length}
-                      </span>
                     </div>
                   </motion.article>
                 </div>
@@ -1163,6 +1296,80 @@ export default function ExperienceTimeline({ experience = [] }) {
           </div>
         </div>
       </div>
+
+      {/* Workplace Photo Lightbox Modal */}
+      <AnimatePresence>
+        {activePhotoModal && (
+          <motion.div
+            className={styles.modalBackdrop}
+            onClick={() => setActivePhotoModal(null)}
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${activePhotoModal.company} Workplace Photo`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+          >
+            <motion.div
+              className={styles.modalContent}
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, scale: 0.92, y: 24 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 24 }}
+              transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <button
+                type="button"
+                className={styles.modalCloseBtn}
+                onClick={() => setActivePhotoModal(null)}
+                aria-label="Close modal"
+              >
+                <FiX size={18} />
+              </button>
+
+              <div className={styles.modalImageWrap}>
+                <Image
+                  src={activePhotoModal.bgImage}
+                  alt={`${activePhotoModal.company} workplace`}
+                  fill
+                  className={styles.modalImage}
+                  sizes="(max-width: 860px) 92vw, 840px"
+                  priority
+                />
+                <div className={styles.modalImageGlassGlow} />
+              </div>
+
+              <div className={styles.modalFooter}>
+                <div className={styles.modalTitleGroup}>
+                  <div className={styles.modalMetaPills}>
+                    <span className={styles.modalBadge}>
+                      <FiCamera size={12} /> {activePhotoModal.workplaceLabel || "Workplace"}
+                    </span>
+                    <span className={styles.modalPeriodBadge}>
+                      {activePhotoModal.period}
+                    </span>
+                    <span className={styles.modalVerifiedBadge}>
+                      <FiCheckCircle size={11} /> Verified In-Office
+                    </span>
+                  </div>
+                  <h4 className={styles.modalCompanyTitle}>
+                    {activePhotoModal.company} <span className={styles.modalRoleDivider}>//</span> {activePhotoModal.role}
+                  </h4>
+                  <p className={styles.modalSubtitle}>
+                    {activePhotoModal.workplaceSubtitle || activePhotoModal.type}
+                  </p>
+                </div>
+                <div className={styles.modalLocationWrap}>
+                  <span className={styles.modalLocationText}>
+                    📍 {activePhotoModal.countryCode || activePhotoModal.location}
+                  </span>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

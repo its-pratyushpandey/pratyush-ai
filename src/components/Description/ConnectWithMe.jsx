@@ -3,9 +3,9 @@ import { motion } from 'framer-motion';
 import styles from './ConnectWithMe.module.scss';
 
 const links = [
-  { name: 'GitHub', url: 'https://github.com/Pratyush-2005', icon: '🐙' },
-  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/pratyush-pandey-', icon: '🔗' },
-  { name: 'LeetCode', url: 'https://leetcode.com/u/pratyush_pandey/', icon: '📘' },
+  { name: 'GitHub', url: 'https://github.com/its-pratyushpandey', icon: '🐙' },
+  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/pratyush-pandey1/', icon: '🔗' },
+  { name: 'LeetCode', url: 'https://leetcode.com/u/mNJTujizno3/', icon: '📘' },
   { name: 'Email', url: 'mailto:pratyush.me.ai@gmail.com', icon: '✉️' },
   { name: 'Phone', url: 'tel:+917562920811', icon: '📞', description: '+91-7562920811' },
   { name: 'Location', url: '#', icon: '📍', description: 'Vijayawada, India' },
