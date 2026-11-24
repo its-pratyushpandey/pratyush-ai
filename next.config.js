@@ -6,6 +6,7 @@ const nextConfig = {
   compress: true,
   poweredByHeader: false,
   swcMinify: true,
+  distDir: process.env.NODE_ENV === 'development' ? '.next-dev' : '.next',
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [360, 480, 640, 750, 828, 1080, 1200, 1920],

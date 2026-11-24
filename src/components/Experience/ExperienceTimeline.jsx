@@ -33,7 +33,6 @@ const JOURNEY_STATION_COLORS = {
 export default function ExperienceTimeline({ experience = [] }) {
   // activeStation: 0 = Intro, 1..5 = Milestones 01..05, 6 = Outro
   const [activeStation, setActiveStation] = useState(0);
-  const [progressPercent, setProgressPercent] = useState(0);
   const [ropePathD, setRopePathD] = useState("");
   const [svgDimensions, setSvgDimensions] = useState({ width: 7000, height: 750 });
   const [reachedNodes, setReachedNodes] = useState([]);
@@ -56,10 +55,18 @@ export default function ExperienceTimeline({ experience = [] }) {
   const desktopTravelingSparkRef = useRef(null);
   const watermarkRef = useRef(null);
   const scrollTriggerInstance = useRef(null);
+  const progressPercentRef = useRef(0);
+  const progressTextRef = useRef(null);
+  const desktopPathLengthRef = useRef(0);
+  const desktopGrommetPositionsRef = useRef([]);
+  const reachedNodesRef = useRef([]);
 
   const mobileContainerRef = useRef(null);
   const mobileRopeActivePathRef = useRef(null);
   const mobileTravelingSparkRef = useRef(null);
+  const mobilePathLengthRef = useRef(0);
+  const mobileGrommetPositionsRef = useRef([]);
+  const mobileReachedNodesRef = useRef([]);
 
   const lastStationRef = useRef(-1);
   const lastMobileStationRef = useRef(-1);
@@ -95,27 +102,29 @@ export default function ExperienceTimeline({ experience = [] }) {
     if (!grommets.length) return;
 
     const trackRect = track.getBoundingClientRect();
-    const points = [];
-
-    // Lead-in point before the first station
-    const firstRect = grommets[0].getBoundingClientRect();
-    const leadInX = Math.max(10, firstRect.left - trackRect.left - 120);
-    const leadInY = firstRect.top - trackRect.top + firstRect.height / 2 + 10;
-    points.push({ x: leadInX, y: leadInY });
-
-    // Center coordinates of each station grommet
-    grommets.forEach((grommet) => {
+    const grommetPoints = Array.from(grommets, (grommet) => {
       const rect = grommet.getBoundingClientRect();
-      const x = rect.left - trackRect.left + rect.width / 2;
-      const y = rect.top - trackRect.top + rect.height / 2;
-      points.push({ x, y });
+      return {
+        x: rect.left - trackRect.left + rect.width / 2,
+        y: rect.top - trackRect.top + rect.height / 2,
+        width: rect.width,
+      };
     });
+    desktopGrommetPositionsRef.current = grommetPoints.map(({ x }) => x);
 
-    // Lead-out point after the last station
-    const lastRect = grommets[grommets.length - 1].getBoundingClientRect();
-    const leadOutX = lastRect.left - trackRect.left + lastRect.width + 140;
-    const leadOutY = lastRect.top - trackRect.top + lastRect.height / 2 - 10;
-    points.push({ x: leadOutX, y: leadOutY });
+    const firstPoint = grommetPoints[0];
+    const lastPoint = grommetPoints[grommetPoints.length - 1];
+    const points = [
+      {
+        x: Math.max(10, firstPoint.x - firstPoint.width / 2 - 120),
+        y: firstPoint.y + 10,
+      },
+      ...grommetPoints,
+      {
+        x: lastPoint.x + lastPoint.width / 2 + 140,
+        y: lastPoint.y - 10,
+      },
+    ];
 
     // Construct smooth organic cubic Bezier spline with natural catenary gravity sag across wide distance
     let d = `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
@@ -151,16 +160,16 @@ export default function ExperienceTimeline({ experience = [] }) {
     if (!grommets.length) return;
 
     const containerRect = container.getBoundingClientRect();
-    const points = [];
-
-    grommets.forEach((grommet) => {
+    const points = Array.from(grommets, (grommet) => {
       const rect = grommet.getBoundingClientRect();
-      const x = rect.left - containerRect.left + rect.width / 2;
-      const y = rect.top - containerRect.top + rect.height / 2;
-      points.push({ x, y });
+      return {
+        x: rect.left - containerRect.left + rect.width / 2,
+        y: rect.top - containerRect.top + rect.height / 2,
+      };
     });
 
     if (points.length < 2) return;
+    mobileGrommetPositionsRef.current = points.map(({ y }) => y);
 
     // Build vertical organic curvy spline threading through each node
     let d = `M ${points[0].x.toFixed(1)} ${points[0].y.toFixed(1)}`;
@@ -224,9 +233,10 @@ export default function ExperienceTimeline({ experience = [] }) {
     if (activePath && ropePathD) {
       try {
         const pathLength = activePath.getTotalLength();
+        desktopPathLengthRef.current = pathLength;
         if (pathLength > 0) {
           activePath.style.strokeDasharray = `${pathLength}`;
-          const currentProgress = progressPercent / 100;
+          const currentProgress = progressPercentRef.current / 100;
           activePath.style.strokeDashoffset = `${pathLength * (1 - currentProgress)}px`;
 
           if (desktopTravelingSparkRef.current) {
@@ -238,7 +248,7 @@ export default function ExperienceTimeline({ experience = [] }) {
         }
       } catch (e) {}
     }
-  }, [ropePathD, progressPercent]);
+  }, [ropePathD]);
 
   // Synchronize mobile vertical rope stroke immediately
   useEffect(() => {
@@ -246,6 +256,7 @@ export default function ExperienceTimeline({ experience = [] }) {
     if (activePath && mobileRopePathD) {
       try {
         const pathLength = activePath.getTotalLength();
+        mobilePathLengthRef.current = pathLength;
         if (pathLength > 0) {
           activePath.style.strokeDasharray = `${pathLength}`;
           activePath.style.strokeDashoffset = `${pathLength}px`;
@@ -278,6 +289,7 @@ export default function ExperienceTimeline({ experience = [] }) {
         x: () => -getScrollAmount(),
         ease: "none",
       });
+      const stationCount = track.querySelectorAll(`.${styles.stationWrapper}`).length;
 
       // Subtle parallax drift on the ghost watermark word
       if (watermarkRef.current) {
@@ -304,19 +316,24 @@ export default function ExperienceTimeline({ experience = [] }) {
         anticipatePin: 1,
         onUpdate: (self) => {
           const p = self.progress;
-          setProgressPercent(Math.round(p * 100));
+          const progressPercent = Math.round(p * 100);
+          if (progressPercent !== progressPercentRef.current) {
+            progressPercentRef.current = progressPercent;
+            if (progressTextRef.current) {
+              progressTextRef.current.textContent = `${progressPercent}% Explored`;
+            }
+          }
 
           // A. Scrub horizontal curvy active rope's strokeDashoffset
           const activePath = desktopRopeActivePathRef.current;
           let sparkX = 0;
-          if (activePath) {
+          const pathLength = desktopPathLengthRef.current;
+          if (activePath && pathLength > 0) {
             try {
-              const pathLength = activePath.getTotalLength();
-              activePath.style.strokeDasharray = `${pathLength}`;
               const drawOffset = pathLength * (1 - p);
               activePath.style.strokeDashoffset = `${drawOffset}px`;
 
-              if (desktopTravelingSparkRef.current && pathLength > 0) {
+              if (desktopTravelingSparkRef.current) {
                 const currentDist = Math.max(0, Math.min(pathLength * p, pathLength));
                 const point = activePath.getPointAtLength(currentDist);
                 desktopTravelingSparkRef.current.setAttribute("cx", point.x);
@@ -326,20 +343,11 @@ export default function ExperienceTimeline({ experience = [] }) {
             } catch (e) {}
           }
 
-          // B. Screen-center proximity detection: precisely which single station is currently active
-          const center = window.innerWidth / 2;
-          const stations = track.querySelectorAll(`.${styles.stationWrapper}`);
-          let closestIdx = 0;
-          let minDiff = Infinity;
-          stations.forEach((st, i) => {
-            const rect = st.getBoundingClientRect();
-            const stCenter = rect.left + rect.width / 2;
-            const diff = Math.abs(center - stCenter);
-            if (diff < minDiff) {
-              minDiff = diff;
-              closestIdx = i;
-            }
-          });
+          // Stations are evenly spaced, so progress maps directly to the nearest station.
+          const closestIdx = Math.min(
+            Math.round(p * (stationCount - 1)),
+            stationCount - 1
+          );
 
           if (closestIdx !== lastStationRef.current) {
             lastStationRef.current = closestIdx;
@@ -361,16 +369,16 @@ export default function ExperienceTimeline({ experience = [] }) {
             }
           }
 
-          // C. Precise node activation: check which grommets the flowing rope has reached
-          const grommets = track.querySelectorAll(`.${styles.ropeGrommet}`);
-          const trackRect = track.getBoundingClientRect();
-          const reached = [];
-          grommets.forEach((g) => {
-            const gRect = g.getBoundingClientRect();
-            const gX = gRect.left - trackRect.left + gRect.width / 2;
-            reached.push(sparkX >= gX - 18);
-          });
-          setReachedNodes(reached);
+          // Grommet positions are measured during layout and reused while scrolling.
+          const reached = desktopGrommetPositionsRef.current.map((grommetX) => sparkX >= grommetX - 18);
+          const previousReached = reachedNodesRef.current;
+          if (
+            reached.length !== previousReached.length ||
+            reached.some((isReached, index) => isReached !== previousReached[index])
+          ) {
+            reachedNodesRef.current = reached;
+            setReachedNodes(reached);
+          }
         },
       });
     });
@@ -388,61 +396,64 @@ export default function ExperienceTimeline({ experience = [] }) {
         scrub: reducedMotion ? false : 0.8,
         onUpdate: (self) => {
           const p = self.progress;
+          const pathLength = mobilePathLengthRef.current;
 
-          try {
-            const pathLength = activePath.getTotalLength();
-            activePath.style.strokeDasharray = `${pathLength}`;
-            const drawOffset = pathLength * (1 - p);
-            activePath.style.strokeDashoffset = `${drawOffset}px`;
+          if (pathLength > 0) {
+            try {
+              const drawOffset = pathLength * (1 - p);
+              activePath.style.strokeDashoffset = `${drawOffset}px`;
 
-            if (mobileTravelingSparkRef.current && pathLength > 0) {
-              const currentDist = Math.max(0, Math.min(pathLength * p, pathLength));
-              const point = activePath.getPointAtLength(currentDist);
-              mobileTravelingSparkRef.current.setAttribute("cx", point.x);
-              mobileTravelingSparkRef.current.setAttribute("cy", point.y);
+              if (mobileTravelingSparkRef.current) {
+                const currentDist = Math.max(0, Math.min(pathLength * p, pathLength));
+                const point = activePath.getPointAtLength(currentDist);
+                mobileTravelingSparkRef.current.setAttribute("cx", point.x);
+                mobileTravelingSparkRef.current.setAttribute("cy", point.y);
 
-              // Check which vertical nodes spark has reached
-              const grommets = container.querySelectorAll(`.${styles.mobileGrommet}`);
-              const cRect = container.getBoundingClientRect();
-              const reached = [];
-              let closestMobile = 0;
-              let minMobileDiff = Infinity;
-
-              grommets.forEach((g, i) => {
-                const gRect = g.getBoundingClientRect();
-                const gY = gRect.top - cRect.top + gRect.height / 2;
-                reached.push(point.y >= gY - 16);
-
-                const diff = Math.abs(window.innerHeight / 2 - (gRect.top + gRect.height / 2));
-                if (diff < minMobileDiff) {
-                  minMobileDiff = diff;
-                  closestMobile = i;
+                const grommetPositions = mobileGrommetPositionsRef.current;
+                const reached = grommetPositions.map((grommetY) => point.y >= grommetY - 16);
+                const previousReached = mobileReachedNodesRef.current;
+                if (
+                  reached.length !== previousReached.length ||
+                  reached.some((isReached, index) => isReached !== previousReached[index])
+                ) {
+                  mobileReachedNodesRef.current = reached;
+                  setMobileReachedNodes(reached);
                 }
-              });
 
-              setMobileReachedNodes(reached);
+                const containerTop = container.getBoundingClientRect().top;
+                let closestMobile = 0;
+                let minMobileDiff = Infinity;
 
-              if (closestMobile !== lastMobileStationRef.current) {
-                lastMobileStationRef.current = closestMobile;
-                setActiveMobileIndex(closestMobile);
-                if (typeof document !== "undefined") {
-                  const snapZone = document.querySelector("[data-snap-theme]");
-                  if (snapZone) {
-                    snapZone.setAttribute("data-snap-theme", "journey");
-                    snapZone.setAttribute("data-journey-station", String(closestMobile));
-                    const targetColor = JOURNEY_STATION_COLORS[closestMobile] || "#eef3f8";
-                    snapZone.style.setProperty("--snap-canvas-bg", targetColor);
-                    gsap.to(snapZone, {
-                      backgroundColor: targetColor,
-                      duration: 0.65,
-                      ease: "power2.out",
-                      overwrite: "auto",
-                    });
+                grommetPositions.forEach((grommetY, index) => {
+                  const diff = Math.abs(window.innerHeight / 2 - (containerTop + grommetY));
+                  if (diff < minMobileDiff) {
+                    minMobileDiff = diff;
+                    closestMobile = index;
+                  }
+                });
+
+                if (closestMobile !== lastMobileStationRef.current) {
+                  lastMobileStationRef.current = closestMobile;
+                  setActiveMobileIndex(closestMobile);
+                  if (typeof document !== "undefined") {
+                    const snapZone = document.querySelector("[data-snap-theme]");
+                    if (snapZone) {
+                      snapZone.setAttribute("data-snap-theme", "journey");
+                      snapZone.setAttribute("data-journey-station", String(closestMobile));
+                      const targetColor = JOURNEY_STATION_COLORS[closestMobile] || "#eef3f8";
+                      snapZone.style.setProperty("--snap-canvas-bg", targetColor);
+                      gsap.to(snapZone, {
+                        backgroundColor: targetColor,
+                        duration: 0.65,
+                        ease: "power2.out",
+                        overwrite: "auto",
+                      });
+                    }
                   }
                 }
               }
-            }
-          } catch (e) {}
+            } catch (e) {}
+          }
         },
       });
     });
@@ -508,7 +519,6 @@ export default function ExperienceTimeline({ experience = [] }) {
                   src={item.bgImage}
                   alt=""
                   fill
-                  priority={idx === 0}
                   className={styles.ambientStageImg}
                   sizes="100vw"
                 />
@@ -538,7 +548,7 @@ export default function ExperienceTimeline({ experience = [] }) {
               >
                 <span className={styles.eyebrowDot} />
                 <span>04 / MY JOURNEY</span>
-                <span className={styles.eyebrowSep}>//</span>
+                <span className={styles.eyebrowSep}>{"//"}</span>
                 <span className={styles.eyebrowMeta}>CHRONOLOGICAL ARCHITECTURE</span>
               </motion.div>
 
@@ -771,7 +781,6 @@ export default function ExperienceTimeline({ experience = [] }) {
                           src={item.bgImage}
                           alt={`${item.company} workplace`}
                           fill
-                          priority={idx === 0}
                           className={styles.cardBgImg}
                           sizes="(max-width: 860px) 100vw, 540px"
                         />
@@ -952,7 +961,8 @@ export default function ExperienceTimeline({ experience = [] }) {
                 : `Active: ${currentExperienceItem?.company}`}
             </span>
             <span className={styles.activeRoleText}>
-              // {activeStation === 0
+              {"// "}
+              {activeStation === 0
                 ? "2023 — 2026 Journey"
                 : activeStation === 6
                 ? "Certifications & Standards"
@@ -968,8 +978,8 @@ export default function ExperienceTimeline({ experience = [] }) {
                 ? "06 // End"
                 : `0${activeStation} of 05`}
             </span>
-            <span className={styles.progressPct}>
-              {progressPercent}% Explored
+            <span className={styles.progressPct} ref={progressTextRef}>
+              0% Explored
             </span>
             <div className={styles.navPillWrap}>
               <button
@@ -1147,7 +1157,6 @@ export default function ExperienceTimeline({ experience = [] }) {
                           src={item.bgImage}
                           alt={`${item.company} workplace`}
                           fill
-                          priority={idx === 0}
                           className={styles.cardBgImg}
                           sizes="(max-width: 860px) 100vw, 420px"
                         />
@@ -1354,7 +1363,7 @@ export default function ExperienceTimeline({ experience = [] }) {
                     </span>
                   </div>
                   <h4 className={styles.modalCompanyTitle}>
-                    {activePhotoModal.company} <span className={styles.modalRoleDivider}>//</span> {activePhotoModal.role}
+                    {activePhotoModal.company} <span className={styles.modalRoleDivider}>{"//"}</span> {activePhotoModal.role}
                   </h4>
                   <p className={styles.modalSubtitle}>
                     {activePhotoModal.workplaceSubtitle || activePhotoModal.type}

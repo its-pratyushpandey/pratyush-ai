@@ -11,6 +11,8 @@ import {
   FiCheckCircle,
   FiActivity,
   FiZap,
+  FiLock,
+  FiGlobe,
 } from 'react-icons/fi';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
@@ -107,14 +109,15 @@ const cogniviewProject = {
   kicker: 'Voice AI • Interview Practice',
   subtitle: 'Next.js · TypeScript · Firebase · VAPI',
   description:
-    'Voice-led interview practice with instant AI scoring and personalized feedback.',
+    'An intelligent voice-led interview platform delivering real-time conversational practice, speech-to-text evaluation, automated scoring, and personalized placement dashboards.',
   year: '2026',
-  tags: ['Next.js', 'TypeScript', 'VAPI', 'LLMs'],
+  tags: ['Next.js', 'TypeScript', 'Firebase', 'VAPI', 'Speech AI'],
   accent: '#80e8e0',
   backdropImage: '/images/background.jpg',
-  liveUrl: 'mailto:pratyush.me.ai@gmail.com?subject=Cogniview%20Demo%20Request',
-  githubUrl: 'https://github.com/its-pratyushpandey',
-  urlBar: 'cogniview.ai/practice/voice-interview',
+  showcaseImage: '/images/projects/cogniview-showcase.png',
+  liveUrl: 'https://cogniview-frontend.vercel.app/sign-in',
+  githubUrl: 'https://github.com/its-pratyushpandey/cogniview-frontend-.git',
+  urlBar: 'cogniview-frontend.vercel.app/sign-in',
   prompt: 'Evaluate candidate response on distributed consensus, system tradeoffs, and communication depth.',
   scores: [
     { label: 'Problem Solving', value: '96%', pct: 96 },
@@ -132,14 +135,15 @@ const nexthireProject = {
   kicker: 'AI Recruitment • Real-Time Systems',
   subtitle: 'React · Node.js · MongoDB · WebSockets',
   description:
-    'A real-time hiring workspace for smarter matching, communication, and candidate discovery.',
+    'A modern hiring platform connecting talent and employers with smart role discovery, real-time candidate pipelines, and intelligent matching.',
   year: '2025',
-  tags: ['React', 'Node.js', 'MongoDB', 'WebSockets'],
+  tags: ['React', 'Node.js', 'MongoDB', 'WebSockets', 'AI'],
   accent: '#9b8cff',
   backdropImage: '/images/background2.jpg',
-  liveUrl: 'mailto:pratyush.me.ai@gmail.com?subject=NextHire%20Demo%20Request',
-  githubUrl: 'https://github.com/its-pratyushpandey',
-  urlBar: 'nexthire.ai/recruiter/pipeline',
+  showcaseImage: '/images/projects/nexthire-showcase.png',
+  liveUrl: 'https://nexthireap.netlify.app/',
+  githubUrl: 'https://github.com/its-pratyushpandey/NextHire.git',
+  urlBar: 'nexthireap.netlify.app',
   candidate: {
     name: 'Eren Yeager',
     role: 'Senior Full-Stack Engineer',
@@ -268,8 +272,8 @@ export default function ProjectsShowcase() {
             '<'
           );
 
-        // Independent layered depth parallax across scroll
-        if (desktopWindowRef.current && dashboardWindowRef.current && mobileMockupRef.current) {
+        // Depth parallax across scroll
+        if (desktopWindowRef.current) {
           gsap.to(desktopWindowRef.current, {
             y: -18,
             ease: 'none',
@@ -280,7 +284,8 @@ export default function ProjectsShowcase() {
               scrub: 1,
             },
           });
-
+        }
+        if (dashboardWindowRef.current) {
           gsap.to(dashboardWindowRef.current, {
             y: -38,
             ease: 'none',
@@ -291,7 +296,8 @@ export default function ProjectsShowcase() {
               scrub: 1.2,
             },
           });
-
+        }
+        if (mobileMockupRef.current) {
           gsap.to(mobileMockupRef.current, {
             y: -54,
             ease: 'none',
@@ -534,7 +540,6 @@ export default function ProjectsShowcase() {
                   alt=""
                   fill
                   sizes="100vw"
-                  priority
                 />
               </div>
               <div className={styles.bigScreenLighting} aria-hidden="true" />
@@ -544,8 +549,10 @@ export default function ProjectsShowcase() {
               {/* Floating Top-Right Circular Arrow Button */}
               <a
                 href={cogniviewProject.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.bigScreenArrowBtn}
-                aria-label={`Open ${cogniviewProject.name} live project`}
+                aria-label={`Open ${cogniviewProject.name} live project in new tab`}
                 title={`Open ${cogniviewProject.name} live project`}
               >
                 <FiArrowUpRight />
@@ -553,7 +560,7 @@ export default function ProjectsShowcase() {
 
               {/* Multi-Layered 3D Stage */}
               <div className={styles.multiLayerStage}>
-                {/* Layer 1: Dark Mode Desktop Window (Top-Left) */}
+                {/* Hero Desktop Browser Window */}
                 <div ref={desktopWindowRef} className={styles.masterDesktopWindow}>
                   <div className={styles.windowTopBar}>
                     <div className={styles.windowDots}>
@@ -561,143 +568,48 @@ export default function ProjectsShowcase() {
                       <span />
                       <span />
                     </div>
-                    <div className={styles.windowUrlPill}>
-                      <FiTerminal />
+                    <a
+                      href={cogniviewProject.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.windowUrlPill}
+                      title="Open Cogniview Live Platform"
+                    >
+                      <FiLock className={styles.lockIcon} />
                       <span>https://{cogniviewProject.urlBar}</span>
-                    </div>
+                      <FiArrowUpRight className={styles.urlExternalIcon} />
+                    </a>
                     <div className={styles.windowRightActions}>
                       <span className={styles.activePillDot}>
                         <span className={styles.recDot} />
-                        <span>Streaming Active</span>
+                        <span>Live Platform</span>
                       </span>
                     </div>
                   </div>
 
-                  <div className={styles.windowCanvas}>
-                    <div className={styles.heroHudHeader}>
-                      <span className={styles.liveRecIndicator}>
-                        <span className={styles.recDot} /> LIVE SESSION #0482
-                      </span>
-                      <span className={styles.telemetryTag}>
-                        <FiZap style={{ marginRight: 4 }} /> GEMINI 1.5 PRO STREAM • 42ms
-                      </span>
-                    </div>
-
-                    <div className={styles.activePromptBox}>
-                      <div className={styles.promptKicker}>
-                        AI Technical Prompter // Event-Driven Microservices
-                      </div>
-                      <div className={styles.promptText}>
-                        &ldquo;{cogniviewProject.prompt}&rdquo;
-                      </div>
-                    </div>
-
-                    {/* Dynamic Equalizer Waveform */}
-                    <div className={styles.audioWaveform}>
-                      {[14, 28, 18, 36, 22, 42, 28, 48, 34, 52, 38, 46, 30, 44, 24, 38, 20, 32, 18, 12].map(
-                        (height, i) => (
-                          <span
-                            key={i}
-                            className={styles.waveBar}
-                            style={{
-                              height: `${height}px`,
-                              animationDelay: `${i * 0.06}s`,
-                              animationDuration: `${0.75 + (i % 5) * 0.18}s`,
-                            }}
-                          />
-                        )
-                      )}
-                    </div>
-
-                    {/* Performance Score Cards with mini progress indicators */}
-                    <div className={styles.scorePillsRow}>
-                      {cogniviewProject.scores.map((sc) => (
-                        <div key={sc.label} className={styles.scoreCard}>
-                          <div className={styles.scoreTopRow}>
-                            <span className={styles.scoreLabel}>{sc.label}</span>
-                            <span className={styles.scoreValue}>{sc.value}</span>
-                          </div>
-                          <div className={styles.miniProgressBar}>
-                            <span
-                              className={styles.miniProgressFill}
-                              style={{ width: `${sc.pct}%` }}
-                            />
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Layer 2: Light Mode Analytics Dashboard (Overlapping Right) */}
-                <div ref={dashboardWindowRef} className={styles.masterDashboardWindow} aria-hidden="true">
-                  <div className={styles.dashTopBar}>
-                    <span>Discover Candidates &amp; Rubrics</span>
-                    <span className={styles.dashBadge}>● Evaluated: 34</span>
-                  </div>
-                  <div className={styles.dashBody}>
-                    <div className={styles.dashSearchRow}>
-                      <span>Search competencies, AST logs...</span>
-                      <span>All Categories ▾</span>
-                    </div>
-                    <div className={styles.dashStatGrid}>
-                      <div className={styles.dashStatBox}>
-                        <b>96.4%</b>
-                        <span>Clarity Index</span>
-                      </div>
-                      <div className={styles.dashStatBox}>
-                        <b>&lt;95ms</b>
-                        <span>Voice Latency</span>
-                      </div>
-                      <div className={styles.dashStatBox}>
-                        <b>100%</b>
-                        <span>AST Validated</span>
+                  <a
+                    href={cogniviewProject.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={styles.screenshotFrameLink}
+                    aria-label="View Cogniview live application"
+                  >
+                    <div className={styles.screenshotFrame}>
+                      <Image
+                        src={cogniviewProject.showcaseImage}
+                        alt="Cogniview - AI Voice Interview & Placement Prep Platform"
+                        width={1024}
+                        height={520}
+                        className={styles.showcaseScreenshot}
+                      />
+                      <div className={styles.screenshotHoverOverlay}>
+                        <span className={styles.screenshotHoverPill}>
+                          <span>Open Live Application</span>
+                          <FiArrowUpRight />
+                        </span>
                       </div>
                     </div>
-                    <div className={styles.dashMiniCandidateRow}>
-                      <div className={styles.miniCandidateBadge}>
-                        <span className={styles.miniDotGreen} />
-                        <span>Distributed Architecture • 98% Match</span>
-                      </div>
-                      <div className={styles.miniCandidateBadge}>
-                        <span className={styles.miniDotBlue} />
-                        <span>AST Execution Engine • 96% Match</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Layer 3: Floating Dark Mobile Mockup (Foreground Center-Left) */}
-                <div ref={mobileMockupRef} className={styles.masterMobileMockup} aria-hidden="true">
-                  <div className={styles.mobileSpeakerBar} />
-                  <div className={styles.mobileInner}>
-                    <div className={styles.mobileStatusBar}>
-                      <span>09:41</span>
-                      <span className={styles.mobileDynamicIsland} />
-                      <span>5G 100%</span>
-                    </div>
-                    <div className={styles.mobileHeader}>
-                      <span className={styles.recDot} /> Live Voice Feed
-                    </div>
-                    <div className={styles.mobileCardSnippet}>
-                      <b>Interviewee:</b> Active speech detected.
-                    </div>
-                    <div className={styles.mobileCardSnippet}>
-                      <b>Confidence:</b> 98.2% semantic match.
-                    </div>
-                    <div className={styles.mobileMiniWave}>
-                      {[12, 24, 18, 30, 16, 26, 14, 20].map((h, i) => (
-                        <span
-                          key={i}
-                          className={styles.mobileWaveBar}
-                          style={{
-                            height: `${h}px`,
-                            animationDelay: `${i * 0.08}s`,
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
+                  </a>
                 </div>
               </div>
             </div>
@@ -777,12 +689,14 @@ export default function ProjectsShowcase() {
             >
               <motion.a
                 href={cogniviewProject.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={styles.actionBtnPrimary}
-                aria-label={`Discuss ${cogniviewProject.name}`}
+                aria-label={`View live demo of ${cogniviewProject.name}`}
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
-                <span>Discuss Project</span>
+                <span>View Live Demo</span>
                 <FiArrowUpRight />
               </motion.a>
               <motion.a
@@ -790,12 +704,12 @@ export default function ProjectsShowcase() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className={styles.actionBtnOutline}
-                aria-label={`GitHub source for ${cogniviewProject.name}`}
+                aria-label={`GitHub source repository for ${cogniviewProject.name}`}
                 whileHover={{ y: -2, scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <FiGithub />
-                <span>GitHub Profile</span>
+                <span>GitHub Repository</span>
               </motion.a>
             </motion.div>
           </div>
@@ -838,76 +752,55 @@ export default function ProjectsShowcase() {
                         <span />
                         <span />
                       </div>
-                      <div className={styles.windowUrlPill}>
-                        <FiTerminal />
+                      <a
+                        href={nexthireProject.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.windowUrlPill}
+                        title="Open NextHire Live Platform"
+                      >
+                        <FiLock className={styles.lockIcon} />
                         <span>https://{nexthireProject.urlBar}</span>
+                        <FiArrowUpRight className={styles.urlExternalIcon} />
+                      </a>
+                      <div className={styles.windowRightActions}>
+                        <span className={styles.activePillDotViolet}>
+                          <span className={styles.recDotViolet} />
+                          <span>Live Platform</span>
+                        </span>
                       </div>
                     </div>
 
-                    <div className={styles.nexthireCanvas}>
-                      <div className={styles.nexthireHeaderRow}>
-                        <span className={styles.pipelineStatusBadge}>
-                          <span className={styles.eyebrowPulseDot} />
-                          <span>Live WebSocket Connected • 32ms</span>
-                        </span>
-                        <span className={styles.pipelineCountBadge}>
-                          48 Candidates In Review
-                        </span>
-                      </div>
-
-                      <div className={styles.candidateTile}>
-                        <div className={styles.candidateLeft}>
-                          <div className={styles.candidateAvatar}>
-                            EY
-                            <span className={styles.onlineBadge} />
-                          </div>
-                          <div className={styles.candidateBio}>
-                            <span className={styles.candidateName}>{nexthireProject.candidate.name}</span>
-                            <span className={styles.candidateRole}>
-                              {nexthireProject.candidate.role} • {nexthireProject.candidate.location}
-                            </span>
-                          </div>
-                        </div>
-                        <div className={styles.matchGaugePill}>
-                          <span className={styles.matchGaugeValue}>{nexthireProject.candidate.score}</span>
-                          <span className={styles.matchGaugeLabel}>{nexthireProject.candidate.badge}</span>
+                    <a
+                      href={nexthireProject.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles.screenshotFrameLink}
+                      aria-label="View NextHire live platform"
+                    >
+                      <div className={styles.screenshotFrameNextHire}>
+                        <Image
+                          src={nexthireProject.showcaseImage}
+                          alt="NextHire - AI Recruitment and Job Discovery Platform"
+                          width={1024}
+                          height={554}
+                          className={styles.showcaseScreenshot}
+                        />
+                        <div className={styles.screenshotHoverOverlay}>
+                          <span className={styles.screenshotHoverPill}>
+                            <span>Open Live Platform</span>
+                            <FiArrowUpRight />
+                          </span>
                         </div>
                       </div>
-
-                      <div className={styles.liveChatToast}>
-                        <FiMessageCircle className={styles.chatIcon} />
-                        <div className={styles.chatBubbleContent}>
-                          <span className={styles.chatSender}>Recruiter Pipeline Chat:</span>
-                          <p className={styles.chatMessageText}>
-                            &ldquo;Your distributed systems architecture test was exceptional! Let&apos;s schedule the final round.&rdquo;
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className={styles.hiringGraphSection}>
-                        <div className={styles.graphHeader}>
-                          <span><FiActivity style={{ marginRight: 4 }} /> WebSocket Real-Time Activity</span>
-                          <span className={styles.graphSubLabel}>Sub-50ms Event Sync</span>
-                        </div>
-                        <div className={styles.hiringBarGraph}>
-                          {nexthireProject.graphHeights.map((h, i) => (
-                            <div
-                              key={i}
-                              className={styles.graphBar}
-                              style={{
-                                height: `${h}%`,
-                                animationDelay: `${i * 0.08}s`,
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                    </a>
                   </div>
 
                   {/* Floating Interactive "View ↗" Badge */}
                   <a
                     href={nexthireProject.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={styles.floatingViewBadge}
                     aria-label={`View ${nexthireProject.name} live`}
                     title={`View ${nexthireProject.name} live`}
@@ -996,12 +889,14 @@ export default function ProjectsShowcase() {
               >
                 <motion.a
                   href={nexthireProject.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={styles.actionBtnPrimary}
-                  aria-label={`Discuss ${nexthireProject.name}`}
+                  aria-label={`View live demo of ${nexthireProject.name}`}
                   whileHover={{ y: -2, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <span>Discuss Project</span>
+                  <span>View Live Demo</span>
                   <FiArrowUpRight />
                 </motion.a>
                 <motion.a
@@ -1009,12 +904,12 @@ export default function ProjectsShowcase() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={styles.actionBtnOutline}
-                  aria-label={`GitHub source for ${nexthireProject.name}`}
+                  aria-label={`GitHub source repository for ${nexthireProject.name}`}
                   whileHover={{ y: -2, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
                   <FiGithub />
-                  <span>GitHub Profile</span>
+                  <span>GitHub Repository</span>
                 </motion.a>
               </motion.div>
             </div>

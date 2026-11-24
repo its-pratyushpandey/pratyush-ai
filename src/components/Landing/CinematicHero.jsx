@@ -203,39 +203,22 @@ function DigitalCoreCanvas() {
 
     let animId = null;
     let angle = 0;
+    let width = 400;
+    let height = 260;
+    let isInViewport = false;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    const setCanvasSize = () => {
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
-      const width = rect.width || 400;
-      const height = rect.height || 260;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(dpr, dpr);
-    };
-
-    setCanvasSize();
-    window.addEventListener('resize', setCanvasSize);
-
-    const renderGyro = () => {
-      if (!canvas) return;
-      const rect = canvas.getBoundingClientRect();
-      const w = rect.width || 400;
-      const h = rect.height || 260;
-      const cx = w / 2;
-      const cy = h / 2;
-
-      ctx.clearRect(0, 0, w, h);
-      angle += 0.018;
+    const drawGyro = () => {
+      const cx = width / 2;
+      const cy = height / 2;
 
       const rings = [
-        { radius: Math.min(115, w * 0.28), rotSpeed: angle * 1.0, color: '#55abf5', tilt: 0.55 },
-        { radius: Math.min(85, w * 0.21), rotSpeed: -angle * 1.35, color: '#9b8cff', tilt: -0.45 },
-        { radius: Math.min(58, w * 0.14), rotSpeed: angle * 1.8, color: '#43e8b3', tilt: 0.8 },
+        { radius: Math.min(115, width * 0.28), rotSpeed: angle * 1.0, color: '#55abf5', tilt: 0.55 },
+        { radius: Math.min(85, width * 0.21), rotSpeed: -angle * 1.35, color: '#9b8cff', tilt: -0.45 },
+        { radius: Math.min(58, width * 0.14), rotSpeed: angle * 1.8, color: '#43e8b3', tilt: 0.8 },
       ];
 
+      ctx.clearRect(0, 0, width, height);
       rings.forEach((ring) => {
         ctx.save();
         ctx.translate(cx, cy);
@@ -278,15 +261,62 @@ function DigitalCoreCanvas() {
       ctx.shadowBlur = 24;
       ctx.fill();
       ctx.restore();
+    };
 
+    const renderGyro = () => {
+      animId = null;
+      if (!isInViewport || document.hidden || prefersReducedMotion) return;
+      angle += 0.018;
+      drawGyro();
       animId = requestAnimationFrame(renderGyro);
     };
 
-    animId = requestAnimationFrame(renderGyro);
+    const syncAnimation = () => {
+      const shouldAnimate = isInViewport && !document.hidden && !prefersReducedMotion;
+      if (shouldAnimate && animId === null) {
+        animId = requestAnimationFrame(renderGyro);
+      } else if (!shouldAnimate && animId !== null) {
+        cancelAnimationFrame(animId);
+        animId = null;
+      }
+
+      if (isInViewport && !document.hidden && prefersReducedMotion) {
+        drawGyro();
+      }
+    };
+
+    const setCanvasSize = () => {
+      const rect = canvas.getBoundingClientRect();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = rect.width || 400;
+      height = rect.height || 260;
+      canvas.width = Math.round(width * dpr);
+      canvas.height = Math.round(height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      syncAnimation();
+    };
+
+    const observer = typeof IntersectionObserver !== 'undefined'
+      ? new IntersectionObserver(([entry]) => {
+          isInViewport = entry.isIntersecting;
+          syncAnimation();
+        })
+      : null;
+
+    setCanvasSize();
+    observer?.observe(canvas);
+    if (!observer) {
+      isInViewport = true;
+      syncAnimation();
+    }
+    window.addEventListener('resize', setCanvasSize);
+    document.addEventListener('visibilitychange', syncAnimation);
 
     return () => {
-      cancelAnimationFrame(animId);
+      if (animId !== null) cancelAnimationFrame(animId);
+      observer?.disconnect();
       window.removeEventListener('resize', setCanvasSize);
+      document.removeEventListener('visibilitychange', syncAnimation);
     };
   }, []);
 
@@ -307,7 +337,8 @@ export default function CinematicHero({
   const stageGridRef = useRef(null);
   const ribbonContainerRef = useRef(null);
   const footerBarRef = useRef(null);
-  const isInViewportRef = useRef(true);
+  const isInViewportRef = useRef(false);
+  const animationControlsRef = useRef(new Set());
 
   // Dynamic UI States
   const [roleText, setRoleText] = useState(ROLES[0]);
@@ -319,7 +350,6 @@ export default function CinematicHero({
   const [packetBurst, setPacketBurst] = useState(false);
   const [benchmarkStatus, setBenchmarkStatus] = useState('idle'); // 'idle' | 'running' | 'success'
   const [terminalLogs, setTerminalLogs] = useState([]);
-  const [mouseNorm, setMouseNorm] = useState({ x: 0, y: 0 });
 
   // Bind external hero ref
   const setContainerRef = (el) => {
@@ -336,16 +366,32 @@ export default function CinematicHero({
   // Viewport intersection observer to pause animations when Hero is off-screen
   useEffect(() => {
     const el = containerRef.current;
-    if (!el || typeof IntersectionObserver === 'undefined') return;
+    if (!el) return;
+
+    const handleVisibilityChange = () => {
+      animationControlsRef.current.forEach((syncAnimation) => syncAnimation());
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    if (typeof IntersectionObserver === 'undefined') {
+      isInViewportRef.current = true;
+      handleVisibilityChange();
+      return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         isInViewportRef.current = entry.isIntersecting;
+        handleVisibilityChange();
       },
       { threshold: 0.05 }
     );
     observer.observe(el);
-    return () => observer.disconnect();
+
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   // 1. Live Indian Standard Time (IST) Ticker
@@ -416,8 +462,6 @@ export default function CinematicHero({
     const x = (e.clientX - rect.left) / rect.width;
     const y = (e.clientY - rect.top) / rect.height;
 
-    setMouseNorm({ x: (x - 0.5) * 2, y: (y - 0.5) * 2 });
-
     const tiltX = (0.5 - y) * 14;
     const tiltY = (x - 0.5) * 16;
 
@@ -434,7 +478,6 @@ export default function CinematicHero({
     card.style.setProperty('--card-tilt-y', '0deg');
     card.style.setProperty('--card-spot-x', '50%');
     card.style.setProperty('--card-spot-y', '50%');
-    setMouseNorm({ x: 0, y: 0 });
   };
 
   // 4. Interactive Code Execution Simulator
@@ -492,6 +535,7 @@ export default function CinematicHero({
 
     let mouseX = -1000;
     let mouseY = -1000;
+    const animationControls = animationControlsRef.current;
 
     const onPointerMove = (e) => {
       if (isCoarse) return; // Skip mouse attraction on touch devices
@@ -520,11 +564,6 @@ export default function CinematicHero({
     }
 
     const render = () => {
-      if (!isInViewportRef.current) {
-        animId = requestAnimationFrame(render);
-        return;
-      }
-
       ctx.clearRect(0, 0, width, height);
 
       // Update and draw particles
@@ -577,10 +616,21 @@ export default function CinematicHero({
       animId = requestAnimationFrame(render);
     };
 
-    render();
+    const syncAnimation = () => {
+      if (isInViewportRef.current && !document.hidden && animId === null) {
+        animId = requestAnimationFrame(render);
+      } else if ((!isInViewportRef.current || document.hidden) && animId !== null) {
+        cancelAnimationFrame(animId);
+        animId = null;
+      }
+    };
+
+    animationControls.add(syncAnimation);
+    syncAnimation();
 
     return () => {
-      cancelAnimationFrame(animId);
+      animationControls.delete(syncAnimation);
+      if (animId !== null) cancelAnimationFrame(animId);
       window.removeEventListener('resize', onResize);
       window.removeEventListener('pointermove', onPointerMove);
     };
@@ -592,13 +642,9 @@ export default function CinematicHero({
     let offset1 = 0;
     let offset2 = 0;
     let lastScroll = window.scrollY;
+    const animationControls = animationControlsRef.current;
 
     const loop = () => {
-      if (!isInViewportRef.current) {
-        animId = requestAnimationFrame(loop);
-        return;
-      }
-
       const currentScroll = window.scrollY;
       const scrollDiff = currentScroll - lastScroll;
       lastScroll = currentScroll;
@@ -616,8 +662,21 @@ export default function CinematicHero({
       animId = requestAnimationFrame(loop);
     };
 
-    animId = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(animId);
+    const syncAnimation = () => {
+      if (isInViewportRef.current && !document.hidden && animId === null) {
+        animId = requestAnimationFrame(loop);
+      } else if ((!isInViewportRef.current || document.hidden) && animId !== null) {
+        cancelAnimationFrame(animId);
+        animId = null;
+      }
+    };
+
+    animationControls.add(syncAnimation);
+    syncAnimation();
+    return () => {
+      animationControls.delete(syncAnimation);
+      if (animId !== null) cancelAnimationFrame(animId);
+    };
   }, []);
 
   // 9. Coordinated Cinematic Parallax & Fade Exit into Section 01 / ABOUT ME

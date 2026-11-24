@@ -353,12 +353,13 @@ const projects = [
     type: "AI interview platform",
     description:
       "A voice-enabled interview platform with AI-assisted conversations, interview management, GitHub profile evaluation, and progress dashboards.",
-    tags: ["Next.js", "TypeScript", "Gemini", "Firebase", "Voice AI"],
+    tags: ["Next.js", "TypeScript", "Firebase", "VAPI", "Speech AI"],
     visual: "cogniview",
-    image: "/images/background.jpg",
+    image: "/images/projects/cogniview-showcase.png",
     year: "2026",
     accent: "#80e8e0",
-    liveUrl: "mailto:pratyush.me.ai@gmail.com?subject=Cogniview%20project",
+    liveUrl: "https://cogniview-frontend.vercel.app/sign-in",
+    githubUrl: "https://github.com/its-pratyushpandey/cogniview-frontend-.git",
   },
   {
     number: "02",
@@ -368,10 +369,11 @@ const projects = [
       "A full-stack hiring experience connecting job seekers and employers with smart recommendations, resume parsing, real-time chat, and video interviews.",
     tags: ["React", "Node.js", "MongoDB", "WebSockets", "AI"],
     visual: "nexthire",
-    image: "/images/background2.jpg",
+    image: "/images/projects/nexthire-showcase.png",
     year: "2025",
     accent: "#9b8cff",
-    liveUrl: "mailto:pratyush.me.ai@gmail.com?subject=NextHire%20project",
+    liveUrl: "https://nexthireap.netlify.app/",
+    githubUrl: "https://github.com/its-pratyushpandey/NextHire.git",
   },
   {
     number: "03",
@@ -812,7 +814,6 @@ function AboutPortrait() {
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 560px"
             className={styles.aboutPortraitImg}
-            priority
           />
           <div className={styles.aboutPortraitOverlay} aria-hidden="true" />
 
@@ -1040,7 +1041,7 @@ export default function Home() {
   useEffect(() => {
     document.body.classList.add("is-loading");
     const isVisited = typeof window !== "undefined" && sessionStorage.getItem("portfolio_visited");
-    const initialDelay = isVisited ? 600 : 1250; // 2.5x faster loading experience!
+    const initialDelay = isVisited ? 250 : 600;
 
     const timer = window.setTimeout(() => {
       handleFinishLoading();
